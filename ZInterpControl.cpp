@@ -7,6 +7,7 @@
 #define		ISTREAM							INPUT->tnstream->istream
 #define	    MATCHT(t, fs)					RECOGNIZER->match(RECOGNIZER, t, fs)
 #define	    MATCHANYT()						RECOGNIZER->matchAny(RECOGNIZER)
+#define	    CONSUME()						ISTREAM->consume(ISTREAM)
 #define	    LA(n)							ISTREAM->_LA(ISTREAM, n)
 #define	    LT(n)							INPUT->tnstream->_LT(INPUT->tnstream, n)
 #define		SEEK(n)							ISTREAM->seek(ISTREAM, n)
@@ -50,13 +51,15 @@ namespace ZInterp
 
 		while(boost::apply_visitor(BoolVal(),*((ZTvarp)(cond->u)))== ZBTrue )
 		{
-			SEEK(Wexpr);
-			MATCHT(EWHILE_EXP,NULL);
-			MATCHT(ANTLR3_TOKEN_DOWN,NULL);
+			SEEK(Wexpr+2);
+			//CONSUME();CONSUME();
+			//MATCHT(EWHILE_EXP,NULL);
+			//MATCHT(ANTLR3_TOKEN_DOWN,NULL);
 			xyz->expr_g(xyz);
-			SEEK(Wcond);
-			MATCHT(EWHILE_CON,NULL);
-			MATCHT(ANTLR3_TOKEN_DOWN,NULL);
+			SEEK(Wcond+2);
+			//CONSUME();CONSUME();
+			//MATCHT(EWHILE_CON,NULL);
+			//MATCHT(ANTLR3_TOKEN_DOWN,NULL);
 			cond = (xyz->expr_g(xyz)).start;
 		}
 		SEEK(Wend);
