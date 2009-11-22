@@ -87,7 +87,7 @@ int ANTLR3_CDECL _tmain(int argc, _TCHAR* argv[])
 			if(p->getType(p)==nodes->EOF_NODE.token->getType(nodes->EOF_NODE.token))break;
 			nodes->tnstream->istream->consume(nodes->tnstream->istream);
 		}
-		ZInterp::global::Init();
+		//ZInterp::global::Init();
 		treePsr	= yatgFWNew(nodes);
 		treePsr->program(treePsr);
 

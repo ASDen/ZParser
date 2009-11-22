@@ -51,15 +51,13 @@ namespace ZInterp
 
 		while(boost::apply_visitor(BoolVal(),*((ZTvarp)(cond->u)))== ZBTrue )
 		{
-			SEEK(Wexpr+2);
-			//CONSUME();CONSUME();
-			//MATCHT(EWHILE_EXP,NULL);
-			//MATCHT(ANTLR3_TOKEN_DOWN,NULL);
+			SEEK(Wexpr);
+			MATCHT(EWHILE_EXP,NULL);
+			MATCHT(ANTLR3_TOKEN_DOWN,NULL);
 			xyz->expr_g(xyz);
-			SEEK(Wcond+2);
-			//CONSUME();CONSUME();
-			//MATCHT(EWHILE_CON,NULL);
-			//MATCHT(ANTLR3_TOKEN_DOWN,NULL);
+			SEEK(Wcond);
+			MATCHT(EWHILE_CON,NULL);
+			MATCHT(ANTLR3_TOKEN_DOWN,NULL);
 			cond = (xyz->expr_g(xyz)).start;
 		}
 		SEEK(Wend);

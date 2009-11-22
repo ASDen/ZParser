@@ -9,7 +9,6 @@ namespace ZInterp
 	void global::Init()
 	{
 		ZSym.InitScope();
-		ZSym.currentScope->VarTable.ZIHash.clear();
 	}
 
 	void global::IncScope()
