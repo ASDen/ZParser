@@ -181,10 +181,14 @@ unary_expression
 	
 operand
 	:    
-	^(t1=OPERAND IDENTIFIER (operand_op)*)
-	{
-	ZInterp::Operand::_OPERAND($t1);
-	}
+	^(t1=OPERAND IDENTIFIER 
+	( 
+	  ID_MORE {ZInterp::Operand::_OPERAND($t1);}
+	| ^(DOT IDENTIFIER ) ID_MORE
+	| ^(ARR_IND expr_g ) ID_MORE
+	| ^(ARG_EXPR_L expr_g+ ) ID_MORE
+	)
+	)
         | constant
         ;
 	

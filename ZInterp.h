@@ -7,13 +7,15 @@
 
 namespace ZInterp
 {
-	extern ZSymbolTable<ZTvar,ZTmfp> ZSym;
+	extern ZSymbolTable<ZTvar,ZFunction> ZSym;
 
 	class global
 	{
 	public:
 		
 		static void Init();
+
+		static void InitBuiltinMods();
 
 		static void IncScope();
 

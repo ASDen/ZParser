@@ -1,9 +1,12 @@
 #include "stdafx.h"
 #include "ZInterp.h"
 
+extern ZBuiltinModule ZBMods[];
+
 namespace ZInterp
 {
-	ZSymbolTable<ZTvar,ZTmfp> ZSym;
+	
+	ZSymbolTable<ZTvar,ZFunction> ZSym;
 
 
 	void global::Init()
@@ -19,6 +22,18 @@ namespace ZInterp
 	void global::DecScope()
 	{
 		ZSym.FinScope();
+	}
+
+	void global::InitBuiltinMods()
+	{
+		int i=0;
+		while(true)
+		{
+			if (ZBMods[i].ZModInitFunc==0)
+				break;
+			(*ZBMods[i].ZModInitFunc)();
+			i++;
+		}
 	}
 
 

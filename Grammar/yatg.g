@@ -98,6 +98,7 @@ tokens {
 	OPERAND;
 	DOT;
 	ARG_EXPR_L;
+	ID_MORE;
 	SET;
 	PRIM_EXP;
 }
@@ -203,8 +204,8 @@ try_expr
 	->^(ETRY ^(ETRY_EXP $t_exp)^(ECATCH_EXP $c_exp))
 	;
 function_def 
-	: ( KW_MAPPED )? fun IDENTIFIER ( argument_expression_list )*  SS_EQUAL expr_g
-	->^( FUN_DEF ^(FUN_NAME IDENTIFIER) ( argument_expression_list )*  ^(BODY expr_g))
+	: ( KW_MAPPED )? fun IDENTIFIER ( argument_decl_list )*  SS_EQUAL expr_g
+	->^( FUN_DEF ^(FUN_NAME IDENTIFIER) ( argument_decl_list )*  ^(BODY expr_g))
 	;
 	
 fun	
@@ -266,24 +267,29 @@ argT	: IDENTIFIER (SS_COLON operand)?
 	->^( IDENTIFIER (operand)? )
 	;
 
+argument_decl_list
+	:  argT ( SS_COMMA argT)*	
+	->^(ARG_EXPR_L argT+)	
+	;
+
 argument_expression_list
-	: a+=argT ( SS_COMMA a+=argT)*	
-	->^(ARG_EXPR_L argT*)
+	: expr_g ( SS_COMMA expr_g)*	
+	->^(ARG_EXPR_L expr_g+)
 	;
 
 unary_expression
 	: operand
 	;
 operand
-	: IDENTIFIER (operand_op )* ->^(OPERAND IDENTIFIER (operand_op)*)
+	: IDENTIFIER (operand_op )* ->^(OPERAND IDENTIFIER (operand_op)* ID_MORE)
         | constant 
         ;
 	
 operand_op
 	: SS_DOT IDENTIFIER ->^(DOT IDENTIFIER)
-        	| SS_OBRACKET expr_g SS_CBRACKET ->^(ARR_IND expr_g)
-        	| SS_OPAREN! argument_expression_list? SS_CPAREN!
-        	;
+        | SS_OBRACKET expr_g SS_CBRACKET ->^(ARR_IND expr_g)
+        | SS_OPAREN! argument_expression_list? SS_CPAREN!
+        ;
 
 constant
     	:
