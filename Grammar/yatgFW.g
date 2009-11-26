@@ -186,7 +186,7 @@ operand
 	  ID_MORE {ZInterp::Operand::_OPERAND($t1);}
 	| ^(DOT IDENTIFIER ) ID_MORE
 	| ^(ARR_IND expr_g ) ID_MORE
-	| ^(ARG_EXPR_L expr_g+ ) ID_MORE
+	| ^(arg=ARG_EXPR_L expr_g+ ) ID_MORE {ZInterp::Operand::FunCall($t1,$arg,ctx);}
 	)
 	)
         | constant

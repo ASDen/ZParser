@@ -32,6 +32,8 @@ namespace ZInterp
 	{
 	public:
 		static void _OPERAND(pANTLR3_BASE_TREE t1);
+
+		static void FunCall(pANTLR3_BASE_TREE t1,pANTLR3_BASE_TREE arg,yatgFW_Ctx_struct* xyz);
 	};
 
 	class Constant

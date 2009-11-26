@@ -14,6 +14,34 @@
 
 namespace ZInterp
 {
+	void Operand::FunCall(pANTLR3_BASE_TREE t1,pANTLR3_BASE_TREE arg,yatgFW_Ctx_struct* xyz)
+	{
+		pANTLR3_BASE_TREE t2=(pANTLR3_BASE_TREE)t1->getChild(t1,0);
+		ZChar* vName = getNodeText(t2);
+		ZFunction* var;
+		var = ZSym.getSymbol<ZFunction>(vName,true);
+		if(var==NULL)
+			std::cout<<"Function : "<<vName<<" Not defined"<<std::endl;
+
+		//collect arguments in a vector before calling
+		ZTvarS Fargs;
+		ZTvarp vp;
+		for(int i=0;i<arg->children->count;i++)
+		{
+			vp=(ZTvarp)((pANTLR3_BASE_TREE)arg->getChild(arg,i))->u;
+			Fargs.push_back(vp);
+		}
+		switch(var->FunT)
+		{
+		case ZInternal:
+			break;
+		case ZExternal:
+			ZInterp::setCustomNodeField(t1,(*(var->FunData.pFun))(Fargs));
+			break;
+		}
+
+	}
+
 	void IfExpr::Exec(pANTLR3_BASE_TREE ifnode,pANTLR3_BASE_TREE cond,yatgFW_Ctx_struct* xyz)
 	{
 		pANTLR3_BASE_TREE r;
