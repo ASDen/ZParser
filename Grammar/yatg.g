@@ -76,6 +76,7 @@ tokens {
 	BODY;
 	FUN;
 	MAPPED;
+	FUN_DEF_END;
 	//string
 	STRING;
 	//context
@@ -205,7 +206,7 @@ try_expr
 	;
 function_def 
 	: ( KW_MAPPED )? fun IDENTIFIER ( argument_decl_list )*  SS_EQUAL expr_g
-	->^( FUN_DEF ^(FUN_NAME IDENTIFIER) ( argument_decl_list )*  ^(BODY expr_g))
+	->^( FUN_DEF ^(FUN_NAME IDENTIFIER) ( argument_decl_list )*  ^(BODY expr_g) FUN_DEF_END )
 	;
 	
 fun	

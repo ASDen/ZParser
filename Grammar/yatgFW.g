@@ -120,7 +120,7 @@ try_expr
 	
 function_def
 	: 
-	^( FUN_DEF ^(FUN_NAME IDENTIFIER) ( argument_expression_list )*  ^(BODY expr_g))
+	^( t =FUN_DEF ^(FUN_NAME IDENTIFIER) ( argument_expression_list )*  { ZInterp::Function::Defination($t,ctx); })
 	;
 	
 fun	
@@ -186,7 +186,7 @@ operand
 	  ID_MORE {ZInterp::Operand::_OPERAND($t1);}
 	| ^(DOT IDENTIFIER ) ID_MORE
 	| ^(ARR_IND expr_g ) ID_MORE
-	| ^(arg=ARG_EXPR_L expr_g+ ) ID_MORE {ZInterp::Operand::FunCall($t1,$arg,ctx);}
+	| ^(arg =ARG_EXPR_L expr_g+ ) ID_MORE {ZInterp::Operand::FunCall($t1,$arg,ctx);}
 	)
 	)
         | constant
@@ -235,19 +235,19 @@ assignment_expression
 
 cexprx	:
 	( 
-	  ^(r= SS_D_BAR t1=cexprx t2=cexprx)
-	| ^(r= SS_D_AMP t1=cexprx t2=cexprx)
-	| ^(r= SS_D_EQUAL t1=cexprx t2=cexprx)
-	| ^(r= SS_EXC_EQUAL t1=cexprx t2=cexprx)
-	| ^(r= SS_LT t1=cexprx t2=cexprx)
-	| ^(r= SS_GT t1=cexprx t2=cexprx)
-	| ^(r= SS_LT_EQUAL t1=cexprx t2=cexprx)
-	| ^(r= SS_GT_EQUAL t1=cexprx t2=cexprx)
-	| ^(r= SS_PLUS t1=cexprx t2=cexprx)	
-	| ^(r= SS_MINUS t1=cexprx t2=cexprx)	
-	| ^(r= SS_STAR t1=cexprx t2=cexprx)	
-	| ^(r= SS_FSLASH t1=cexprx t2=cexprx)	
-	| ^(r= SS_PERCENT t1=cexprx t2=cexprx)
+	  ^(r = SS_D_BAR t1=cexprx t2=cexprx)
+	| ^(r = SS_D_AMP t1=cexprx t2=cexprx)
+	| ^(r = SS_D_EQUAL t1=cexprx t2=cexprx)
+	| ^(r = SS_EXC_EQUAL t1=cexprx t2=cexprx)
+	| ^(r = SS_LT t1=cexprx t2=cexprx)
+	| ^(r = SS_GT t1=cexprx t2=cexprx)
+	| ^(r = SS_LT_EQUAL t1=cexprx t2=cexprx)
+	| ^(r = SS_GT_EQUAL t1=cexprx t2=cexprx)
+	| ^(r = SS_PLUS t1=cexprx t2=cexprx)	
+	| ^(r = SS_MINUS t1=cexprx t2=cexprx)	
+	| ^(r = SS_STAR t1=cexprx t2=cexprx)	
+	| ^(r = SS_FSLASH t1=cexprx t2=cexprx)	
+	| ^(r = SS_PERCENT t1=cexprx t2=cexprx)
 	) 
 	{ZInterp::Cexprx::Exec($r,$t1.start,$t2.start);}
 	

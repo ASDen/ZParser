@@ -82,7 +82,7 @@ int ANTLR3_CDECL _tmain(int argc, _TCHAR* argv[])
 		pANTLR3_BASE_TREE p;
 		while(true)
 		{
-			p=nodes->tnstream->_LT(nodes->tnstream,1);
+			p =nodes -> tnstream -> _LT ( nodes -> tnstream , 1 ) ;
 			p->savedIndex=nodes->tnstream->istream->index(nodes->tnstream->istream);
 			if(p->getType(p)==nodes->EOF_NODE.token->getType(nodes->EOF_NODE.token))break;
 			nodes->tnstream->istream->consume(nodes->tnstream->istream);
@@ -93,7 +93,7 @@ int ANTLR3_CDECL _tmain(int argc, _TCHAR* argv[])
 		treePsr->program(treePsr);
 
 		ZInterp::ZSym.currentScope->VarTable.PrintAll();
-		
+
 		nodes->free(nodes); nodes = NULL;
 		treePsr ->free  (treePsr);	    treePsr	= NULL;
 

@@ -1,5 +1,18 @@
 #include "stdafx.h"
 #include "ZInterp.h"
+#include "Helper.h"
+
+#define	    PARSER							xyz->pTreeParser  
+#define	    RECOGNIZER						PARSER->rec
+#define	    INPUT							PARSER->ctnstream
+#define		ISTREAM							INPUT->tnstream->istream
+#define	    MATCHT(t, fs)					RECOGNIZER->match(RECOGNIZER, t, fs)
+#define	    MATCHANYT()						RECOGNIZER->matchAny(RECOGNIZER)
+#define	    CONSUME()						ISTREAM->consume(ISTREAM)
+#define	    LA(n)							ISTREAM->_LA(ISTREAM, n)
+#define	    LT(n)							INPUT->tnstream->_LT(INPUT->tnstream, n)
+#define		SEEK(n)							ISTREAM->seek(ISTREAM, n)
+
 
 extern ZBuiltinModule ZBMods[];
 
@@ -50,7 +63,7 @@ namespace ZInterp
 	}
 
 
-	void Operand::_OPERAND(pANTLR3_BASE_TREE t1)
+	void Operand::_OPERAND(pANTLR3_BASE_TREE t1 ,  yatgFW_Ctx_struct *xyz )
 	{
 		pANTLR3_BASE_TREE t2=(pANTLR3_BASE_TREE)t1->getChild(t1,0);
 		ZChar* vName = getNodeText(t2);
@@ -62,6 +75,8 @@ namespace ZInterp
 			ZSym.currentScope->VarTable.Insert(var,vName);
 		}
 		setCustomNodeField(t1,var);
+		//SEEK(((pANTLR3_BASE_TREE)t1->getChild(t1,0))->savedIndex);
+		//MATCHT(ID_MORE,NULL);
 	}
 
 
