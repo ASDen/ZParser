@@ -63,7 +63,7 @@ namespace ZInterp
 	}
 
 
-	void Operand::_OPERAND(pANTLR3_BASE_TREE t1 ,  yatgFW_Ctx_struct *xyz )
+	void Operand::_OPERAND(pANTLR3_BASE_TREE t1  )
 	{
 		pANTLR3_BASE_TREE t2=(pANTLR3_BASE_TREE)t1->getChild(t1,0);
 		ZChar* vName = getNodeText(t2);
@@ -75,8 +75,6 @@ namespace ZInterp
 			ZSym.currentScope->VarTable.Insert(var,vName);
 		}
 		setCustomNodeField(t1,var);
-		//SEEK(((pANTLR3_BASE_TREE)t1->getChild(t1,0))->savedIndex);
-		//MATCHT(ID_MORE,NULL);
 	}
 
 

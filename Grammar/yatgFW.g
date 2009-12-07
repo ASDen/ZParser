@@ -69,12 +69,12 @@ while_loop
 
 do_loop 
 	: 
-	  ^( EDO ^(EDO_EXP expr_g) ^(EDO_CON expr_g))
+	 ^( j= EDO ^(EDO_CON  c =expr_g) { ZInterp::DoExpr::Exec($j,$c.start,ctx);})
 	;
 
 for_loop 
 	: 
-	  ^( EFOR IDENTIFIER ^(EFOR_SRC source ) ^(EFOR_EXP expr_g) )
+	  ^( j= EFOR IDENTIFIER ^(EFOR_SRC c =source ) {ZInterp::ForExpr::Exec($j,$c.start,ctx); } )
 	;
 	
 source
@@ -94,7 +94,7 @@ loop_continue
 
 case_expr
 	 : 
-	  ^(CASE (^(CASE_Exp expr_g))? (^( case_item '')))
+	  ^(j =CASE (^(CASE_Exp expr_g))?{ZInterp::CaseExpr::Exec( $j , ctx );})
 	 ;
 
 case_item 
@@ -201,16 +201,16 @@ operand_op
 constant
     	: 
     	(
-    	  e= DIGIT		
-    	| e= HEX_LITERAL
-    	| e= STRING_LITERIAL
-    	| e= KW_TRUE
-    	| e= KW_FALSE
-    	| e= KW_ON
-    	| e= KW_OFF
-    	| e= KW_OK
-    	| e= KW_UNDEFINED
-    	| e= KW_UNSUPPLIED
+    	  e = DIGIT		
+    	| e = HEX_LITERAL
+    	| e =  STRING_LITERIAL
+    	| e = KW_TRUE
+    	| e = KW_FALSE
+    	| e = KW_ON
+    	| e = KW_OFF
+    	| e = KW_OK
+    	| e = KW_UNDEFINED
+    	| e = KW_UNSUPPLIED
     	)
     	{ ZInterp::Constant::Exec($e); }
     	

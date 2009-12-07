@@ -33,10 +33,12 @@ tokens {
 	EDO;
 	EDO_CON;
 	EDO_EXP;
+	EDO_END;
 	//for-related
 	EFOR;
 	EFOR_SRC;
 	EFOR_EXP;
+	EFOR_END;
 	//source-related
 	ESRC_START;
 	ESRC_TO;
@@ -157,12 +159,12 @@ while_loop
 
 do_loop 
 	: KW_DO exp=expr_g KW_WHILE cond=expr_g
-	-> ^( EDO ^(EDO_EXP $exp) ^(EDO_CON $cond))
+	-> ^( EDO  ^(EDO_CON $cond) ^(EDO_EXP $exp) EDO_END)
 	;
 
 for_loop 
 	: KW_FOR  IDENTIFIER  ( KW_IN | SS_EQUAL ) source (KW_DO | KW_COLLECT) expr_g 
-	-> ^( EFOR IDENTIFIER ^(EFOR_SRC source ) ^(EFOR_EXP expr_g) )
+	-> ^( EFOR IDENTIFIER ^(EFOR_SRC source ) ^(EFOR_EXP expr_g) EFOR_END )
 	;
 	
 source
