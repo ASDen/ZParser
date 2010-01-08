@@ -120,7 +120,7 @@ try_expr
 	
 function_def
 	: 
-	^( t =FUN_DEF ^(FUN_NAME IDENTIFIER) ( argument_expression_list )*  { ZInterp::Function::Defination($t,ctx); })
+	^( t =FUN_DEF ^(FUN_NAME IDENTIFIER) ^(ARG_EXPR_L ( argument_expression_list )* )  { ZInterp::Function::Defination($t,ctx); })
 	;
 	
 fun	
@@ -172,7 +172,7 @@ argT	:
 
 argument_expression_list
 	:  
-	 ^(ARG_EXPR_L argT+)
+	 argT+
 	;
 
 unary_expression
@@ -186,7 +186,7 @@ operand
 	  ID_MORE {ZInterp::Operand::_OPERAND($t1);}
 	| ^(DOT IDENTIFIER ) ID_MORE
 	| ^(ARR_IND expr_g ) ID_MORE
-	| ^(arg =ARG_EXPR_L expr_g+ ) ID_MORE {ZInterp::Operand::FunCall($t1,$arg,ctx);}
+	| ^(arg =ARG_EXPR_L expr_g* ) ID_MORE {ZInterp::Operand::FunCall($t1,$arg,ctx);}
 	)
 	)
         | constant

@@ -7,7 +7,7 @@
 
 namespace ZInterp
 {
-	extern ZSymbolTable<ZTvar,ZFunction> ZSym;
+	extern ZSymbolTable<ZTvar> ZSym;
 
 	class global
 	{

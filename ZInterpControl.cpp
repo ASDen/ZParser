@@ -135,7 +135,7 @@ namespace ZInterp
 		pANTLR3_BASE_TREE t = (pANTLR3_BASE_TREE)((pANTLR3_BASE_TREE)caseNode->getChild(caseNode,0));
 		pANTLR3_BASE_TREE p=(pANTLR3_BASE_TREE)t->getChild(t,0);
 		char* var = getNodeText((pANTLR3_BASE_TREE)p->getChild(p,0));
-		ZTvarp x= ZInterp::ZSym.currentScope->lookup<ZTvar>(var);
+		ZTvarp x= ZInterp::ZSym.currentScope->lookup(var);
 		string res=boost::apply_visitor(ToString(),*x);
 		//cout<<getNodeText((pANTLR3_BASE_TREE)(titem)->getChild(titem,0))<<endl;
 		//cout<<boost::apply_visitor(ToString(),*x)<<endl;

@@ -23,22 +23,21 @@ namespace ZInterp
 		ANTLR3_MARKER funend = ( ( pANTLR3_BASE_TREE ) funNode -> getChild ( funNode , 3 ) ) -> savedIndex ;
 		pANTLR3_BASE_TREE t2 = ( pANTLR3_BASE_TREE ) funNode -> getChild ( funNode , 0 ) ;
 		ZChar* fName = getNodeText ( ( pANTLR3_BASE_TREE ) t2 -> getChild ( t2 , 0 ) ) ;
-		ZFunction* fun;
-		fun = ZSym . getSymbol < ZFunction > ( fName , true ) ;
+		ZTvarp fun;
+		fun = ZSym . getSymbol ( fName , true ) ;
 		if ( fun == NULL )
 		{
-			fun = ZAlloc ( ZFunction , 1 ) ;
-			fun -> FunData . NodeID = ( funNode ) -> savedIndex ;
-			fun -> FunT = ZInternal;
-			fun -> NumArgs = ( ( pANTLR3_BASE_TREE ) funNode -> getChild ( funNode , 1 ) ) -> children -> count;
-			ZSym . currentScope -> FunTable . Insert ( fun , fName ) ;
-
-
+			fun = ZAlloc(ZTvar,1);
+			ZIFunction* ifun=ZAlloc(ZIFunction,1);
+			ifun -> FunData . NodeID = ( funNode ) -> savedIndex ;
+			ifun -> FunT = ZInternal;
+			ifun -> NumArgs = ( ( pANTLR3_BASE_TREE ) funNode -> getChild ( funNode , 1 ) ) -> children -> count;
+			*fun=ZTFunction(ifun);
+			ZSym.InsertSymbol ( fName , fun );
 		}
 		SEEK ( funend ) ;
 		MATCHT ( FUN_DEF_END , NULL ) ;
-		//setCustomNodeField(funNode,fun);
-
+		setCustomNodeField(funNode,fun);
 		
 	}
 	void Operand::FunCall(pANTLR3_BASE_TREE t1,pANTLR3_BASE_TREE arg,yatgFW_Ctx_struct* xyz)
@@ -50,24 +49,29 @@ namespace ZInterp
 
 		pANTLR3_BASE_TREE t2=(pANTLR3_BASE_TREE)t1->getChild(t1,0);
 		ZChar* vName = getNodeText(t2);
-		ZFunction* var;
-		var = ZSym.getSymbol<ZFunction>(vName,true);
-		if ( var == NULL )
+		ZTvarp fun;
+		fun = ZSym.getSymbol(vName,true);
+		if ( fun == NULL )
 		{
+			/* Fire an Exception */
 			std::cout << "Function : " << vName << " Not defined" << std::endl ;
 			return;
 		}
 
-		//collect arguments in a vector before calling
+		//Collect arguments in a vector before calling
 		ZTvarS Fargs;
 		ZTvarp vp;
+		if(arg->children!=NULL)
 		for ( int i = 0 ; i < arg -> children -> count ; i ++ )
 		{
 			vp=ZAlloc(ZTvar,1);
 			*vp = *((ZTvarp)((pANTLR3_BASE_TREE)arg->getChild(arg,i))->u);
 			Fargs . push_back ( vp ) ;
 		}
+
 		pANTLR3_BASE_TREE t  ;
+		ZIFunction* var=boost::get<gZFunction>(*fun).cont->val;
+		
 		switch ( var -> FunT )
 		{
 		case ZInternal :
@@ -102,7 +106,8 @@ namespace ZInterp
 			}
 			else
 			{
-				cout<<"different number\n";
+				/* Fire an Exception */
+				std::cout<<"Insufficient Numer of Arguments"<<std::endl;
 			}
 			break;
 		case ZExternal:

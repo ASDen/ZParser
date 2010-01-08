@@ -25,7 +25,7 @@ int ANTLR3_CDECL _tmain(int argc, _TCHAR* argv[])
 
 	pyatgFW		    treePsr;
 
-    fName	=(pANTLR3_UINT8)"input.txt"; // Note in VS2005 debug, working directory must be configured
+	fName	=(pANTLR3_UINT8)"input.txt"; // Note in VS2005 debug, working directory must be configured
     
 	input	= antlr3AsciiFileStreamNew(fName);
 

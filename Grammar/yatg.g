@@ -208,7 +208,7 @@ try_expr
 	;
 function_def 
 	: ( KW_MAPPED )? fun IDENTIFIER ( argument_decl_list )*  SS_EQUAL expr_g
-	->^( FUN_DEF ^(FUN_NAME IDENTIFIER) ( argument_decl_list )*  ^(BODY expr_g) FUN_DEF_END )
+	->^( FUN_DEF ^(FUN_NAME IDENTIFIER) ^( ARG_EXPR_L ( argument_decl_list )*)  ^(BODY expr_g) FUN_DEF_END )
 	;
 	
 fun	
@@ -272,12 +272,12 @@ argT	: IDENTIFIER (SS_COLON operand)?
 
 argument_decl_list
 	:  argT ( SS_COMMA argT)*	
-	->^(ARG_EXPR_L argT+)	
+	-> argT+	
 	;
 
 argument_expression_list
 	: expr_g ( SS_COMMA expr_g)*	
-	->^(ARG_EXPR_L expr_g+)
+	-> expr_g+
 	;
 
 unary_expression
@@ -291,7 +291,7 @@ operand
 operand_op
 	: SS_DOT IDENTIFIER ->^(DOT IDENTIFIER)
         | SS_OBRACKET expr_g SS_CBRACKET ->^(ARR_IND expr_g)
-        | SS_OPAREN! argument_expression_list? SS_CPAREN!
+        | SS_OPAREN argument_expression_list? SS_CPAREN -> ^(ARG_EXPR_L argument_expression_list?)
         ;
 
 constant

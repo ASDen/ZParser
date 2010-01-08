@@ -19,7 +19,7 @@ extern ZBuiltinModule ZBMods[];
 namespace ZInterp
 {
 	
-	ZSymbolTable<ZTvar,ZFunction> ZSym;
+	ZSymbolTable<ZTvar> ZSym;
 
 
 	void global::Init()
@@ -68,11 +68,11 @@ namespace ZInterp
 		pANTLR3_BASE_TREE t2=(pANTLR3_BASE_TREE)t1->getChild(t1,0);
 		ZChar* vName = getNodeText(t2);
 		ZTvarp var;
-		var = ZSym.getSymbol<ZTvar>(vName,true);
+		var = ZSym.getSymbol(vName,true);
 		if(var==NULL)
 		{
 			var=ZAlloc(ZTvar,1);
-			ZSym.currentScope->VarTable.Insert(var,vName);
+			ZSym.InsertSymbol(vName,var);
 		}
 		setCustomNodeField(t1,var);
 	}

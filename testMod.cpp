@@ -60,20 +60,25 @@ ZTvarp ZprintL(ZTvarS var)
 
 void ZModInit_Test()
 {
-	ZFunction* zf=ZAlloc(ZFunction,4);
+	ZIFunction* zf=ZAlloc(ZIFunction,4);
+	ZTvarp zv=ZAlloc(ZTvar,4);
 
 	zf->pFunInit(1,Zprint);
-	ZInterp::ZSym.currentScope->FunTable.Insert(zf,_ZC("print"));
+	*zv=ZTFunction(zf);
+	ZInterp::ZSym.InsertSymbol(_ZC("print"),zv);
 
-	zf++;
+	zf++;zv++;
 	zf->pFunInit(1,ZprintL);
-	ZInterp::ZSym.currentScope->FunTable.Insert(zf,_ZC("printL"));
+	*zv=ZTFunction(zf);
+	ZInterp::ZSym.InsertSymbol(_ZC("printL"),zv);
 
-	zf++;
+	zf++;zv++;
 	zf->pFunInit(1,Zsqrt::Zsqrt_);
-	ZInterp::ZSym.currentScope->FunTable.Insert(zf,_ZC("sqrt"));
+	*zv=ZTFunction(zf);
+	ZInterp::ZSym.InsertSymbol(_ZC("sqrt"),zv);
 
-	zf++;
+	zf++;zv++;
 	zf->pFunInit(2,Zpower::Zpower_);
-	ZInterp::ZSym.currentScope->FunTable.Insert(zf,_ZC("pow"));
+	*zv=ZTFunction(zf);
+	ZInterp::ZSym.InsertSymbol(_ZC("pow"),zv);
 }
