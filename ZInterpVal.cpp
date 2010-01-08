@@ -155,9 +155,7 @@ namespace ZInterp
 	void ExprSeq::_ESEQ(pANTLR3_BASE_TREE e)
 	{
 		pANTLR3_BASE_TREE p=((pANTLR3_BASE_TREE)(e->getChild(e, e->getChildCount(e)-1)));
-		//cout<<p->toStringTree(p)->chars<<endl;
 		e->u=p->u;
-		//cout<<boost::apply_visitor(ToString(),*((ZTvarp)(p->u)))<<endl;
 	}
 
 	void AssingmentExpr::Exec(pANTLR3_BASE_TREE r,pANTLR3_BASE_TREE l,pANTLR3_BASE_TREE e)
@@ -165,7 +163,6 @@ namespace ZInterp
 		switch(r->getToken(r)->type)
 		{
 		case SS_EQUAL:
-			//cout<<boost::apply_visitor(ToString(),*((ZTvarp)(l->u)))<<endl;
 			*((ZTvarp)(l->u))=*((ZTvarp)(e->u));
 			break;
 		case SS_PLUS_EQUAL:

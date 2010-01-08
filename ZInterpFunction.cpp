@@ -42,11 +42,6 @@ namespace ZInterp
 	}
 	void Operand::FunCall(pANTLR3_BASE_TREE t1,pANTLR3_BASE_TREE arg,yatgFW_Ctx_struct* xyz)
 	{
-		//pANTLR3_BASE_TREE tPrnt=t1->getParent(t1);
-		//std::cout<<(t1->getParent(t1)==NULL);
-		//tPrnt=(pANTLR3_BASE_TREE)(tPrnt->getChild(tPrnt,1));
-		//std::cout<<((pANTLR3_BASE_TREE)tPrnt->getChild(tPrnt,0))->getType(((pANTLR3_BASE_TREE)tPrnt->getChild(tPrnt,0)))<<std::endl;
-
 		pANTLR3_BASE_TREE t2=(pANTLR3_BASE_TREE)t1->getChild(t1,0);
 		ZChar* vName = getNodeText(t2);
 		ZTvarp fun;

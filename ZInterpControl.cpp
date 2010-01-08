@@ -66,10 +66,9 @@ namespace ZInterp
 		SEEK(Wend);
 		MATCHT(EWHILE_END,NULL);
 	}
+
 	void ForExpr::Exec ( pANTLR3_BASE_TREE fnode , pANTLR3_BASE_TREE src , yatgFW_Ctx_struct* xyz )
 	{
-		//ANTLR3_MARKER fid = ( ( pANTLR3_BASE_TREE ) ( fnode -> getChild ( fnode , 0 ) ) ) -> savedIndex ;
-		//ANTLR3_MARKER fsrc = ( ( pANTLR3_BASE_TREE ) ( fnode -> getChild ( fnode , 1 ) ) ) -> savedIndex ;
 		ANTLR3_MARKER fexpr = ( ( pANTLR3_BASE_TREE ) ( fnode -> getChild ( fnode , 2 ) ) ) -> savedIndex ;
 		ANTLR3_MARKER fend = ( ( pANTLR3_BASE_TREE ) ( fnode -> getChild ( fnode , 3 ) ) ) -> savedIndex ;
 
@@ -93,16 +92,13 @@ namespace ZInterp
 		}
 		SEEK ( fend ) ;
 		MATCHT ( EFOR_END , NULL ) ;
-		
 	}
+
 	void DoExpr::Exec ( pANTLR3_BASE_TREE dnode , pANTLR3_BASE_TREE cond , yatgFW_Ctx_struct* xyz )
 	{
 		ANTLR3_MARKER dexpr=(((pANTLR3_BASE_TREE)dnode->getChild(dnode,1))->savedIndex);
 		ANTLR3_MARKER dcond=(((pANTLR3_BASE_TREE)dnode->getChild(dnode,0))->savedIndex);
 		ANTLR3_MARKER dend=(((pANTLR3_BASE_TREE)dnode->getChild(dnode,2))->savedIndex);
-		//cout<<getNodeText((pANTLR3_BASE_TREE)dnode->getChild(dnode,0))<<endl;
-		//cout<<getNodeText((pANTLR3_BASE_TREE)dnode->getChild(dnode,1))<<endl;
-		//cout<<getNodeText((pANTLR3_BASE_TREE)dnode->getChild(dnode,2))<<endl;
 		
 		do
 		{
@@ -120,14 +116,13 @@ namespace ZInterp
 		SEEK(dend);
 		MATCHT(EDO_END,NULL);
 	}
+
 	void CaseExpr::Exec(pANTLR3_BASE_TREE caseNode, yatgFW_Ctx_struct * xyz)
 	{
 		ANTLR3_MARKER caseexpr=(((pANTLR3_BASE_TREE)caseNode->getChild(caseNode,0))->savedIndex);
 		ANTLR3_MARKER item=(((pANTLR3_BASE_TREE)caseNode->getChild(caseNode,1))->savedIndex);
-		//cout<<getNodeText((pANTLR3_BASE_TREE)caseNode->getChild(caseNode,0))<<endl;
 		pANTLR3_BASE_TREE titem=(pANTLR3_BASE_TREE)caseNode->getChild(caseNode,1);
-		//cout<<getNodeText(titem)<<endl;
-		//cout<<getNodeText((pANTLR3_BASE_TREE)(titem)->getChild(titem,0))<<endl;
+		
 		SEEK(item);
 		MATCHT(CASE_Item,NULL);
 		MATCHT ( ANTLR3_TOKEN_DOWN , NULL ) ;
@@ -137,8 +132,7 @@ namespace ZInterp
 		char* var = getNodeText((pANTLR3_BASE_TREE)p->getChild(p,0));
 		ZTvarp x= ZInterp::ZSym.currentScope->lookup(var);
 		string res=boost::apply_visitor(ToString(),*x);
-		//cout<<getNodeText((pANTLR3_BASE_TREE)(titem)->getChild(titem,0))<<endl;
-		//cout<<boost::apply_visitor(ToString(),*x)<<endl;
+		
 		int c=1;
 		while((pANTLR3_BASE_TREE)(caseNode)->getChild(caseNode,c)!=NULL)
 		{
@@ -148,13 +142,11 @@ namespace ZInterp
 				itemstr.erase(0,1);
 				itemstr.erase(itemstr.size()-1,1);
 			}
-			//cout<<itemstr<<endl;
-
+		
 			if(res== itemstr || itemstr == "DEFAULT")
 			{
 				pANTLR3_BASE_TREE tt = (pANTLR3_BASE_TREE)caseNode->getChild(caseNode,c);
 				SEEK(((pANTLR3_BASE_TREE)(tt->getChild(tt,1)))->savedIndex);
-				//cout<<(pANTLR3_BASE_TREE)(titem->getChild(titem,1))<<endl;
 				xyz->expr_g(xyz);
 				break;
 			}
@@ -163,8 +155,5 @@ namespace ZInterp
 		}
 		MATCHT(ANTLR3_TOKEN_UP , NULL);
 		MATCHT(ANTLR3_TOKEN_UP , NULL);
-		//cout<<var<<"="<<boost::apply_visitor(ToString(),*x)<<endl;
-		
 	}
-
 };
