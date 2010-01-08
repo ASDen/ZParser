@@ -32,7 +32,7 @@ namespace ZInterp
 	{
 	public:
 		static void _OPERAND(pANTLR3_BASE_TREE t1);
-
+		static void AccessListElement(pANTLR3_BASE_TREE t1,pANTLR3_BASE_TREE ind);
 		static void FunCall(pANTLR3_BASE_TREE t1,pANTLR3_BASE_TREE arg,yatgFW_Ctx_struct* xyz);
 	};
 
@@ -40,6 +40,7 @@ namespace ZInterp
 	{
 	public:
 		static void Exec(pANTLR3_BASE_TREE c);
+		static void ComplexExec(pANTLR3_BASE_TREE c);
 	};
 
 	class Cexprx

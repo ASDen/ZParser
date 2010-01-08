@@ -77,6 +77,23 @@ namespace ZInterp
 		setCustomNodeField(t1,var);
 	}
 
+	void Operand::AccessListElement(pANTLR3_BASE_TREE t1,pANTLR3_BASE_TREE ind)
+	{
+		pANTLR3_BASE_TREE aind=(pANTLR3_BASE_TREE)ind->getChild(ind,0);
+		ZIInteger index=boost::get<gZInt>(*(ZTvarp)(aind->u)).cont->val;
+		
+		pANTLR3_BASE_TREE t2=(pANTLR3_BASE_TREE)t1->getChild(t1,0);
+		ZChar* vName = getNodeText(t2);
+		ZTvarp var;
+		var = ZSym.getSymbol(vName,true);
+		if(var==NULL)
+		{
+			/* Fire Exception */
+			std::cout<<"Not a variable"<<std::endl;
+		}
+		ZTList* list=(boost::get<gZList>(*var)).cont;
+		setCustomNodeField(t1,list->val[index]);
+	}
 
 	// TODO : use a pool of preallocaed temps , should affect
 	//		  performance greatly
@@ -110,6 +127,28 @@ namespace ZInterp
 			break;
 		case KW_FALSE:
 			*var=ZTBool(false);
+			break;
+		}
+		setCustomNodeField(c,var);
+	}
+
+	void Constant::ComplexExec(pANTLR3_BASE_TREE c)
+	{
+		ZTvarp var=ZAlloc(ZTvar,1);
+		switch(c->getToken(c)->type)
+		{
+		case ARR_A:
+			ZTList zl;
+			if(c->children!=NULL)
+			{
+				for ( int i = 0 ; i < c->children->count ; i++ )
+				{
+					ZTvarp vp=ZAlloc(ZTvar,1);
+					*vp = *((ZTvarp)((pANTLR3_BASE_TREE)c->getChild(c,i))->u);
+					zl.Append ( vp ) ;
+				}
+			}
+			*var=zl;
 			break;
 		}
 		setCustomNodeField(c,var);

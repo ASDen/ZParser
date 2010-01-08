@@ -185,8 +185,8 @@ operand
 	( 
 	  ID_MORE {ZInterp::Operand::_OPERAND($t1);}
 	| ^(DOT IDENTIFIER ) ID_MORE
-	| ^(ARR_IND expr_g ) ID_MORE
-	| ^(arg =ARG_EXPR_L expr_g* ) ID_MORE {ZInterp::Operand::FunCall($t1,$arg,ctx);}
+	| ^(elm = ARR_IND expr_g ) ID_MORE {ZInterp::Operand::AccessListElement($t1,$elm);}
+	| ^(arg = ARG_EXPR_L expr_g* ) ID_MORE {ZInterp::Operand::FunCall($t1,$arg,ctx);}
 	)
 	)
         | constant
@@ -203,7 +203,7 @@ constant
     	(
     	  e = DIGIT		
     	| e = HEX_LITERAL
-    	| e =  STRING_LITERIAL
+    	| e = STRING_LITERIAL
     	| e = KW_TRUE
     	| e = KW_FALSE
     	| e = KW_ON
@@ -213,9 +213,9 @@ constant
     	| e = KW_UNSUPPLIED
     	)
     	{ ZInterp::Constant::Exec($e); }
-    	
+    	| ^(c=ARR_A  expr_g*)
+   	{ ZInterp::Constant::ComplexExec($c); }
     	| SS_HASH IDENTIFIER
-   	| array
     	| bitarray
     	| box2
    	| point3

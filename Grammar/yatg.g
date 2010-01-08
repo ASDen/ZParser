@@ -405,9 +405,9 @@ point2
 	;
 
 array 
-	: SS_HASH SS_OPAREN SS_CPAREN
+	: SS_OBRACKET SS_CBRACKET
 	-> ^(ARR_A)
-	| SS_HASH SS_OPAREN ele+=expr_g ( SS_COMMA ele+=expr_g )* SS_CPAREN
+	| SS_OBRACKET ele+=expr_g ( SS_COMMA ele+=expr_g )* SS_CBRACKET
 	-> ^(ARR_A $ele+)
 	;
 
