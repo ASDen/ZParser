@@ -1,5 +1,18 @@
-// Zzparser.cpp : Defines the entry point for the console application.
-//
+/*
+TODO :
+------
+1)  to comply closure and others , when defining function store it's scope
+	and jump to that scope when calling the function (CHECK IF THIS SUFFICIENT)
+
+2)  Lists , still very much problematic
+
+3)  I/O module to develop real sample scripts
+
+4)  LLVM ?
+
+5)  libffi ?
+
+*/
 
 #include "stdafx.h"
 #include "yatgLexer.h"

@@ -3,7 +3,7 @@ tree grammar yatgFW;
 options
 {
     tokenVocab	    = yatg;
-    ASTLabelType   = pANTLR3_BASE_TREE;
+    ASTLabelType    = pANTLR3_BASE_TREE;
     language	    = C;
     backtrack	    = true;
 }
@@ -181,13 +181,12 @@ unary_expression
 	
 operand
 	:    
-	^(t1=OPERAND IDENTIFIER 
-	( 
-	  ID_MORE {ZInterp::Operand::_OPERAND($t1);}
-	| ^(DOT IDENTIFIER ) ID_MORE
-	| ^(elm = ARR_IND expr_g ) ID_MORE {ZInterp::Operand::AccessListElement($t1,$elm);}
-	| ^(arg = ARG_EXPR_L expr_g* ) ID_MORE {ZInterp::Operand::FunCall($t1,$arg,ctx);}
-	)
+	^(t1=OPERAND IDENTIFIER {ZInterp::Operand::_OPERAND($t1);}
+	(  
+	  ^(DOT IDENTIFIER ) 
+	| ^(elm = ARR_IND expr_g ) {ZInterp::Operand::AccessListElement($t1,$elm);}
+	| ^(arg = ARG_EXPR_L expr_g* ) {ZInterp::Operand::FunCall($t1,$arg,ctx);}
+	)* ID_MORE
 	)
         | constant
         ;

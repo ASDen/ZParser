@@ -42,17 +42,6 @@ namespace ZInterp
 	}
 	void Operand::FunCall(pANTLR3_BASE_TREE t1,pANTLR3_BASE_TREE arg,yatgFW_Ctx_struct* xyz)
 	{
-		pANTLR3_BASE_TREE t2=(pANTLR3_BASE_TREE)t1->getChild(t1,0);
-		ZChar* vName = getNodeText(t2);
-		ZTvarp fun;
-		fun = ZSym.getSymbol(vName,true);
-		if ( fun == NULL )
-		{
-			/* Fire an Exception */
-			std::cout << "Function : " << vName << " Not defined" << std::endl ;
-			return;
-		}
-
 		//Collect arguments in a vector before calling
 		ZTvarS Fargs;
 		ZTvarp vp;
@@ -65,7 +54,7 @@ namespace ZInterp
 		}
 
 		pANTLR3_BASE_TREE t  ;
-		ZIFunction* var=boost::get<gZFunction>(*fun).cont->val;
+		ZIFunction* var=boost::get<gZFunction>( *(ZTvarp)(t1->u) ).cont->val;
 		
 		switch ( var -> FunT )
 		{

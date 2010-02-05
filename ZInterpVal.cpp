@@ -81,17 +81,7 @@ namespace ZInterp
 	{
 		pANTLR3_BASE_TREE aind=(pANTLR3_BASE_TREE)ind->getChild(ind,0);
 		ZIInteger index=boost::get<gZInt>(*(ZTvarp)(aind->u)).cont->val;
-		
-		pANTLR3_BASE_TREE t2=(pANTLR3_BASE_TREE)t1->getChild(t1,0);
-		ZChar* vName = getNodeText(t2);
-		ZTvarp var;
-		var = ZSym.getSymbol(vName,true);
-		if(var==NULL)
-		{
-			/* Fire Exception */
-			std::cout<<"Not a variable"<<std::endl;
-		}
-		ZTList* list=(boost::get<gZList>(*var)).cont;
+		ZTList* list=( boost::get<gZList>( *(ZTvarp)(t1->u) )).cont;
 		setCustomNodeField(t1,list->val[index]);
 	}
 
