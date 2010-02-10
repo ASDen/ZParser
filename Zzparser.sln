@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual C++ Express 2008
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Zzparser", "Zzparser.vcproj", "{68B00091-9568-468A-83B3-2A238F72D7CB}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ZSymbolTable", "..\ZSymbolTable\ZSymbolTable.vcproj", "{7D8CBA68-73DA-4070-8F79-DC1745AC0389}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ZTypes", "..\ZTypes\ZTypes.vcproj", "{57A0E37D-D1FB-4554-A00B-C0969AC798B7}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{68B00091-9568-468A-83B3-2A238F72D7CB}.Debug|Win32.ActiveCfg = Debug|Win32
+		{68B00091-9568-468A-83B3-2A238F72D7CB}.Debug|Win32.Build.0 = Debug|Win32
+		{68B00091-9568-468A-83B3-2A238F72D7CB}.Release|Win32.ActiveCfg = Release|Win32
+		{68B00091-9568-468A-83B3-2A238F72D7CB}.Release|Win32.Build.0 = Release|Win32
+		{7D8CBA68-73DA-4070-8F79-DC1745AC0389}.Debug|Win32.ActiveCfg = Debug|Win32
+		{7D8CBA68-73DA-4070-8F79-DC1745AC0389}.Debug|Win32.Build.0 = Debug|Win32
+		{7D8CBA68-73DA-4070-8F79-DC1745AC0389}.Release|Win32.ActiveCfg = Release|Win32
+		{7D8CBA68-73DA-4070-8F79-DC1745AC0389}.Release|Win32.Build.0 = Release|Win32
+		{57A0E37D-D1FB-4554-A00B-C0969AC798B7}.Debug|Win32.ActiveCfg = Debug|Win32
+		{57A0E37D-D1FB-4554-A00B-C0969AC798B7}.Debug|Win32.Build.0 = Debug|Win32
+		{57A0E37D-D1FB-4554-A00B-C0969AC798B7}.Release|Win32.ActiveCfg = Release|Win32
+		{57A0E37D-D1FB-4554-A00B-C0969AC798B7}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,28 @@
+fn sum a,b=(a+b)
+fn sub a,b=(a-b)
+fn Tten =10
+
+
+v=sum
+printL(v(1,2))
+v=sub
+printL(v(1,2))
+v=(fn XTten a,b=a-b)
+printL(v(1,2))
+
+x=[1,2,3,[[1,2],[3,4]],sum,sub]
+x[3][1][0]=12
+x[3][1]+=[12]
+printL(x[4](3,4))
+
+y=[1,2]+[3,4]
+y+=[9,0]
+
+i=0
+while(i<10) do
+(
+print("i = ")
+printL(i)
+break
+i+=1
+)
