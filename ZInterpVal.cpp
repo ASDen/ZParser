@@ -20,21 +20,23 @@ namespace ZInterp
 {
 	
 	ZSymbolTable<ZTvar> ZSym;
-
+    ZIBool isExit=ZBFalse,isContinue=ZBFalse;
+    vector <ANTLR3_MARKER> lend,lCon;
+    int loopNum=0,actual=0;
 
 	void global::Init()
 	{
-		ZSym.InitScope();
+		ZSym . InitScope();
 	}
 
-	void global::IncScope()
+	void global :: IncScope()
 	{
-		ZSym.InitScope();
+		ZSym . InitScope ( ) ;
 	}
 
-	void global::DecScope()
+	void global :: DecScope ( )
 	{
-		ZSym.FinScope();
+		ZSym . FinScope();
 	}
 
 	void global::InitBuiltinMods()
@@ -77,10 +79,10 @@ namespace ZInterp
 		setCustomNodeField(t1,var);
 	}
 
-	void Operand::AccessListElement(pANTLR3_BASE_TREE t1,pANTLR3_BASE_TREE ind)
+    void Operand::AccessListElement(pANTLR3_BASE_TREE t1,pANTLR3_BASE_TREE ind)
 	{
 		pANTLR3_BASE_TREE aind=(pANTLR3_BASE_TREE)ind->getChild(ind,0);
-		ZIInteger index=boost::get<gZInt>(*(ZTvarp)(aind->u)).cont->val;
+        ZIInteger index=boost::get<gZInt>(*(ZTvarp)(aind->u)).cont->val;
 		ZTList* list=( boost::get<gZList>( *(ZTvarp)(t1->u) )).cont;
 		setCustomNodeField(t1,list->val[index]);
 	}
@@ -210,6 +212,36 @@ namespace ZInterp
 			break;
 		}
 		//((r->u))=((ZTvarp)(l->u));
-		r->u=l->u;
+		r -> u = l -> u ;
 	}
+
+    void EXIT :: Exec ( pANTLR3_BASE_TREE exitNode , yatgFW_Ctx_struct *xyz )
+    {
+        char * n=(((pANTLR3_BASE_TREE)exitNode->getChild(exitNode,0))!=NULL)? getNodeText((pANTLR3_BASE_TREE)(((pANTLR3_BASE_TREE)exitNode->getChild(exitNode,0))->getChild((pANTLR3_BASE_TREE)exitNode->getChild(exitNode,0),0))) : "1";
+        isExit = ZBTrue ;
+        loopNum=atoi(n);
+        SEEK(lend[0]);
+        switch(LA(1))
+        {
+        case EFOR_END:
+            MATCHT(EFOR_END,NULL);
+            break;
+        case EDO_END:
+            MATCHT(EDO_END,NULL);
+            break;
+        case EWHILE_END:
+            MATCHT(EWHILE_END,NULL);
+            break;
+        }
+
+    }
+    void CONTINUE :: Exec ( pANTLR3_BASE_TREE conNode , yatgFW_Ctx_struct *xyz )
+    {
+     //   char * n=getNodeText((pANTLR3_BASE_TREE)((pANTLR3_BASE_TREE)exitNode->getChild(exitNode,0))->getChild((pANTLR3_BASE_TREE)exitNode->getChild(exitNode,0),0));
+        isContinue = ZBTrue ;
+        //loopNum=atoi(n);
+        SEEK(lCon[0]);
+
+        MATCHT(EFOR_END,NULL);
+    }
 };

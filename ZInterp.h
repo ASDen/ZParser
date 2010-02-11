@@ -8,6 +8,9 @@
 namespace ZInterp
 {
 	extern ZSymbolTable<ZTvar> ZSym;
+    extern ZIBool isExit,isContinue;
+    extern vector <ANTLR3_MARKER> lend,lCon;
+    extern int loopNum,actual;
 
 	class global
 	{
@@ -93,7 +96,16 @@ namespace ZInterp
 	public:
 		static void Defination(pANTLR3_BASE_TREE funNode,yatgFW_Ctx_struct* xyz);
 	};
-
+    class EXIT
+	{
+	public:
+		static void Exec(pANTLR3_BASE_TREE exitNode,yatgFW_Ctx_struct* xyz);
+	};
+    class CONTINUE
+	{
+	public:
+		static void Exec(pANTLR3_BASE_TREE conNode,yatgFW_Ctx_struct* xyz);
+	};
 };
 
 #endif
