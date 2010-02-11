@@ -58,6 +58,14 @@ ZTvarp ZprintL(ZTvarS var)
 	return res;
 }
 
+ZTvarp ZInt(ZTvarS var)
+{
+    ZIInteger index=boost::get<gZInt>(*(var[0])).cont->val;
+    ZTvarp res=ZAlloc(ZTvar,1);
+	*res=ZTInt(index);
+    return res;
+}
+
 void ZModInit_Test()
 {
 	ZIFunction* zf=ZAlloc(ZIFunction,4);
@@ -81,4 +89,9 @@ void ZModInit_Test()
 	zf->pFunInit(2,Zpower::Zpower_);
 	*zv=ZTFunction(zf);
 	ZInterp::ZSym.InsertSymbol(_ZC("pow"),zv);
+
+    zf++;zv++;
+    zf->pFunInit(1,ZInt);
+	*zv=ZTFunction(zf);
+	ZInterp::ZSym.InsertSymbol(_ZC("parseInt"),zv);
 }

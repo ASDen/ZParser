@@ -31,7 +31,7 @@ namespace ZInterp
 			ZIFunction* ifun=ZAlloc(ZIFunction,1);
 			ifun -> FunData . NodeID = ( funNode ) -> savedIndex ;
 			ifun -> FunT = ZInternal;
-			ifun -> NumArgs = ( ( pANTLR3_BASE_TREE ) funNode -> getChild ( funNode , 1 ) ) -> children -> count;
+            ifun -> NumArgs = (( pANTLR3_BASE_TREE ) funNode -> getChild ( funNode , 1 )==NULL)?( ( pANTLR3_BASE_TREE ) funNode -> getChild ( funNode , 1 ) ) -> children -> count:0;
 			*fun=ZTFunction(ifun);
 			ZSym.InsertSymbol ( fName , fun );
 		}

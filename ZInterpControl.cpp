@@ -52,6 +52,8 @@ namespace ZInterp
 		ANTLR3_MARKER Wexpr=((pANTLR3_BASE_TREE)(wnode->getChild(wnode,1)))->savedIndex;
 		ANTLR3_MARKER Wend =((pANTLR3_BASE_TREE)(wnode->getChild(wnode,2)))->savedIndex;
 
+        ZInterp::lend.push_back(Wend);
+        ZInterp::lCon.push_back(Wend);
 		while(boost::apply_visitor(BoolVal(),*((ZTvarp)(cond->u)))== ZBTrue )
 		{
 			SEEK(Wexpr);
@@ -62,6 +64,26 @@ namespace ZInterp
 			MATCHT(EWHILE_CON,NULL);
 			MATCHT(ANTLR3_TOKEN_DOWN,NULL);
 			cond = (xyz->expr_g(xyz)).start;
+            if(ZInterp::isExit)
+            {
+                ZInterp::actual++;
+                if(ZInterp::actual==ZInterp::loopNum)
+                {
+                    ZInterp::actual=0;
+                    ZInterp::isExit = ZBFalse ;
+                }
+                break ;
+            }
+            if(ZInterp :: isContinue)
+            {
+                //ZInterp::actual++;
+                //if(ZInterp::actual==ZInterp::loopNum)
+                //{
+                    //  ZInterp::actual=0;
+                    //ZInterp::isExit = ZBFalse ;
+                //}
+                continue ;
+            }
 		}
 		SEEK(Wend);
 		MATCHT(EWHILE_END,NULL);
@@ -71,24 +93,80 @@ namespace ZInterp
 	{
 		ANTLR3_MARKER fexpr = ( ( pANTLR3_BASE_TREE ) ( fnode -> getChild ( fnode , 2 ) ) ) -> savedIndex ;
 		ANTLR3_MARKER fend = ( ( pANTLR3_BASE_TREE ) ( fnode -> getChild ( fnode , 3 ) ) ) -> savedIndex ;
-
+        ZInterp::lend.push_back(fend);
+        ZInterp::lCon.push_back(fend);
 		pANTLR3_BASE_TREE tsrc=( ( pANTLR3_BASE_TREE ) ( fnode -> getChild ( fnode , 1 ) ) );
 		pANTLR3_BASE_TREE tstart= ( pANTLR3_BASE_TREE ) tsrc -> getChild ( tsrc , 0 ) ;
 		pANTLR3_BASE_TREE tend= ( pANTLR3_BASE_TREE ) tsrc -> getChild ( tsrc , 1 ) ;
 		pANTLR3_BASE_TREE tby= ( pANTLR3_BASE_TREE ) tsrc -> getChild ( tsrc , 2 ) ;
 		pANTLR3_BASE_TREE twhere= ( pANTLR3_BASE_TREE ) tsrc -> getChild ( tsrc , 3 ) ;
 
-		double start = atof ( ( char * ) getNodeText ( ( pANTLR3_BASE_TREE ) tstart -> getChild ( tstart , 0 ) ) ) ;
-		double end = atof ( ( char * ) getNodeText ( ( pANTLR3_BASE_TREE ) tend -> getChild ( tend , 0 ) ) ) ;
-		double scale = ( tby != NULL ) ? atof ( ( char * ) getNodeText ( ( pANTLR3_BASE_TREE ) tby -> getChild ( tby , 0 ) ) ) : 1;
-		bool cond = (twhere!=NULL) ? boost :: apply_visitor ( BoolVal ( ) , * ( ( ZTvarp ) ( ((pANTLR3_BASE_TREE)twhere->getChild(twhere,0)) -> u ) ) ) ==  ZBTrue : ZBTrue;
+        ZIFloat start,end,scale=1;ZIBool cond=ZBTrue;ZTvarp v;ZTList* list=NULL;ZChar* arr;
+        ZTFloat f;
+        if(tend==NULL)
+        {
+            arr=getNodeText(((pANTLR3_BASE_TREE)(( pANTLR3_BASE_TREE ) tstart -> getChild ( tstart , 0 ))->getChild((( pANTLR3_BASE_TREE ) tstart -> getChild ( tstart , 0 )),0)));
+            ZTvarp var=ZInterp::ZSym.getSymbol(arr,true);
+            list=( boost::get<gZList>( *var )).cont;
+            start=0;
+            end=list->val.size();
+            
+		    f.val=atof(boost::apply_visitor(ToString(),*(list->val[0])));
+		    v = ZAlloc(ZTvar , 1);
+		    *v =(ZTvar)f;
+        }
+        else
+        {
+            start= boost::get<gZInt>(*(ZTvarp)((( pANTLR3_BASE_TREE ) tstart -> getChild ( tstart , 0 ))->u)).cont->val;
+            end=boost::get<gZInt>(*(ZTvarp)((( pANTLR3_BASE_TREE ) tend -> getChild ( tend , 0 ))->u)).cont->val;
+            scale=( tby != NULL ) ? boost::get<gZInt>(*(ZTvarp)((( pANTLR3_BASE_TREE ) tby -> getChild ( tby , 0 ))->u)).cont->val : 1.0;
+            cond= (twhere!=NULL)  ? boost::get<gZInt>(*(ZTvarp)((( pANTLR3_BASE_TREE ) twhere -> getChild ( twhere , 0 ))->u)).cont->val ==  ZBTrue : ZBTrue;
+    		
+		    f.val=start;
+		    v = ZAlloc(ZTvar,1);
+		    *v =(ZTvar)f;
+        }
+		ZChar* id=getNodeText((pANTLR3_BASE_TREE)fnode->getChild(fnode,0));
+	    ZInterp::ZSym.currentScope->VarTable.Insert(v,id);
 
-		for ( ; start <= end && cond ; start += scale )
+        for ( ; start <=end && cond ; start += scale )
 		{
+            if(list==NULL)
+            {
+                f.val+=scale;
+                *v =(ZTvar)f;
+            }
+            else
+            {
+                if(start+1>end)
+                    break;
+                f.val=atof(boost::apply_visitor(ToString(),*(list->val[start])));
+                *v=(ZTvar)f;
+            }
 			SEEK ( fexpr ) ;
 			MATCHT ( EFOR_EXP , NULL ) ;
 			MATCHT ( ANTLR3_TOKEN_DOWN , NULL ) ;
 			xyz -> expr_g ( xyz ) ;
+            if(ZInterp::isExit)
+            {
+                ZInterp::actual++;
+                if(ZInterp::actual==ZInterp::loopNum)
+                {
+                    ZInterp::actual=0;
+                    ZInterp::isExit = ZBFalse ;
+                }
+                break ;
+            }
+            if(ZInterp :: isContinue)
+            {
+                //ZInterp::actual++;
+                //if(ZInterp::actual==ZInterp::loopNum)
+                //{
+                    //  ZInterp::actual=0;
+                    //ZInterp::isExit = ZBFalse ;
+                //}
+                continue ;
+            }
 		}
 		SEEK ( fend ) ;
 		MATCHT ( EFOR_END , NULL ) ;
@@ -129,8 +207,8 @@ namespace ZInterp
 
 		pANTLR3_BASE_TREE t = (pANTLR3_BASE_TREE)((pANTLR3_BASE_TREE)caseNode->getChild(caseNode,0));
 		pANTLR3_BASE_TREE p=(pANTLR3_BASE_TREE)t->getChild(t,0);
-		char* var = getNodeText((pANTLR3_BASE_TREE)p->getChild(p,0));
-		ZTvarp x= ZInterp::ZSym.currentScope->lookup(var);
+		ZChar* var = getNodeText((pANTLR3_BASE_TREE)p->getChild(p,0));
+        ZTvarp x= ZInterp::ZSym.getSymbol(var,ZBTrue);
 		string res=boost::apply_visitor(ToString(),*x);
 		
 		int c=1;
@@ -145,13 +223,13 @@ namespace ZInterp
 		
 			if(res== itemstr || itemstr == "DEFAULT")
 			{
-				pANTLR3_BASE_TREE tt = (pANTLR3_BASE_TREE)caseNode->getChild(caseNode,c);
-				SEEK(((pANTLR3_BASE_TREE)(tt->getChild(tt,1)))->savedIndex);
-				xyz->expr_g(xyz);
-				break;
+				pANTLR3_BASE_TREE tt = ( pANTLR3_BASE_TREE ) caseNode -> getChild ( caseNode , c ) ;
+				SEEK ( ( ( pANTLR3_BASE_TREE ) ( tt -> getChild ( tt , 1 ) ) ) -> savedIndex ) ;
+				xyz -> expr_g ( xyz );
+				return;
 			}
-			MATCHT(ANTLR3_TOKEN_UP , NULL);
-			c++;
+			MATCHT ( ANTLR3_TOKEN_UP , NULL ) ;
+			c ++ ;
 		}
 		MATCHT(ANTLR3_TOKEN_UP , NULL);
 		MATCHT(ANTLR3_TOKEN_UP , NULL);

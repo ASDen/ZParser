@@ -84,12 +84,12 @@ source
 
 loop_exit 
 	: 
-	  ^( LP_EXIT ( ^(LP_EXIT_WITH expr_g ) )? )
+	  ^(j = LP_EXIT { ZInterp :: EXIT :: Exec ( $j , ctx ) ; } )
 	;
 
 loop_continue
 	 : 
-	   LP_CONT
+	  j= LP_CONT{ ZInterp :: CONTINUE :: Exec ( $j , ctx ) ; }
 	 ;
 
 case_expr

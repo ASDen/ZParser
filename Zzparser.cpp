@@ -42,6 +42,8 @@ int ANTLR3_CDECL _tmain(int argc, _TCHAR* argv[])
     
 	input	= antlr3AsciiFileStreamNew(fName);
 
+	
+
     if ( input == NULL)
     {
 	    fprintf(stderr, "Failed to open file %s\n", (char *)fName);
@@ -105,7 +107,7 @@ int ANTLR3_CDECL _tmain(int argc, _TCHAR* argv[])
 		treePsr	= yatgFWNew(nodes);
 		treePsr->program(treePsr);
 
-		ZInterp::ZSym.currentScope->VarTable.PrintAll();
+		//ZInterp::ZSym.currentScope->VarTable.PrintAll();
 
 		nodes->free(nodes); nodes = NULL;
 		treePsr ->free  (treePsr);	    treePsr	= NULL;
