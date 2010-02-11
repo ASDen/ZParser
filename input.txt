@@ -1,28 +1,62 @@
-fn sum a,b=(a+b)
-fn sub a,b=(a-b)
-fn Tten =10
-
-
-v=sum
-printL(v(1,2))
-v=sub
-printL(v(1,2))
-v=(fn XTten a,b=a-b)
-printL(v(1,2))
-
-x=[1,2,3,[[1,2],[3,4]],sum,sub]
-x[3][1][0]=12
-x[3][1]+=[12]
-printL(x[4](3,4))
-
-y=[1,2]+[3,4]
-y+=[9,0]
-
-i=0
-while(i<10) do
+for a in ["ASD"] do
 (
-print("i = ")
-printL(i)
-break
-i+=1
+	printL(a)
 )
+
+v=8
+	w=100
+	sum=0
+	x=[10,2,3,4,"ASD",["Q","printL"],5,6,123]
+
+	for  a in x  do 
+	(
+		for m =4 to 20 do
+		(
+			for n =1 to 3 do
+			(
+				print("a=")
+				printL(a)
+				printL(n)
+				exit with 2
+			)
+		)
+	)
+	printL(x)
+	a=10
+	while(a) do
+	(
+	printL("Before")
+	a=a-1
+	continue
+	printL("after")
+	)
+	print("sum=")
+	printL(sum);
+	x=1
+	e=20 
+	for a=x to e do
+	(
+	x+=1
+	)
+	print("x=")
+	printL(x)
+	x=20
+	case x of
+	(
+		10:
+			(
+				print("1")
+			)
+		(10+10):
+			(
+				print("second=")
+				printL(x)
+				x=34
+			)
+		default:
+			(
+				print("x=")
+				x=34
+				print(x)
+			)
+	)

@@ -102,18 +102,19 @@ namespace ZInterp
 		pANTLR3_BASE_TREE twhere= ( pANTLR3_BASE_TREE ) tsrc -> getChild ( tsrc , 3 ) ;
 
         ZIFloat start,end,scale=1;ZIBool cond=ZBTrue;ZTvarp v;ZTList* list=NULL;ZChar* arr;
-        ZTFloat f;
+		ZTFloat f;
+		v = ZAlloc(ZTvar,1);
         if(tend==NULL)
         {
-            arr=getNodeText(((pANTLR3_BASE_TREE)(( pANTLR3_BASE_TREE ) tstart -> getChild ( tstart , 0 ))->getChild((( pANTLR3_BASE_TREE ) tstart -> getChild ( tstart , 0 )),0)));
-            ZTvarp var=ZInterp::ZSym.getSymbol(arr,true);
-            list=( boost::get<gZList>( *var )).cont;
+            //arr=getNodeText(((pANTLR3_BASE_TREE)(( pANTLR3_BASE_TREE ) tstart -> getChild ( tstart , 0 ))->getChild((( pANTLR3_BASE_TREE ) tstart -> getChild ( tstart , 0 )),0)));
+            //ZTvarp var=ZInterp::ZSym.getSymbol(arr,true);
+            list=( boost::get<gZList>( *(ZTvarp)( ( ( pANTLR3_BASE_TREE ) tstart -> getChild ( tstart , 0 ) ) ->u) )).cont;
             start=0;
             end=list->val.size();
             
-		    f.val=atof(boost::apply_visitor(ToString(),*(list->val[0])));
-		    v = ZAlloc(ZTvar , 1);
-		    *v =(ZTvar)f;
+		    //f.val=atof(boost::apply_visitor(ToString(),*(list->val[0])));
+		    //v = ZAlloc(ZTvar , 1);
+		    *v=*(list->val[0]);
         }
         else
         {
@@ -122,9 +123,9 @@ namespace ZInterp
             scale=( tby != NULL ) ? boost::get<gZInt>(*(ZTvarp)((( pANTLR3_BASE_TREE ) tby -> getChild ( tby , 0 ))->u)).cont->val : 1.0;
             cond= (twhere!=NULL)  ? boost::get<gZInt>(*(ZTvarp)((( pANTLR3_BASE_TREE ) twhere -> getChild ( twhere , 0 ))->u)).cont->val ==  ZBTrue : ZBTrue;
     		
-		    f.val=start;
-		    v = ZAlloc(ZTvar,1);
-		    *v =(ZTvar)f;
+		    //f.val=start;
+		    
+			*v =ZTFloat(start);
         }
 		ZChar* id=getNodeText((pANTLR3_BASE_TREE)fnode->getChild(fnode,0));
 	    ZInterp::ZSym.currentScope->VarTable.Insert(v,id);
@@ -133,15 +134,17 @@ namespace ZInterp
 		{
             if(list==NULL)
             {
-                f.val+=scale;
-                *v =(ZTvar)f;
+                //f.val+=scale;
+                //*v =(ZTvar)f;
+				//*v=boost::apply_visitor(Sum(),*v,ZTvar(ZTFloat(start)));
+				*v =ZTFloat(start);
             }
             else
             {
                 if(start+1>end)
                     break;
-                f.val=atof(boost::apply_visitor(ToString(),*(list->val[start])));
-                *v=(ZTvar)f;
+               // f.val=atof(boost::apply_visitor(ToString(),*(list->val[start])));
+				*v=*(list->val[start]);
             }
 			SEEK ( fexpr ) ;
 			MATCHT ( EFOR_EXP , NULL ) ;
