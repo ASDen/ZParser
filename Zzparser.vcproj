@@ -313,6 +313,10 @@
 					RelativePath=".\testMod.cpp"
 					>
 				</File>
+				<File
+					RelativePath=".\testMod2.cpp"
+					>
+				</File>
 			</Filter>
 		</Filter>
 		<Filter
@@ -362,6 +366,10 @@
 		<Filter
 			Name="Input"
 			>
+			<File
+				RelativePath=".\inp00.txt"
+				>
+			</File>
 			<File
 				RelativePath=".\input.txt"
 				>

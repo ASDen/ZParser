@@ -103,6 +103,7 @@ int ANTLR3_CDECL _tmain(int argc, _TCHAR* argv[])
 			nodes->tnstream->istream->consume(nodes->tnstream->istream);
 		}
 		//ZInterp::global::Init();
+		ZTObject::Init();
 		ZInterp::global::InitBuiltinMods();
 		treePsr	= yatgFWNew(nodes);
 		treePsr->program(treePsr);

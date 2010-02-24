@@ -13,8 +13,8 @@ using namespace std;
 #include	<stdio.h>
 #include	<tchar.h>
 
-#include	"../ZTypes/ZTypes.h"
 #include	"../ZSymbolTable/ZSymbolTable.h"
+#include	"../ZTypes/ZTypes.h"
 #include    <antlr3.h>
 
 

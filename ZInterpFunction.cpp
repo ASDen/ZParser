@@ -31,7 +31,7 @@ namespace ZInterp
 			ZIFunction* ifun=ZAlloc(ZIFunction,1);
 			ifun -> FunData . NodeID = ( funNode ) -> savedIndex ;
 			ifun -> FunT = ZInternal;
-            ifun -> NumArgs = (( pANTLR3_BASE_TREE ) funNode -> getChild ( funNode , 1 )==NULL)?( ( pANTLR3_BASE_TREE ) funNode -> getChild ( funNode , 1 ) ) -> children -> count:0;
+            ifun -> NumArgs = ( ( pANTLR3_BASE_TREE ) funNode -> getChild ( funNode , 1 ) ) -> children -> count;
 			*fun=ZTFunction(ifun);
 			ZSym.InsertSymbol ( fName , fun );
 		}
@@ -40,21 +40,11 @@ namespace ZInterp
 		setCustomNodeField(funNode,fun);
 		
 	}
-	void Operand::FunCall(pANTLR3_BASE_TREE t1,pANTLR3_BASE_TREE arg,yatgFW_Ctx_struct* xyz)
+	/*--------------------------------------------*/
+	////////////////////////////////////////////////
+	void CallFunction(ZTvarS& Fargs,ZTvarp zfun,pANTLR3_BASE_TREE t1,pANTLR3_BASE_TREE arg,yatgFW_Ctx_struct* xyz)
 	{
-		//Collect arguments in a vector before calling
-		ZTvarS Fargs;
-		ZTvarp vp;
-		if(arg->children!=NULL)
-		for ( int i = 0 ; i < arg -> children -> count ; i ++ )
-		{
-			vp=ZAlloc(ZTvar,1);
-			*vp = *((ZTvarp)((pANTLR3_BASE_TREE)arg->getChild(arg,i))->u);
-			Fargs . push_back ( vp ) ;
-		}
-
-		pANTLR3_BASE_TREE t  ;
-		ZIFunction* var=boost::get<gZFunction>( *(ZTvarp)(t1->u) ).cont->val;
+		ZIFunction* var=boost::get<gZFunction>( *zfun ).cont->val;
 		
 		switch ( var -> FunT )
 		{
@@ -97,7 +87,50 @@ namespace ZInterp
 		case ZExternal:
 			ZInterp::setCustomNodeField(t1,(*(var->FunData.pFun))(Fargs));
 			break;
+		case ZMExternal:
+			ZTvarp res = (boost::apply_visitor(ZTCallBridge(var->FunData.pMFun,Fargs), *(var->obj) ));
+			ZInterp::setCustomNodeField(t1,res);
+			break;
+		}
+	}
+
+	void CreateObject(ZTvarS Fargs,ZTvarp zobj,pANTLR3_BASE_TREE t1)
+	{
+		ZTOInstance zin;
+		ZTvarp hv = ZAlloc(ZTvar,1);
+		zin.val = ZAlloc(ZObjP,1);
+		boost::get<gZObject>(*zobj).cont->cpy(zin.val,Fargs);
+		*hv=zin;
+		ZInterp::setCustomNodeField(t1,hv);
+	}
+
+	void Operand::FunCall(pANTLR3_BASE_TREE t1,pANTLR3_BASE_TREE arg,yatgFW_Ctx_struct* xyz)
+	{
+		//Collect arguments in a vector before calling
+		ZTvarS Fargs;
+		ZTvarp vp;
+		if(arg->children!=NULL)
+		{
+			for ( int i = 0 ; i < arg -> children -> count ; i ++ )
+			{
+				vp=ZAlloc(ZTvar,1);
+				*vp = *((ZTvarp)((pANTLR3_BASE_TREE)arg->getChild(arg,i))->u);
+				Fargs . push_back ( vp ) ;
+			}
 		}
 
+		pANTLR3_BASE_TREE t  ;
+		ZTvarp inp=(ZTvarp)(t1->u);
+		switch( boost::apply_visitor(getType(),*inp) )
+		{
+		case ZETObject:
+			CreateObject(Fargs,inp,t1);
+			break;
+		case ZETFunction:
+			CallFunction(Fargs,inp,t1,arg,xyz);
+			break;
+		}
 	}
+	////////////////////////////////////////////////
+	/*--------------------------------------------*/
 }

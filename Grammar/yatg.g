@@ -3,11 +3,11 @@ grammar yatg;
 options 
 {
 	output=AST;
-	language=C;
+	//language=C;
 	backtrack=true;
     	memoize=true;
     	k=2;
-    	ASTLabelType    = pANTLR3_BASE_TREE;
+    	//ASTLabelType    = pANTLR3_BASE_TREE;
 }
 
 

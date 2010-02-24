@@ -183,9 +183,9 @@ operand
 	:    
 	^(t1=OPERAND IDENTIFIER {ZInterp::Operand::_OPERAND($t1);}
 	(  
-	  ^(DOT IDENTIFIER ) 
-	| ^(elm = ARR_IND expr_g ) {ZInterp::Operand::AccessListElement($t1,$elm);}
-	| ^(arg = ARG_EXPR_L expr_g* ) {ZInterp::Operand::FunCall($t1,$arg,ctx);}
+	  ^(field = DOT IDENTIFIER )     {ZInterp::Operand::AccessObjectField($t1,$field);} 
+	| ^(elm   = ARR_IND expr_g )     {ZInterp::Operand::AccessListElement($t1,$elm);}
+	| ^(arg   = ARG_EXPR_L expr_g* ) {ZInterp::Operand::FunCall($t1,$arg,ctx);}
 	)* ID_MORE
 	)
         | constant

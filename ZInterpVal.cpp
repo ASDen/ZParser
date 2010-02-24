@@ -87,6 +87,26 @@ namespace ZInterp
 		setCustomNodeField(t1,list->val[index]);
 	}
 
+	void Operand::AccessObjectField(pANTLR3_BASE_TREE t1,pANTLR3_BASE_TREE field)
+	{
+		pANTLR3_BASE_TREE afield=(pANTLR3_BASE_TREE)field->getChild(field,0);
+		ZChar* vName = getNodeText(afield);
+		ZTvarp var,elm;
+		ZTOInstance* zin=( boost::get<gZOInstance>( *(ZTvarp)(t1->u) )).cont;
+		var = zin->val->getDyn().getSymbol(vName,true);
+		switch( boost::apply_visitor(getType(),*var) )
+		{
+		case ZETMemDataItem:
+			elm = (boost::apply_visitor(ZTDataBridge((boost::get<gZMemData>(*var)).cont->val), *(ZTvarp)(t1->u) ));
+			break;
+		case ZETFunction:
+			boost::get<gZFunction>( *var ).cont->val->obj = (ZTvarp)(t1->u);
+			elm = var;
+			break;
+		}
+		setCustomNodeField(t1,elm);
+	}
+
 	// TODO : use a pool of preallocaed temps , should affect
 	//		  performance greatly
 

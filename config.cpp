@@ -8,12 +8,14 @@ from Python sources
 
 //--- Begin Externs ---//
 extern void ZModInit_Test();
+extern void ZModInit_Test2();
 //---  End Externs  ---//
 
 //--- Begin Module Inserions ---//
 ZBuiltinModule ZBMods[]={
 
 	{_ZC("Test"),ZModInit_Test},
+	{_ZC("Test2"),ZModInit_Test2},
 	{0,0}
 };
 //---  End Module Inserions  ---//
