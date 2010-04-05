@@ -118,10 +118,10 @@ namespace ZInterp
         }
         else
         {
-            start= boost::get<gZInt>(*(ZTvarp)((( pANTLR3_BASE_TREE ) tstart -> getChild ( tstart , 0 ))->u)).cont->val;
-            end=boost::get<gZInt>(*(ZTvarp)((( pANTLR3_BASE_TREE ) tend -> getChild ( tend , 0 ))->u)).cont->val;
-            scale=( tby != NULL ) ? boost::get<gZInt>(*(ZTvarp)((( pANTLR3_BASE_TREE ) tby -> getChild ( tby , 0 ))->u)).cont->val : 1.0;
-            cond= (twhere!=NULL)  ? boost::get<gZInt>(*(ZTvarp)((( pANTLR3_BASE_TREE ) twhere -> getChild ( twhere , 0 ))->u)).cont->val ==  ZBTrue : ZBTrue;
+			start= boost::get<gZFloat>(*(ZTvarp)((( pANTLR3_BASE_TREE ) tstart -> getChild ( tstart , 0 ))->u)).cont->val;
+            end=boost::get<gZFloat>(*(ZTvarp)((( pANTLR3_BASE_TREE ) tend -> getChild ( tend , 0 ))->u)).cont->val;
+            scale=( tby != NULL ) ? boost::get<gZFloat>(*(ZTvarp)((( pANTLR3_BASE_TREE ) tby -> getChild ( tby , 0 ))->u)).cont->val : 1.0;
+            cond= (twhere!=NULL)  ? boost::get<gZFloat>(*(ZTvarp)((( pANTLR3_BASE_TREE ) twhere -> getChild ( twhere , 0 ))->u)).cont->val ==  ZBTrue : ZBTrue;
     		
 		    //f.val=start;
 		    

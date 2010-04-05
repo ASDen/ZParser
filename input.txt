@@ -1,4 +1,21 @@
-m=ASD(2)
-n=ASD(6*7,88)
-v=ASD()
-printL(v.a)
+	
+a=[]
+for i=0 to 9 do
+a+=[ASD(i,i*2)]
+
+for i in a do
+(
+printL(i.Square(5))
+)
+asdx=ZMath()
+printL(asdx.Zsqrt(5))
+printL(asdx.Zpow(3,2))
+printL(asdx.Zsin(90))
+asd=ZArray()
+printL(asd.xtoString())
+aw=0.2
+as=5*aw
+a=-120.235+as
+printL(asd.Zadd(12,45,"ASD",23,45,56,"ZZ",a))
+qw=340.4545
+printL(qw)

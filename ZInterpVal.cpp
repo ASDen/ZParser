@@ -113,10 +113,15 @@ namespace ZInterp
 	void Constant::Exec(pANTLR3_BASE_TREE c)
 	{
 		ZTvarp var=ZAlloc(ZTvar,1);
+		string str;
 		switch(c->getToken(c)->type)
 		{
 		case DIGIT:
-			*var=ZTInt(boost::lexical_cast<int,ZChar*>(getNodeText(c)));
+			 str=getNodeText(c);
+			if(str.find('.')>0)
+				*var=ZTFloat(boost::lexical_cast<float,ZChar*>(getNodeText(c)));
+			else
+				*var=ZTInt(boost::lexical_cast<int,ZChar*>(getNodeText(c)));
 			break;
 		case HEX_LITERAL:
 			{

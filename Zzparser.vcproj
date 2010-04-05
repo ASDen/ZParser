@@ -40,6 +40,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
+				AdditionalOptions="-Zm300"
 				Optimization="0"
 				AdditionalIncludeDirectories=""
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
@@ -61,8 +62,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="antlr3cd_dll.lib ShinyDebug.lib"
+				AdditionalDependencies="antlr3cd_dll.lib ShinyDebug.lib osgd.lib osgUtild.lib osgViewerd.lib osgGAd.lib gsl.lib PhysXLoader.lib NxCharacter.lib NxCooking.lib Rendrerd.lib"
 				LinkIncremental="2"
+				AdditionalLibraryDirectories="C:\Zlang\src\CGsp\DllDebug"
 				GenerateDebugInformation="true"
 				SubSystem="1"
 				TargetMachine="1"
@@ -310,13 +312,74 @@
 				Name="Mods"
 				>
 				<File
-					RelativePath=".\testMod.cpp"
+					RelativePath=".\Mods\testMod.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\testMod2.cpp"
+					RelativePath=".\Mods\testMod2.cpp"
 					>
 				</File>
+				<File
+					RelativePath=".\Mods\ZArray.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Mods\ZMath.cpp"
+					>
+				</File>
+				<Filter
+					Name="CGsp"
+					>
+					<File
+						RelativePath=".\Mods\CGsp\Init.cpp"
+						>
+						<FileConfiguration
+							Name="Debug|Win32"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+								UsePrecompiledHeader="2"
+								PrecompiledHeaderThrough="XCGsp.h"
+								PrecompiledHeaderFile="$(IntDir)\XCGsp.pch"
+							/>
+						</FileConfiguration>
+					</File>
+					<File
+						RelativePath=".\Mods\CGsp\XCGsp.cpp"
+						>
+						<FileConfiguration
+							Name="Debug|Win32"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+								PrecompiledHeaderThrough="XCGsp.h"
+								PrecompiledHeaderFile="$(IntDir)\XCGsp.pch"
+							/>
+						</FileConfiguration>
+					</File>
+					<File
+						RelativePath=".\Mods\CGsp\XCGsp.h"
+						>
+					</File>
+					<Filter
+						Name="Primitives"
+						>
+						<File
+							RelativePath=".\Mods\CGsp\Primitives\Box.cpp"
+							>
+							<FileConfiguration
+								Name="Debug|Win32"
+								>
+								<Tool
+									Name="VCCLCompilerTool"
+									UsePrecompiledHeader="2"
+									PrecompiledHeaderThrough="XCGsp.h"
+									PrecompiledHeaderFile="$(IntDir)\XCGsp.pch"
+								/>
+							</FileConfiguration>
+						</File>
+					</Filter>
+				</Filter>
 			</Filter>
 		</Filter>
 		<Filter
