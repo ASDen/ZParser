@@ -314,18 +314,50 @@
 				<File
 					RelativePath=".\Mods\testMod.cpp"
 					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							UsePrecompiledHeader="2"
+						/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath=".\Mods\testMod2.cpp"
 					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							UsePrecompiledHeader="2"
+						/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath=".\Mods\ZArray.cpp"
 					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							UsePrecompiledHeader="2"
+						/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath=".\Mods\ZMath.cpp"
 					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							UsePrecompiledHeader="2"
+						/>
+					</FileConfiguration>
 				</File>
 				<Filter
 					Name="CGsp"
@@ -364,20 +396,6 @@
 					<Filter
 						Name="Primitives"
 						>
-						<File
-							RelativePath=".\Mods\CGsp\Primitives\Box.cpp"
-							>
-							<FileConfiguration
-								Name="Debug|Win32"
-								>
-								<Tool
-									Name="VCCLCompilerTool"
-									UsePrecompiledHeader="2"
-									PrecompiledHeaderThrough="XCGsp.h"
-									PrecompiledHeaderFile="$(IntDir)\XCGsp.pch"
-								/>
-							</FileConfiguration>
-						</File>
 					</Filter>
 				</Filter>
 			</Filter>
@@ -415,6 +433,30 @@
 				RelativePath=".\ZInterp.h"
 				>
 			</File>
+			<Filter
+				Name="Mods"
+				>
+				<Filter
+					Name="CGsp"
+					>
+					<File
+						RelativePath=".\Mods\CGsp\CGPlug.h"
+						>
+					</File>
+					<File
+						RelativePath=".\Mods\CGsp\ClassDefs.h"
+						>
+					</File>
+					<Filter
+						Name="Primitives"
+						>
+						<File
+							RelativePath=".\Mods\CGsp\Primitives\ZBox.h"
+							>
+						</File>
+					</Filter>
+				</Filter>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="Resource Files"
