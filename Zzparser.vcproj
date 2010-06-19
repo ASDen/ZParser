@@ -454,6 +454,30 @@
 							RelativePath=".\Mods\CGsp\Primitives\ZBox.h"
 							>
 						</File>
+						<File
+							RelativePath=".\Mods\CGsp\Primitives\ZPlane.h"
+							>
+						</File>
+						<File
+							RelativePath=".\Mods\CGsp\Primitives\ZSphere.h"
+							>
+						</File>
+					</Filter>
+					<Filter
+						Name="Physics"
+						>
+						<File
+							RelativePath=".\Mods\CGsp\Physics\RigidBodySimulation.h"
+							>
+						</File>
+					</Filter>
+					<Filter
+						Name="KeyFrame"
+						>
+						<File
+							RelativePath=".\Mods\CGsp\KeyFrame\KeyFrame.h"
+							>
+						</File>
 					</Filter>
 				</Filter>
 			</Filter>

@@ -117,11 +117,11 @@ namespace ZInterp
 		switch(c->getToken(c)->type)
 		{
 		case DIGIT:
-			 str=getNodeText(c);
-			if(str.find('.')>0)
-				*var=ZTFloat(boost::lexical_cast<float,ZChar*>(getNodeText(c)));
-			else
-				*var=ZTInt(boost::lexical_cast<int,ZChar*>(getNodeText(c)));
+			str=getNodeText(c);
+			//if(str.find('.')!=string::npos)
+			*var=ZTFloat(boost::lexical_cast<float,ZChar*>(getNodeText(c)));
+			//else
+			//	*var=ZTInt(boost::lexical_cast<int,ZChar*>(getNodeText(c)));
 			break;
 		case HEX_LITERAL:
 			{

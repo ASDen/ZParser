@@ -17,5 +17,20 @@ aw=0.2
 as=5*aw
 a=-120.235+as
 printL(asd.Zadd(12,45,"ASD",23,45,56,"ZZ",a))
-qw=340.4545
-printL(qw)
+qw=340
+printL(qw);
+
+vv=ZRigidBodySimulation();
+p=Plane(100,[0,0,0]);
+p.setPhysActor(vv,vv.ZPhysPlane);
+vv.Add(p);
+
+for i=0 to 9 do(
+	for j=0 to 9-i do(
+		b=Box(2,[1.0,j*2,i*2+1]);
+		b.setPhysActor(vv,vv.ZPhysBOX);
+		vv.Add(b);
+	)
+)
+
+vv.View();
