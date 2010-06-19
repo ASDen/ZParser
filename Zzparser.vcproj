@@ -62,7 +62,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="antlr3cd_dll.lib ShinyDebug.lib osgd.lib osgUtild.lib osgViewerd.lib osgGAd.lib gsl.lib PhysXLoader.lib NxCharacter.lib NxCooking.lib Rendrerd.lib"
+				AdditionalDependencies="antlr3cd_dll.lib osgd.lib osgUtild.lib osgViewerd.lib osgGAd.lib gsl.lib PhysXLoader.lib NxCharacter.lib NxCooking.lib Rendrerd.lib"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="C:\Zlang\src\CGsp\DllDebug"
 				GenerateDebugInformation="true"
@@ -459,11 +459,51 @@
 							>
 						</File>
 						<File
+							RelativePath=".\Mods\CGsp\Primitives\ZCapsule.h"
+							>
+						</File>
+						<File
+							RelativePath=".\Mods\CGsp\Primitives\ZChamferCyl.h"
+							>
+						</File>
+						<File
+							RelativePath=".\Mods\CGsp\Primitives\ZCone.h"
+							>
+						</File>
+						<File
+							RelativePath=".\Mods\CGsp\Primitives\ZCylinder.h"
+							>
+						</File>
+						<File
+							RelativePath=".\Mods\CGsp\Primitives\ZLathe.h"
+							>
+						</File>
+						<File
 							RelativePath=".\Mods\CGsp\Primitives\ZPlane.h"
 							>
 						</File>
 						<File
+							RelativePath=".\Mods\CGsp\Primitives\ZPyramid.h"
+							>
+						</File>
+						<File
 							RelativePath=".\Mods\CGsp\Primitives\ZSphere.h"
+							>
+						</File>
+						<File
+							RelativePath=".\Mods\CGsp\Primitives\ZSpindle.h"
+							>
+						</File>
+						<File
+							RelativePath=".\Mods\CGsp\Primitives\ZSpring.h"
+							>
+						</File>
+						<File
+							RelativePath=".\Mods\CGsp\Primitives\ZTorus.h"
+							>
+						</File>
+						<File
+							RelativePath=".\Mods\CGsp\Primitives\ZTube.h"
 							>
 						</File>
 					</Filter>
@@ -486,10 +526,86 @@
 					<Filter
 						Name="Modifiers"
 						>
-						<File
-							RelativePath=".\Mods\CGsp\Modifiers\ZTwist.h"
+						<Filter
+							Name="Facet"
 							>
-						</File>
+							<File
+								RelativePath=".\Mods\CGsp\Modifiers\Facet\ZBevel.h"
+								>
+							</File>
+							<File
+								RelativePath=".\Mods\CGsp\Modifiers\Facet\ZExtrude.h"
+								>
+							</File>
+							<File
+								RelativePath=".\Mods\CGsp\Modifiers\Facet\ZOutline.h"
+								>
+							</File>
+						</Filter>
+						<Filter
+							Name="Polyhedron"
+							>
+							<File
+								RelativePath=".\Mods\CGsp\Modifiers\Polyhedron\ZBend.h"
+								>
+							</File>
+							<File
+								RelativePath=".\Mods\CGsp\Modifiers\Polyhedron\ZBulge.h"
+								>
+							</File>
+							<File
+								RelativePath=".\Mods\CGsp\Modifiers\Polyhedron\ZCylindrical_Wave.h"
+								>
+							</File>
+							<File
+								RelativePath=".\Mods\CGsp\Modifiers\Polyhedron\ZLinear_Wave.h"
+								>
+							</File>
+							<File
+								RelativePath=".\Mods\CGsp\Modifiers\Polyhedron\ZMorph.h"
+								>
+							</File>
+							<File
+								RelativePath=".\Mods\CGsp\Modifiers\Polyhedron\ZNoise.h"
+								>
+							</File>
+							<File
+								RelativePath=".\Mods\CGsp\Modifiers\Polyhedron\ZSkew.h"
+								>
+							</File>
+							<File
+								RelativePath=".\Mods\CGsp\Modifiers\Polyhedron\ZSlice.h"
+								>
+							</File>
+							<File
+								RelativePath=".\Mods\CGsp\Modifiers\Polyhedron\ZSmooth.h"
+								>
+							</File>
+							<File
+								RelativePath=".\Mods\CGsp\Modifiers\Polyhedron\ZSpherify.h"
+								>
+							</File>
+							<File
+								RelativePath=".\Mods\CGsp\Modifiers\Polyhedron\ZSqueeze.h"
+								>
+							</File>
+							<File
+								RelativePath=".\Mods\CGsp\Modifiers\Polyhedron\ZStretch.h"
+								>
+							</File>
+							<File
+								RelativePath=".\Mods\CGsp\Modifiers\Polyhedron\ZTaper.h"
+								>
+							</File>
+							<File
+								RelativePath=".\Mods\CGsp\Modifiers\Polyhedron\ZTriangulate.h"
+								>
+							</File>
+							<File
+								RelativePath=".\Mods\CGsp\Modifiers\Polyhedron\ZTwist.h"
+								>
+							</File>
+						</Filter>
 					</Filter>
 				</Filter>
 			</Filter>

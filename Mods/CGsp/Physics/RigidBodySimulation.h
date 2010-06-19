@@ -5,25 +5,37 @@ public:
 	PhysicsManager* pm;
 
 	ZTvar ZPhysBOX,
-		  ZPhysPlane,
+		  ZPhysCAPSULE,
+		  ZPhysCONVEX,
+		  ZPhysPLANE,
 		  ZPhysSPHERE,
-		  ZPhysTORUS;
+		  ZPhysSPRING,
+		  ZPhysTORUS,
+		  ZPhysTUBE;
 
 
 	ZRigidBodySimulation()
 	{
 		AddDataMember(_ZC("ZPhysBOX")    , &ZRigidBodySimulation::ZPhysBOX);
-		AddDataMember(_ZC("ZPhysPlane")  , &ZRigidBodySimulation::ZPhysPlane);
-		AddDataMember(_ZC("ZPhysSPHERE") , &ZRigidBodySimulation::ZPhysSPHERE);
+		AddDataMember(_ZC("ZPhysCAPSULE")  , &ZRigidBodySimulation::ZPhysCAPSULE);
+		AddDataMember(_ZC("ZPhysCONVEX")  , &ZRigidBodySimulation::ZPhysCONVEX);
+		AddDataMember(_ZC("ZPhysPLANE")  , &ZRigidBodySimulation::ZPhysPLANE);
+		AddDataMember(_ZC("ZPhysSPHERE")  , &ZRigidBodySimulation::ZPhysSPHERE);
+		AddDataMember(_ZC("ZPhysSPRING")  , &ZRigidBodySimulation::ZPhysSPRING);
 		AddDataMember(_ZC("ZPhysTORUS")  , &ZRigidBodySimulation::ZPhysTORUS);
+		AddDataMember(_ZC("ZPhysTUBE")  , &ZRigidBodySimulation::ZPhysTUBE);
 	}
 
 	ZRigidBodySimulation(ZTvarS inp)
 	{
 		ZPhysBOX    = ZTFloat(1);
-		ZPhysPlane  = ZTFloat(2);
-		ZPhysSPHERE = ZTFloat(3);
-		ZPhysTORUS  = ZTFloat(4);
+		ZPhysCAPSULE  = ZTFloat(2);
+		ZPhysCONVEX  = ZTFloat(3);
+		ZPhysPLANE  = ZTFloat(4);
+		ZPhysSPHERE  = ZTFloat(5);
+		ZPhysSPRING  = ZTFloat(6);
+		ZPhysTORUS  = ZTFloat(7);
+		ZPhysTUBE  = ZTFloat(8);
 
 		pm  = new PhysicsManager();
 		opm = new osgPolyManager;

@@ -20,16 +20,17 @@ printL(asd.Zadd(12,45,"ASD",23,45,56,"ZZ",a))
 qw=340
 printL(qw);
 
-vv=KeyFrameAnimation();
+vv=RigidBodySimulation();
 p=Plane(100,[0,0,0]);
-/*p.setPhysActor(vv,vv.ZPhysPlane);*/
+p.setPhysActor(vv,vv.ZPhysPLANE);
 vv.Add(p);
-t=Twist(90);
 
-b=Box(2,8,[1.0,2,1]);
-/*b.setPhysActor(vv,vv.ZPhysBOX);*/
-vv.Add(b);
-b.ApplyModifier(t);
+for i=0 to 0 do(
+	for j=0 to 0 do(
+		b=Tube(10,4,20,[0,0,10]);
+		b.setPhysActor(vv,vv.ZPhysTUBE,20,false);
+		vv.Add(b);
+	)
+)
 
 vv.View();
-
