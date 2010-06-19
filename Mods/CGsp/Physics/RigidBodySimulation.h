@@ -7,7 +7,7 @@ public:
 	ZTvar ZPhysBOX,
 		  ZPhysPlane,
 		  ZPhysSPHERE,
-		  ZPhysTORUS;
+		  ZPhysCLOTH;
 
 
 	ZRigidBodySimulation()
@@ -15,7 +15,7 @@ public:
 		AddDataMember(_ZC("ZPhysBOX")    , &ZRigidBodySimulation::ZPhysBOX);
 		AddDataMember(_ZC("ZPhysPlane")  , &ZRigidBodySimulation::ZPhysPlane);
 		AddDataMember(_ZC("ZPhysSPHERE") , &ZRigidBodySimulation::ZPhysSPHERE);
-		AddDataMember(_ZC("ZPhysTORUS")  , &ZRigidBodySimulation::ZPhysTORUS);
+		AddDataMember(_ZC("ZPhysCLOTH")  , &ZRigidBodySimulation::ZPhysCLOTH);
 	}
 
 	ZRigidBodySimulation(ZTvarS inp)
@@ -23,7 +23,7 @@ public:
 		ZPhysBOX    = ZTFloat(1);
 		ZPhysPlane  = ZTFloat(2);
 		ZPhysSPHERE = ZTFloat(3);
-		ZPhysTORUS  = ZTFloat(4);
+		ZPhysCLOTH  = ZTFloat(4);
 
 		pm  = new PhysicsManager();
 		opm = new osgPolyManager;
@@ -37,17 +37,26 @@ public:
 	{
 		StProps.InitScope();
 
-		AddFunction(_ZC("Add") ,1,&ZRigidBodySimulation::AddPrimitive);
+		AddFunction(_ZC("AddRigid") ,1,&ZRigidBodySimulation::AddRigidBody);
+		AddFunction(_ZC("AddCloth") ,1,&ZRigidBodySimulation::AddCloth);
 		AddFunction(_ZC("View"),0,&ZRigidBodySimulation::ViewScene);
 
 		ZTObject::Inheriet(StProps);
 	}
 
-	ZTvarp AddPrimitive (ZTvarS inp)
+	ZTvarp AddRigidBody (ZTvarS inp)
 	{
 		pZObjP zins=INSTANCE_ZCONV(*(inp[0]));
 		//because we need to get all pnode from different primitives - Box,sphere,...etc 
 		opm->AddPolyhedron<RigidBodyManager>( reinterpret_cast<PrimitiveAPI<ZBox>* >(zins)->pnode );
+		return NULL;
+	}
+
+	ZTvarp AddCloth (ZTvarS inp)
+	{
+		pZObjP zins=INSTANCE_ZCONV(*(inp[0]));
+		//because we need to get all pnode from different primitives - Box,sphere,...etc 
+		opm->AddPolyhedron<ClothManager>( reinterpret_cast<PrimitiveAPI<ZBox>* >(zins)->pnode );
 		return NULL;
 	}
 

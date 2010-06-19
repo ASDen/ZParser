@@ -16,7 +16,7 @@ void ZModInit_CGsp()
 
 	ADD_CLASS(ZBox,"Box");
 	ADD_CLASS(ZPlane,"Plane");
-	ADD_CLASS(ZRigidBodySimulation,"RigidBodySimulation");
+	ADD_CLASS(ZRigidBodySimulation,"PhysicsSimulation");
 	ADD_CLASS(ZKeyFrame,"KeyFrameAnimation");
 	ADD_CLASS(ZTwist,"Twist");
 	

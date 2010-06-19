@@ -20,16 +20,21 @@ printL(asd.Zadd(12,45,"ASD",23,45,56,"ZZ",a))
 qw=340
 printL(qw);
 
-vv=KeyFrameAnimation();
+vv=PhysicsSimulation();
 p=Plane(100,[0,0,0]);
-/*p.setPhysActor(vv,vv.ZPhysPlane);*/
-vv.Add(p);
-t=Twist(90);
+p.setPhysActor(vv,vv.ZPhysPlane);
+vv.AddRigid(p);
 
-b=Box(2,8,[1.0,2,1]);
-/*b.setPhysActor(vv,vv.ZPhysBOX);*/
-vv.Add(b);
-b.ApplyModifier(t);
+for i=0 to 9 do(
+	for j=0 to 9-i do(
+		b=Box(2,[1.0,j*2,i*2+1]);
+		b.setPhysActor(vv,vv.ZPhysBOX);
+		vv.AddRigid(b);
+	)
+)
+
+c=Plane(10,50,[0,0,80]);
+c.setPhysActor(vv,vv.ZPhysCLOTH);
+vv.AddCloth(c);
 
 vv.View();
-

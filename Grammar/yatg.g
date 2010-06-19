@@ -3,11 +3,11 @@ grammar yatg;
 options 
 {
 	output=AST;
-	language=C;
+	//language=C;
 	backtrack=true;
     	memoize=true;
     	k=2;
-    	ASTLabelType    = pANTLR3_BASE_TREE;
+    	//ASTLabelType    = pANTLR3_BASE_TREE;
 }
 
 
@@ -420,7 +420,6 @@ arrrange
 	: (e1=expr_g ( SS_D_DOT e2=expr_g)?)
 	-> ^(ARR_BIT_RANGE $e1 $e2?)
 	;
-	
 
 /*---------------------------------
 	Lexical Rules Begin	

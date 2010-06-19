@@ -10,7 +10,7 @@ namespace ZInterp
 	extern ZSymbolTable<ZTvar> ZSym;
     extern ZIBool isExit,isContinue;
     extern vector <ANTLR3_MARKER> lend,lCon;
-    extern int loopNum,actual;
+    extern int loopNum,actual,currentFrame;
 
 	class global
 	{
@@ -90,6 +90,12 @@ namespace ZInterp
 	{
 	public:
 		static void Exec(pANTLR3_BASE_TREE caseNode,yatgFW_Ctx_struct* );
+	};
+	class ContextExpr
+	{
+	public:
+		static void Exec (pANTLR3_BASE_TREE timeNode,yatgFW_Ctx_struct* );
+		static void Flush();
 	};
 
 	class Function

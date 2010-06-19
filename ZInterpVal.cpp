@@ -22,7 +22,7 @@ namespace ZInterp
 	ZSymbolTable<ZTvar> ZSym;
     ZIBool isExit=ZBFalse,isContinue=ZBFalse;
     vector <ANTLR3_MARKER> lend,lCon;
-    int loopNum=0,actual=0;
+	int loopNum=0,actual=0,currentFrame=0;
 
 	void global::Init()
 	{

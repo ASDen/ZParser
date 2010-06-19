@@ -12,6 +12,8 @@ public:
 		ModifierAPI<ZTwist>::Init();
 
 		StProps.InitScope();
+
+		AddFunction(_ZC("setAngle") ,1,&ZTwist::setAngle);
 	
 		ZTObject::Inheriet(StProps);
 	}
@@ -19,6 +21,12 @@ public:
 	Modifier* getModifier()
 	{
 		return primt;
+	}
+
+	ZTvarp setAngle (ZTvarS inp)
+	{
+		FrameCreater::FillFrames(ZInterp::currentFrame,static_cast<double>(FLOAT_ZCONV(*(inp[0]))),&Twist::TwAngle,*primt);
+		return NULL;
 	}
 
 	//FIXME : int conversions

@@ -138,9 +138,10 @@ context_expr
 	;
 
 context 
-	:  ^(CONTEXT  ANIMATE cexprx)
-	|   ^(CONTEXT AT LEVEL operand)
-	|  ^(CONTEXT AT TIME operand)
+
+	:  ^(CONTEXT  ANIMATE cexprx)  { ZInterp::ContextExpr::Flush(); }
+	|  ^(CONTEXT AT LEVEL operand)
+	|  ^(t= CONTEXT AT TIME  operand)  { ZInterp::ContextExpr::Exec($t,ctx); }
 	|  ^(CONTEXT EIN operand)
 	| (KW_IN)? KW_COORDSYS 
 		(
@@ -156,6 +157,7 @@ context
 		|  ^(CONTEXT ABOUT operand)
 		)
 	|  ^(CONTEXT  UNDO  cexprx  )
+	
 	;
 
 set_context 

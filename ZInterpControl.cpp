@@ -198,6 +198,16 @@ namespace ZInterp
 		MATCHT(EDO_END,NULL);
 	}
 
+	void ContextExpr::Exec(pANTLR3_BASE_TREE timeNode,yatgFW_Ctx_struct* )
+	{
+		currentFrame = (int)boost::get<gZFloat>(*(ZTvarp)((( pANTLR3_BASE_TREE ) timeNode -> getChild ( timeNode , 2 ))->u)).cont->val;
+	}
+
+	void ContextExpr::Flush()
+	{
+		currentFrame = 0;
+	}
+
 	void CaseExpr::Exec(pANTLR3_BASE_TREE caseNode, yatgFW_Ctx_struct * xyz)
 	{
 		ANTLR3_MARKER caseexpr=(((pANTLR3_BASE_TREE)caseNode->getChild(caseNode,0))->savedIndex);
