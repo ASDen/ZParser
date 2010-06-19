@@ -16,6 +16,9 @@ public:
 		ZTObject::Inheriet(StProps);
 	}
 
+	Primitives* getPrimtive()
+	{return primt;}
+
 	//FIXME : int conversions
 	ZBox(ZTvarS inp)
 	{

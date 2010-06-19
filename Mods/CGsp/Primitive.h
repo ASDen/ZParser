@@ -1,8 +1,3 @@
-class CGPlug
-{
-	
-};
-
 template<class T>
 class PrimitiveAPI : public ZTBaseObject<T> 
 {
@@ -15,6 +10,7 @@ public:
 		StProps.InitScope();
 
 		AddFunction(_ZC("setPhysActor") ,2,&PrimitiveAPI::setPhysActor);
+		AddFunction(_ZC("ApplyModifier") ,1,&PrimitiveAPI::ApplyModifier);
 	
 		ZTObject::Inheriet(StProps);
 	}
@@ -29,6 +25,17 @@ public:
 											FLOAT_ZCONV(*zl.Get(1)),
 											FLOAT_ZCONV(*zl.Get(2))
 												));
+	}
+
+	virtual Primitives* getPrimtive()=0;
+
+	ZTvarp ApplyModifier (ZTvarS inp)
+	{
+		pZObjP zrsg = INSTANCE_ZCONV(*(inp[0]));
+		Primitives* pr=this->getPrimtive();
+		Modifier* m= (reinterpret_cast < ModifierAPI<ZTwist>* >(zrsg))->getModifier();
+		pr->ApplyModifier(m);
+		return NULL;
 	}
 
 	ZTvarp setPhysActor (ZTvarS inp)

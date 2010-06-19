@@ -9,26 +9,17 @@
 						ZInterp::ZSym.InsertSymbol(_ZC(Y),zv);\
 						zv++;
 
-namespace XCGsp
-{
-	PhysicsManager* ZPxMan;
-	osgPolyManager* ZPolyMan;
-};
 
 void ZModInit_CGsp()
 {
-	XCGsp::ZPxMan = new PhysicsManager;
-	XCGsp::ZPolyMan = new osgPolyManager;
-	XCGsp::ZPxMan->InitOsg();
-	XCGsp::ZPxMan->setPolyManager(XCGsp::ZPolyMan);
-
-
-	ZTvarp zv = ZAlloc(ZTvar,4);
+	ZTvarp zv = ZAlloc(ZTvar,20);
 
 	ADD_CLASS(ZBox,"Box");
 	ADD_CLASS(ZPlane,"Plane");
-	ADD_CLASS(ZRigidBodySimulation,"ZRigidBodySimulation");
-	ADD_CLASS(ZKeyFrame,"KeyFrame");
+	ADD_CLASS(ZRigidBodySimulation,"RigidBodySimulation");
+	ADD_CLASS(ZKeyFrame,"KeyFrameAnimation");
+	ADD_CLASS(ZTwist,"Twist");
+	
 
 
 	/*ZBox::Init();

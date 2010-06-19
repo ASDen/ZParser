@@ -440,11 +440,15 @@
 					Name="CGsp"
 					>
 					<File
-						RelativePath=".\Mods\CGsp\CGPlug.h"
+						RelativePath=".\Mods\CGsp\ClassDefs.h"
 						>
 					</File>
 					<File
-						RelativePath=".\Mods\CGsp\ClassDefs.h"
+						RelativePath=".\Mods\CGsp\Modifier.h"
+						>
+					</File>
+					<File
+						RelativePath=".\Mods\CGsp\Primitive.h"
 						>
 					</File>
 					<Filter
@@ -476,6 +480,14 @@
 						>
 						<File
 							RelativePath=".\Mods\CGsp\KeyFrame\KeyFrame.h"
+							>
+						</File>
+					</Filter>
+					<Filter
+						Name="Modifiers"
+						>
+						<File
+							RelativePath=".\Mods\CGsp\Modifiers\ZTwist.h"
 							>
 						</File>
 					</Filter>

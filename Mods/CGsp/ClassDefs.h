@@ -1,7 +1,11 @@
-#include "CGPlug.h"
+#include "Primitive.h"
+#include "Modifier.h"
 
 #include "Primitives/ZPlane.h"
 #include "Primitives/ZBox.h"
+
+#include "Modifiers/ZTwist.h"
+
 
 
 #include "Physics/RigidBodySimulation.h"
