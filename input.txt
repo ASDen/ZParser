@@ -37,4 +37,5 @@ c=Plane(10,50,[0,0,80]);
 c.setPhysActor(vv,vv.ZPhysCLOTH);
 vv.AddCloth(c);
 
+
 vv.View();

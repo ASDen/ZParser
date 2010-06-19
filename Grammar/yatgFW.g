@@ -138,7 +138,6 @@ context_expr
 	;
 
 context 
-
 	:  ^(CONTEXT  ANIMATE cexprx)  { ZInterp::ContextExpr::Flush(); }
 	|  ^(CONTEXT AT LEVEL operand)
 	|  ^(t= CONTEXT AT TIME  operand)  { ZInterp::ContextExpr::Exec($t,ctx); }
@@ -157,7 +156,10 @@ context
 		|  ^(CONTEXT ABOUT operand)
 		)
 	|  ^(CONTEXT  UNDO  cexprx  )
+<<<<<<< HEAD
 	
+=======
+>>>>>>> FETCH_HEAD
 	;
 
 set_context 
