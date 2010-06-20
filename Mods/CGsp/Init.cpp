@@ -51,8 +51,9 @@ void ZModInit_CGsp()
 
 	ADD_CLASS(ZRigidBodySimulation,"PhysicsSimulation");
 	ADD_CLASS(ZKeyFrame,"KeyFrameAnimation");
+	ADD_CLASS(ZAxis,"ZAxis");
+	ADD_CLASS(ZPoint,"ZPoint");
 	
-
 
 	/*ZBox::Init();
 	*zv=ZObjP();

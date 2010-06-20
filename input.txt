@@ -1,41 +1,46 @@
-	
-a=[]
-for i=0 to 9 do
-a+=[ASD(i,i*2)]
+fn sc2 x,y,z =(
+    vv=PhysicsSimulation();
+    p=Plane(100,[0,0,0]);
+    p.setPhysActor(vv,vv.ZPhysPLANE);
+    vv.AddRigid(p);
 
-for i in a do
-(
-printL(i.Square(5))
-)
-asdx=ZMath()
-printL(asdx.Zsqrt(5))
-printL(asdx.Zpow(3,2))
-printL(asdx.Zsin(90))
-asd=ZArray()
-printL(asd.xtoString())
-aw=0.2
-as=5*aw
-a=-120.235+as
-printL(asd.Zadd(12,45,"ASD",23,45,56,"ZZ",a))
-qw=340
-printL(qw);
 
-vv=PhysicsSimulation();
-p=Plane(100,[0,0,0]);
-p.setPhysActor(vv,vv.ZPhysPlane);
-vv.AddRigid(p);
-
-for i=0 to 9 do(
-	for j=0 to 9-i do(
-		b=Box(2,[1.0,j*2,i*2+1]);
-		b.setPhysActor(vv,vv.ZPhysBOX);
-		vv.AddRigid(b);
-	)
+    for k=0 to z do(
+        for i=0 to x do(
+            for j=0 to y do(
+                b=Box(2,[k*2,j*2,i*2+1]);
+                b.setPhysActor(vv,vv.ZPhysBOX);
+                b.setWire(true);
+                vv.AddRigid(b);
+            )
+        )
+    )
+    vv.View();
 )
 
-c=Plane(10,50,[0,0,80]);
-c.setPhysActor(vv,vv.ZPhysCLOTH);
-vv.AddCloth(c);
+fn sc1 x=(
+    vm=KeyFrameAnimation();
+    p=Plane(100,[0,0,0]);
+    vm.Add(p);
+    t=Twist(45);
+    t.Center(ZPoint(32,32,32))
+    --printL(t.Center().Z())
+    
+    t.Axis(ZAxis().X_ax);
+    for j=0 to x do(
+        b=Box(10,15,[0,j*12,5]);
+        vm.Add(b);
+        b.setWire(true);
+        b.ApplyModifier(t)
+    )
+    
+    animate on(
+        at time 20 (t.Angle(720))
+        at time 40 (t.Angle(0)  )
+    )
+    
+    vm.View();
+)
 
-
-vv.View();
+sc1(6)
+/*sc2(9,9,9)*/

@@ -136,8 +136,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="antlr3c_dll.lib Shiny.lib"
+				AdditionalDependencies="antlr3c_dll.lib osg.lib osgUtil.lib osgViewer.lib osgGA.lib gsl.lib PhysXLoader.lib NxCharacter.lib NxCooking.lib Rendrer.lib"
 				LinkIncremental="1"
+				AdditionalLibraryDirectories="C:\Zlang\src\CGsp\DllRelease"
 				GenerateDebugInformation="true"
 				SubSystem="1"
 				OptimizeReferences="2"
@@ -449,6 +450,14 @@
 					</File>
 					<File
 						RelativePath=".\Mods\CGsp\Primitive.h"
+						>
+					</File>
+					<File
+						RelativePath=".\Mods\CGsp\ZAxis.h"
+						>
+					</File>
+					<File
+						RelativePath=".\Mods\CGsp\ZPoint.h"
 						>
 					</File>
 					<Filter
