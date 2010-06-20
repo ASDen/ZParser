@@ -52,4 +52,6 @@ public:
 		InitNode(inp,primt);
 		ZBox();
 	}
+
+
 };

@@ -456,6 +456,14 @@
 						RelativePath=".\Mods\CGsp\Primitive.h"
 						>
 					</File>
+					<File
+						RelativePath=".\Mods\CGsp\ZAxis.h"
+						>
+					</File>
+					<File
+						RelativePath=".\Mods\CGsp\ZPoint.h"
+						>
+					</File>
 					<Filter
 						Name="Primitives"
 						>

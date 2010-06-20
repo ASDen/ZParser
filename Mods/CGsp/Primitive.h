@@ -42,6 +42,7 @@ public:
 	ZTvarp setWire (ZTvarS inp)
 	{
 		pnode->WireFrame = BOOL_ZCONV(*(inp[0]));
+		return NULL;
 	}
 
 	ZTvarp setPhysActor (ZTvarS inp)
