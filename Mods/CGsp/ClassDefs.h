@@ -1,6 +1,6 @@
 #include "Primitive.h"
 #include "Modifier.h"
-
+#include "ZPoint.h"
 /* Primitives */
 #include "Primitives/ZBox.h"
 #include "Primitives/ZCapsule.h"

@@ -1,4 +1,4 @@
-#include "stdafx.h"
+#include "../stdafx.h"
 #include "../ZInterp.h"
 
 class ASD : public ZTBaseObject<ASD> 

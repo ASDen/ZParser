@@ -71,6 +71,5 @@ void ZModInit_CGsp()
 	boost::get<gZObject>(*zv).cont=new ZRigidBodySimulation();
 	ZInterp::ZSym.InsertSymbol(_ZC("ZRigidBodySimulation"),zv);*/
 
-	
-
+	ADD_CLASS(ZPoint,"ZPoint");
 }

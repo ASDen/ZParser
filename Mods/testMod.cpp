@@ -1,4 +1,4 @@
-#include "stdafx.h"
+#include "../stdafx.h"
 #include "../ZInterp.h"
 
 class Zsqrt : public boost::static_visitor<ZTvar>
