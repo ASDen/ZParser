@@ -21,7 +21,6 @@ void ZModInit_CGsp()
 	ADD_CLASS(ZCylinder,"Cylinder");
 	//ADD_CLASS(ZLathe,"Lathe");
 	ADD_CLASS(ZPlane,"Plane");
-	
 	ADD_CLASS(ZPyramid,"Pyramid");
 	ADD_CLASS(ZSphere,"Sphere");
 	ADD_CLASS(ZSpindle,"Spindle");
@@ -29,23 +28,22 @@ void ZModInit_CGsp()
 	ADD_CLASS(ZTorus,"Torus");
 	ADD_CLASS(ZTube,"Tube");
 
-	//ADD_CLASS(ZBevel,"Bevel");
-	//ADD_CLASS(ZExtrude,"Extrude");
-	//ADD_CLASS(ZOutline,"Outline");
+	ADD_CLASS(ZBevel,"Bevel");
+	ADD_CLASS(ZExtrude,"Extrude");
+	ADD_CLASS(ZOutline,"Outline");
 
-	//ADD_CLASS(ZBend,"Bend");
-	//ADD_CLASS(ZBulge,"Bulge");
-	//ADD_CLASS(ZCylindrical_Wave,"Cylindrical_Wave");
-	//ADD_CLASS(ZLinear_Wave,"Linear_Wave");
+	ADD_CLASS(ZBend,"Bend");
+	ADD_CLASS(ZBulge,"Bulge");
+	ADD_CLASS(ZCylindrical_Wave,"Cylindrical_Wave");
+	ADD_CLASS(ZLinear_Wave,"Linear_Wave");
 	//ADD_CLASS(ZMorph,"Morph");
 	//ADD_CLASS(ZNoise,"Noise");
-	//ADD_CLASS(ZSkew,"Skew");
-	//ADD_CLASS(ZSlice,"Slice");
-	//ADD_CLASS(ZSmooth,"Smooth");
-	//ADD_CLASS(ZSpherify,"Spherify");
-	//ADD_CLASS(ZSqueeze,"Squeeze");
-	//ADD_CLASS(ZStretch,"Stretch");
-	//ADD_CLASS(ZTaper,"Taper");
+	ADD_CLASS(ZSkew,"Skew");
+	ADD_CLASS(ZSmooth,"Smooth");
+	ADD_CLASS(ZSpherify,"Spherify");
+	ADD_CLASS(ZSqueeze,"Squeeze");
+	ADD_CLASS(ZStretch,"Stretch");
+	ADD_CLASS(ZTaper,"Taper");
 	//ADD_CLASS(ZTriangulate,"Triangulate");
 	ADD_CLASS(ZTwist,"Twist");
 
@@ -53,6 +51,7 @@ void ZModInit_CGsp()
 	ADD_CLASS(ZKeyFrame,"KeyFrameAnimation");
 	ADD_CLASS(ZAxis,"ZAxis");
 	ADD_CLASS(ZPoint,"ZPoint");
+	ADD_CLASS(ZBulgeType,"ZBulgeType");
 	
 
 	/*ZBox::Init();
@@ -71,6 +70,4 @@ void ZModInit_CGsp()
 	*zv=ZObjP();
 	boost::get<gZObject>(*zv).cont=new ZRigidBodySimulation();
 	ZInterp::ZSym.InsertSymbol(_ZC("ZRigidBodySimulation"),zv);*/
-
-	ADD_CLASS(ZPoint,"ZPoint");
 }

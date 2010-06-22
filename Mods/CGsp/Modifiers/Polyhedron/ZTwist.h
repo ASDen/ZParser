@@ -31,6 +31,9 @@ public:
 	//FIXME : int conversions
 	ZTwist(ZTvarS inp)
 	{
+		Point_3* p3;
+		pZObjP zins;
+
 		//constructor inits
 		switch(inp.size())
 		{
@@ -41,19 +44,23 @@ public:
 			primt = new Twist( FLOAT_ZCONV(*(inp[0])) );
 			break;
 		case 2:
-			primt = new Twist( FLOAT_ZCONV(*(inp[0])) );
+			primt = new Twist( FLOAT_ZCONV(*(inp[0])) , ZAxis::getAxis((inp[1])) );
 			break;
 		case 3:
-			primt = new Twist( FLOAT_ZCONV(*(inp[0])) );
+			zins=INSTANCE_ZCONV(*(inp[1]));
+			p3 = reinterpret_cast<ZPoint*>(zins)->getPnt();
+			primt = new Twist( FLOAT_ZCONV(*(inp[0])) , p3 , ZAxis::getAxis((inp[2])) );
 			break;
 		case 4:
-			primt = new Twist( FLOAT_ZCONV(*(inp[0])) );
-			break;
 		case 5:
-			primt = new Twist( FLOAT_ZCONV(*(inp[0])) );
+			zins=INSTANCE_ZCONV(*(inp[1]));
+			p3 = reinterpret_cast<ZPoint*>(zins)->getPnt();
+			primt = new Twist( FLOAT_ZCONV(*(inp[0])) , p3 , ZAxis::getAxis((inp[2])) , BOOL_ZCONV(*(inp[3])) );
 			break;
 		case 6:
-			primt = new Twist( FLOAT_ZCONV(*(inp[0])) );
+			zins=INSTANCE_ZCONV(*(inp[1]));
+			p3 = reinterpret_cast<ZPoint*>(zins)->getPnt();
+			primt = new Twist( FLOAT_ZCONV(*(inp[0])) , p3 , ZAxis::getAxis((inp[2])) , BOOL_ZCONV(*(inp[3])) , INT_ZCONV(*(inp[4])) , INT_ZCONV(*(inp[5])) );
 			break;
 		}
 		ZTwist();
@@ -71,7 +78,6 @@ public:
 
 		FrameCreater::FillFrames(ZInterp::currentFrame,static_cast<double>(FLOAT_ZCONV(*(inp[0]))),&Twist::TwAngle,*primt);
 		
-		std::cout<<primt->Center->y()<<std::endl;
 		return NULL;
 	}
 
@@ -88,13 +94,13 @@ public:
 		switch((int)(FLOAT_ZCONV(*(inp[0]))))
 		{
 		case 0:
-			primt->RoAxis = X_ax;
+			primt->RoAxis = Axis::X_ax;
 			break;
 		case 1:
-			primt->RoAxis = Y_ax;
+			primt->RoAxis = Axis::Y_ax;
 			break;
 		case 2:
-			primt->RoAxis = Z_ax;
+			primt->RoAxis = Axis::Z_ax;
 			break;
 		}
 		return NULL;
@@ -104,13 +110,13 @@ public:
 	{
 		if (inp.size() == 0)
 		{
-			Point_3* fr = (primt->Center);
+			//Point_3* fr = (primt->Center);
 			ZTvarS zvs;
 			ZTvarp zg = ZAlloc(ZTvar,3);
 			
-			zg[0] = ZTFloat(fr->x());
-			zg[1] = ZTFloat(fr->y());
-			zg[2] = ZTFloat(fr->z());
+			zg[0] = ZTFloat(primt->X_Center.val);
+			zg[1] = ZTFloat(primt->Y_Center.val);
+			zg[2] = ZTFloat(primt->Z_Center.val);
 
 			zvs.push_back( &zg[0] );
 			zvs.push_back( &zg[1] );
@@ -125,7 +131,20 @@ public:
 		else
 		{
 			pZObjP zins=INSTANCE_ZCONV(*(inp[0]));
-			primt->Center = reinterpret_cast<ZPoint*>(zins)->getPnt();
+			Point_3* p3 = reinterpret_cast<ZPoint*>(zins)->getPnt();
+
+			if(ZInterp::currentFrame == 0)
+			{
+				primt->X_Center.FrameValues[0]  = p3->x();
+				primt->Y_Center.FrameValues[0]  = p3->y();
+				primt->Z_Center.FrameValues[0]  = p3->z();
+			}
+			else
+			{
+				FrameCreater::FillFrames(ZInterp::currentFrame,p3->x(),&Twist::X_Center,*primt);
+				FrameCreater::FillFrames(ZInterp::currentFrame,p3->y(),&Twist::Y_Center,*primt);
+				FrameCreater::FillFrames(ZInterp::currentFrame,p3->z(),&Twist::Z_Center,*primt);
+			}
 		}
 		return NULL;
 	}

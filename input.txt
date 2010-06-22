@@ -1,118 +1,3 @@
-
-x=1
-y=30
-a=[12,23,34,45,56,67,1,2]
-/*for i in a do
-for i=2 to y by 2 where (4<5) do
-
-(
-print("i=")
-printL(i)
-)
-
-if (x+3 <y) then 
-(
-	printL("If Execute Successful then asd54rtgtrytrytruytjhynm,lghhgjgghghyurdnhfxgfghfhfghg occured")
-)
-else
-(
-	printL("else Execute Successful")
-)
-a=read()
-
-do
-(
-print("y=")
-printL(y)
-y-=1;
-z=12-5;
-print("z=")
-printL(z)
-
-
-)while (y>0)
-x=10
-y=30
-while y do
-(
-	while x do
-	(
-		print("x=")
-		printL(x)
-		x-=1
-	)
-	if x then
-	(
-		exit with 1
-	)
-	y-=1
-
-)
-x=2
-case x of 
-(
-2:
-	printL(x)
-1:
-	printL(x)
-		
-)
-fn asd=
-(
-printL("Function Defination")
-)
-asd()
-fn asd a=
-(
-print("Function Defination a=")
-printL(a)
-)
-asd(12)
-v=fn asd=(printL("Function Defination"))
-v()
-v=fn asd a,b=(print("Function Defination a+b=");printL(a+b))
-v(2,3)
-fn asd a,b=(a+b)
-aaa=asd(2,3)
-print("aaa=")
-printL(aaa)
---asd very important
-print("asd")
-fn asd a,b=(a+b)
-printL(asd(23))
-fn asd a,b=(a+b)
-printL(asd(23,23,34))
-
-
-fn modulus x,y=
-(
-	for i=1 to x/2 do
-	(
-		z=x/y
-		while z>1 do
-		(
-			z-=1
-		)
-	)
-	res=z*y
-)
-r=modulus(17,3)
-print("r=")
-printL(r)
-
-p=ZPoint("asd",1,2)
-printL(p.X())
-b=Box("asd",[12,23,4])
-printL(z)
-a=p45%
-printL(x)
-b=Box(4,4,5,6,7,5,3,2,1,3,5,7,8,9)
-b=Box()
-b=12*/
-while  do
-(
-)
-
 fn sc2 x,y,z =(
     vv=PhysicsSimulation();
     p=Plane(100,[0,0,0]);
@@ -137,21 +22,20 @@ fn sc1 x=(
     vm=KeyFrameAnimation();
     p=Plane(100,[0,0,0]);
     vm.Add(p);
-    t=Twist(45);
-    t.Center(ZPoint(32,32,32))
-    --printL(t.Center().Z())
-    
-    t.Axis(ZAxis().X_ax);
-    for j=0 to x do(
-        b=Box(10,15,[0,j*12,5]);
+    t=Extrude(0,20);
+    --t.Axis(ZAxis().X_ax);
+    --for j=0 to x do(
+        b=Box(20,55,[0,0,20]);
         vm.Add(b);
-        b.setWire(true);
-        b.ApplyModifier(t)
-    )
+        b.Width(30);
+        b.setWire(false);
+        b.ApplyModifier(t);
+        printL(b.Width())
+    --)
     
     animate on(
-        at time 20 (t.Angle(720))
-        at time 40 (t.Angle(0)  )
+        at time 10 (t.FaceNumber(0))
+        at time 80 (t.FaceNumber(300))
     )
     
     vm.View();

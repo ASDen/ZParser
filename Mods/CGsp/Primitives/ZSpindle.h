@@ -12,6 +12,14 @@ public:
 		PrimitiveAPI<ZSpindle>::Init();
 
 		StProps.InitScope();
+
+		AddFunction(_ZC("Radius") ,1,&ZSpindle::Radius);
+		AddFunction(_ZC("Cap") ,1,&ZSpindle::Cap);
+		AddFunction(_ZC("Height") ,1,&ZSpindle::Height);
+
+		AddFunction(_ZC("SideSegs") ,1,&ZSpindle::SideSegs);
+		AddFunction(_ZC("CapSegs") ,1,&ZSpindle::CapSegs);
+		AddFunction(_ZC("HeightSegs") ,1,&ZSpindle::HeightSegs);
 	
 		ZTObject::Inheriet(StProps);
 	}
@@ -41,12 +49,95 @@ public:
 			primt = new Spindle_3( FLOAT_ZCONV(*inp[0]) , FLOAT_ZCONV(*inp[1]) , FLOAT_ZCONV(*inp[2]) , INT_ZCONV(*inp[3]) );
 			break;
 		case 7:
-		default:
 			primt = new Spindle_3( FLOAT_ZCONV(*inp[0]) , FLOAT_ZCONV(*inp[1]) , FLOAT_ZCONV(*inp[2]) , INT_ZCONV(*inp[3]) , INT_ZCONV(*inp[4]) , INT_ZCONV(*inp[5]) );
 			break;
 		}
 		primt->Draw();
 		InitNode(inp,primt);
 		ZSpindle();
+	}
+
+	ZTvarp Radius (ZTvarS inp)
+	{
+		if (inp.size() == 0)
+		{
+			ZIFloat fr = primt->radius;
+			ZTvarp res=ZAlloc(ZTvar,1);
+			*res = ZTFloat(fr);
+			return res;
+		}
+
+		primt->radius = FLOAT_ZCONV(*(inp[0]));
+		return NULL;
+	}
+
+	ZTvarp Cap (ZTvarS inp)
+	{
+		if (inp.size() == 0)
+		{
+			ZIFloat fr = primt->cap_height;
+			ZTvarp res=ZAlloc(ZTvar,1);
+			*res = ZTFloat(fr);
+			return res;
+		}
+
+		primt->cap_height = FLOAT_ZCONV(*(inp[0]));
+		return NULL;
+	}
+
+	ZTvarp Height (ZTvarS inp)
+	{
+		if (inp.size() == 0)
+		{
+			ZIFloat fr = primt->height;
+			ZTvarp res=ZAlloc(ZTvar,1);
+			*res = ZTFloat(fr);
+			return res;
+		}
+
+		primt->height = FLOAT_ZCONV(*(inp[0]));
+		return NULL;
+	}
+
+	ZTvarp SideSegs (ZTvarS inp)
+	{
+		if (inp.size() == 0)
+		{
+			ZTInt fr = primt->side_Seg;
+			ZTvarp res=ZAlloc(ZTvar,1);
+			*res = ZTFloat(fr);
+			return res;
+		}
+
+		primt->side_Seg = INT_ZCONV(*(inp[0]));
+		return NULL;
+	}
+
+	ZTvarp CapSegs (ZTvarS inp)
+	{
+		if (inp.size() == 0)
+		{
+			ZTInt fr = primt->cap_Seg;
+			ZTvarp res=ZAlloc(ZTvar,1);
+			*res = ZTFloat(fr);
+			return res;
+		}
+
+		primt->cap_Seg = INT_ZCONV(*(inp[0]));
+		return NULL;
+	}
+
+	ZTvarp HeightSegs (ZTvarS inp)
+	{
+		if (inp.size() == 0)
+		{
+			ZTInt fr = primt->height_Seg;
+			ZTvarp res=ZAlloc(ZTvar,1);
+			*res = ZTFloat(fr);
+			return res;
+		}
+
+		primt->height_Seg = INT_ZCONV(*(inp[0]));
+		return NULL;
 	}
 };
