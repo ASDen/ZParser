@@ -9,6 +9,10 @@
 						ZInterp::ZSym.InsertSymbol(_ZC(Y),zv);\
 						zv++;
 
+#define ADD_VAR(X,Y)	zin.val = new X; \
+						*zv=zin;\
+						ZInterp::ZSym.InsertSymbol(_ZC(Y),zv);\
+						zv++;
 
 void ZModInit_CGsp()
 {
@@ -49,25 +53,26 @@ void ZModInit_CGsp()
 
 	ADD_CLASS(ZRigidBodySimulation,"PhysicsSimulation");
 	ADD_CLASS(ZKeyFrame,"KeyFrameAnimation");
-	ADD_CLASS(ZAxis,"ZAxis");
-	ADD_CLASS(ZPoint,"ZPoint");
+
+	ZTvarS zvs;
+	ZTOInstance zin;
+	ADD_VAR( ZAxis (X_ax) , _ZC("XAxis") );
+	ADD_VAR( ZAxis (Y_ax) , _ZC("YAxis") );
+	ADD_VAR( ZAxis (Z_ax) , _ZC("ZAxis") );
+
+	/*zin.val = new ZAxis (X_ax); 
+	*zv=zin;
+	ZInterp::ZSym.InsertSymbol(_ZC("XAxis"),zv);
+	zv++;
+
+	zin.val = new ZAxis (Y_ax); 
+	*zv=zin;
+	ZInterp::ZSym.InsertSymbol(_ZC("YAxis"),zv);
+	zv++;*/
+	
+	ADD_CLASS(ZAxis  ,"__ZAxis");
+	ADD_CLASS(ZPoint ,"ZPoint");
 	ADD_CLASS(ZBulgeType,"ZBulgeType");
 	
 
-	/*ZBox::Init();
-	*zv=ZObjP();
-	boost::get<gZObject>(*zv).cont=new ZBox();
-	ZInterp::ZSym.InsertSymbol(_ZC("Box"),zv);
-
-	zv++;
-	ZPlane::Init();
-	*zv=ZObjP();
-	boost::get<gZObject>(*zv).cont=new ZPlane();
-	ZInterp::ZSym.InsertSymbol(_ZC("Plane"),zv);
-
-	zv++;
-	ZRigidBodySimulation::Init();
-	*zv=ZObjP();
-	boost::get<gZObject>(*zv).cont=new ZRigidBodySimulation();
-	ZInterp::ZSym.InsertSymbol(_ZC("ZRigidBodySimulation"),zv);*/
 }

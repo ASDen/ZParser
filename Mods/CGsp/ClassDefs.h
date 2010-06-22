@@ -1,8 +1,10 @@
 #include "Primitive.h"
 #include "Modifier.h"
+#include "ZPseudo.h"
 #include "ZAxis.h"
 #include "ZPoint.h"
 #include "ZBulgeType.h"
+
 
 /* Primitives */
 #include "Primitives/ZBox.h"

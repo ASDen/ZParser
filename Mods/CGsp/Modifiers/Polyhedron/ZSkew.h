@@ -85,24 +85,17 @@ public:
 	{
 		if (inp.size() == 0)
 		{
-			ZIFloat fr = primt->RoAxis;
-			ZTvarp res=ZAlloc(ZTvar,1);
-			*res = ZTFloat(fr);
-			return res;
+			ZTvarS zvs;
+			ZTOInstance zin;
+			ZTvarp hv = ZAlloc(ZTvar,1);
+			zin.val = new ZAxis (primt->RoAxis); 
+			*hv=zin;
+			return hv;
 		}
 
-		switch((int)(FLOAT_ZCONV(*(inp[0]))))
-		{
-		case 0:
-			primt->RoAxis = Axis::X_ax;
-			break;
-		case 1:
-			primt->RoAxis = Axis::Y_ax;
-			break;
-		case 2:
-			primt->RoAxis = Axis::Z_ax;
-			break;
-		}
+		pZObjP zins=INSTANCE_ZCONV(*(inp[0]));
+		primt->RoAxis = reinterpret_cast<ZAxis*>(zins)->ax;
+		
 		return NULL;
 	}
 	

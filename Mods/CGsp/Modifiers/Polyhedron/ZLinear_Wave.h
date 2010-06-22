@@ -31,7 +31,9 @@ public:
 	//FIXME : int conversions
 	ZLinear_Wave(ZTvarS inp)
 	{
+		ZPoint* zp3;
 		Point_3* p3;
+		ZAxis* za;
 		pZObjP zins;
 
 		//constructor inits
@@ -44,9 +46,21 @@ public:
 			primt = new Linear_Wave( FLOAT_ZCONV(*(inp[0])) );
 			break;
 		case 2:
-			primt = new Linear_Wave( FLOAT_ZCONV(*(inp[0])) , FLOAT_ZCONV(*(inp[1])) );
-			//primt = new Linear_Wave( FLOAT_ZCONV(*(inp[0])) , ZLinear_WaveType::getType((inp[1])) );
-			//primt = new Linear_Wave( FLOAT_ZCONV(*(inp[0])) , ZAxis::getAxis((inp[1])) );
+
+			switch( GET_ZTYPE(*(inp[1])) )
+			{
+			case ZETFloat:
+				primt = new Linear_Wave( FLOAT_ZCONV(*(inp[0])) , FLOAT_ZCONV(*(inp[1])) );
+				break;
+			case ZETInstance:
+				zins=INSTANCE_ZCONV(*(inp[1]));
+				if( (zp3 = dynamic_cast<ZPoint*>(zins)) != NULL)
+					primt = new Linear_Wave( FLOAT_ZCONV(*(inp[0])) , zp3->getPnt() );
+				else if ( (za = dynamic_cast<ZAxis*>(zins)) != NULL)
+					primt = new Linear_Wave( FLOAT_ZCONV(*(inp[0])) , za->ax );
+				else ZError::Throw<ZBadConversionError>();
+				break;
+			}
 			break;
 		case 3:
 			zins=INSTANCE_ZCONV(*(inp[2]));
@@ -145,24 +159,17 @@ public:
 	{
 		if (inp.size() == 0)
 		{
-			ZIFloat fr = primt->RoAxis;
-			ZTvarp res=ZAlloc(ZTvar,1);
-			*res = ZTFloat(fr);
-			return res;
+			ZTvarS zvs;
+			ZTOInstance zin;
+			ZTvarp hv = ZAlloc(ZTvar,1);
+			zin.val = new ZAxis (primt->RoAxis); 
+			*hv=zin;
+			return hv;
 		}
 
-		switch((int)(FLOAT_ZCONV(*(inp[0]))))
-		{
-		case 0:
-			primt->RoAxis = Axis::X_ax;
-			break;
-		case 1:
-			primt->RoAxis = Axis::Y_ax;
-			break;
-		case 2:
-			primt->RoAxis = Axis::Z_ax;
-			break;
-		}
+		pZObjP zins=INSTANCE_ZCONV(*(inp[0]));
+		primt->RoAxis = reinterpret_cast<ZAxis*>(zins)->ax;
+		
 		return NULL;
 	}
 

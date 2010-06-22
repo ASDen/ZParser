@@ -18,7 +18,7 @@ public:
 	static void Init()
 	{
 		StProps.InitScope();
-	
+
 		ZTObject::Inheriet(StProps);
 	}
 };

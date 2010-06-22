@@ -2,7 +2,8 @@
 
 enum ZErrorTypes{
 	ZBadConversionError,
-	ZOperationNotSupported
+	ZOperationNotSupported,
+	ZDivisionByZeroException
 };
 
 class ZError
@@ -34,5 +35,10 @@ public:
 	template <>
 	static void Speak<ZOperationNotSupported>(){
 		DoWrite(_ZC("Operation not support on types")); 
+	}
+
+	template <>
+	static void Speak<ZDivisionByZeroException>(){
+		DoWrite(_ZC("Division by Zero")); 
 	}
 };
