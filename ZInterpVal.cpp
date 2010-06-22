@@ -82,8 +82,8 @@ namespace ZInterp
     void Operand::AccessListElement(pANTLR3_BASE_TREE t1,pANTLR3_BASE_TREE ind)
 	{
 		pANTLR3_BASE_TREE aind=(pANTLR3_BASE_TREE)ind->getChild(ind,0);
-        ZIInteger index=boost::get<gZInt>(*(ZTvarp)(aind->u)).cont->val;
-		ZTList* list=( boost::get<gZList>( *(ZTvarp)(t1->u) )).cont;
+        ZIInteger index=INT_ZCONV(*(ZTvarp)(aind->u));
+		ZTList* list=( gLIST_ZCONV( *(ZTvarp)(t1->u) )).cont;
 		setCustomNodeField(t1,list->val[index]);
 	}
 
@@ -92,15 +92,15 @@ namespace ZInterp
 		pANTLR3_BASE_TREE afield=(pANTLR3_BASE_TREE)field->getChild(field,0);
 		ZChar* vName = getNodeText(afield);
 		ZTvarp var,elm;
-		ZTOInstance* zin=( boost::get<gZOInstance>( *(ZTvarp)(t1->u) )).cont;
+		ZTOInstance* zin=( gINSTANCE_ZCONV( *(ZTvarp)(t1->u) )).cont;
 		var = zin->val->getDyn().getSymbol(vName,true);
 		switch( boost::apply_visitor(getType(),*var) )
 		{
 		case ZETMemDataItem:
-			elm = (boost::apply_visitor(ZTDataBridge((boost::get<gZMemData>(*var)).cont->val), *(ZTvarp)(t1->u) ));
+			elm = (boost::apply_visitor(ZTDataBridge((MEMDATA_ZCONV(*var))), *(ZTvarp)(t1->u) ));
 			break;
 		case ZETFunction:
-			boost::get<gZFunction>( *var ).cont->val->obj = (ZTvarp)(t1->u);
+			FUNCTION_ZCONV( *var )->obj = (ZTvarp)(t1->u);
 			elm = var;
 			break;
 		}
@@ -188,6 +188,9 @@ namespace ZInterp
 		case SS_FSLASH:
 			*var=boost::apply_visitor(Divide(),*((ZTvarp)t1->u),*((ZTvarp)t2->u));
 			break;
+		case SS_PERCENT:
+			*var=boost::apply_visitor(Modulus(),*((ZTvarp)t1->u),*((ZTvarp)t2->u));
+			break;
 		case SS_D_AMP:
 			*var=boost::apply_visitor(Boolean::And(),*((ZTvarp)t1->u),*((ZTvarp)t2->u));
 			break;
@@ -200,9 +203,20 @@ namespace ZInterp
 		case SS_GT:
 			*var=boost::apply_visitor(Boolean::Great(),*((ZTvarp)t1->u),*((ZTvarp)t2->u));
 			break;
+		case SS_D_EQUAL:
+			*var=boost::apply_visitor(Boolean::Equal(),*((ZTvarp)t1->u),*((ZTvarp)t2->u));
+			break;
 		case SS_LT_EQUAL:
+			*var=boost::apply_visitor(Boolean::Or(),
+				boost::apply_visitor(Boolean::Equal(),*((ZTvarp)t1->u),*((ZTvarp)t2->u)),
+				boost::apply_visitor(Boolean::Less(),*((ZTvarp)t1->u),*((ZTvarp)t2->u))
+				);
 			break;
 		case SS_GT_EQUAL:
+			*var=boost::apply_visitor(Boolean::Or(),
+				boost::apply_visitor(Boolean::Equal(),*((ZTvarp)t1->u),*((ZTvarp)t2->u)),
+				boost::apply_visitor(Boolean::Great(),*((ZTvarp)t1->u),*((ZTvarp)t2->u))
+				);
 			break;
 		}
 		setCustomNodeField(r,var);

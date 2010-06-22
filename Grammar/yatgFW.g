@@ -156,10 +156,6 @@ context
 		|  ^(CONTEXT ABOUT operand)
 		)
 	|  ^(CONTEXT  UNDO  cexprx  )
-<<<<<<< HEAD
-	
-=======
->>>>>>> FETCH_HEAD
 	;
 
 set_context 

@@ -312,54 +312,6 @@
 			<Filter
 				Name="Mods"
 				>
-				<File
-					RelativePath=".\Mods\testMod.cpp"
-					>
-					<FileConfiguration
-						Name="Debug|Win32"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-							UsePrecompiledHeader="2"
-						/>
-					</FileConfiguration>
-				</File>
-				<File
-					RelativePath=".\Mods\testMod2.cpp"
-					>
-					<FileConfiguration
-						Name="Debug|Win32"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-							UsePrecompiledHeader="2"
-						/>
-					</FileConfiguration>
-				</File>
-				<File
-					RelativePath=".\Mods\ZArray.cpp"
-					>
-					<FileConfiguration
-						Name="Debug|Win32"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-							UsePrecompiledHeader="2"
-						/>
-					</FileConfiguration>
-				</File>
-				<File
-					RelativePath=".\Mods\ZMath.cpp"
-					>
-					<FileConfiguration
-						Name="Debug|Win32"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-							UsePrecompiledHeader="2"
-						/>
-					</FileConfiguration>
-				</File>
 				<Filter
 					Name="CGsp"
 					>
@@ -374,6 +326,30 @@
 								UsePrecompiledHeader="2"
 								PrecompiledHeaderThrough="XCGsp.h"
 								PrecompiledHeaderFile="$(IntDir)\XCGsp.pch"
+							/>
+						</FileConfiguration>
+					</File>
+					<File
+						RelativePath=".\Mods\testMod.cpp"
+						>
+						<FileConfiguration
+							Name="Debug|Win32"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+								PrecompiledHeaderThrough="../StdAfx.h"
+							/>
+						</FileConfiguration>
+					</File>
+					<File
+						RelativePath=".\Mods\testMod2.cpp"
+						>
+						<FileConfiguration
+							Name="Debug|Win32"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+								PrecompiledHeaderThrough="../StdAfx.h"
 							/>
 						</FileConfiguration>
 					</File>
@@ -393,6 +369,30 @@
 					<File
 						RelativePath=".\Mods\CGsp\XCGsp.h"
 						>
+					</File>
+					<File
+						RelativePath=".\Mods\ZArray.cpp"
+						>
+						<FileConfiguration
+							Name="Debug|Win32"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+								PrecompiledHeaderThrough="../StdAfx.h"
+							/>
+						</FileConfiguration>
+					</File>
+					<File
+						RelativePath=".\Mods\ZMath.cpp"
+						>
+						<FileConfiguration
+							Name="Debug|Win32"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+								PrecompiledHeaderThrough="../StdAfx.h"
+							/>
+						</FileConfiguration>
 					</File>
 					<File
 						RelativePath=".\Mods\CGsp\ZPoint.h"
@@ -432,6 +432,10 @@
 			</File>
 			<File
 				RelativePath=".\yatgParser.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ZError.h"
 				>
 			</File>
 			<File

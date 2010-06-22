@@ -55,8 +55,8 @@ public:
 
 	ZTvarp sq(ZTvarS inp)
 	{
-		ZIInteger in = boost::get<gZFloat>(*inp[0]).cont->val;
-		ZIInteger ai = boost::get<gZFloat>(a).cont->val;
+		ZIInteger in = gFLOAT_ZCONV(*inp[0]).cont->val;
+		ZIInteger ai = gFLOAT_ZCONV(a).cont->val;
 
 		ZIFloat fr = (in*in+ai*ai)/(ZIFloat)(in);
 

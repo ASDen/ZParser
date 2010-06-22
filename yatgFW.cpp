@@ -3302,7 +3302,7 @@ case_expr(pyatgFW ctx)
         // C:\\Zlang\\src\\Zzparser\\Grammar\\yatgFW.g:96:3: ( ^(j= CASE ( ^( CASE_Exp expr_g ) )? ) )
         // C:\\Zlang\\src\\Zzparser\\Grammar\\yatgFW.g:97:4: ^(j= CASE ( ^( CASE_Exp expr_g ) )? )
         {
-            j = (pANTLR3_BASE_TREE) MATCHT(CASE, &FOLLOW_CASE_in_case_expr578); 
+            j = (pANTLR3_BASE_TREE) MATCHT(CASE, NULL); 
             if  (HASEXCEPTION())
             {
                 goto rulecase_exprEx;

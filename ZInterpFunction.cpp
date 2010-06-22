@@ -44,7 +44,7 @@ namespace ZInterp
 	////////////////////////////////////////////////
 	void CallFunction(ZTvarS& Fargs,ZTvarp zfun,pANTLR3_BASE_TREE t1,pANTLR3_BASE_TREE arg,yatgFW_Ctx_struct* xyz)
 	{
-		ZIFunction* var=boost::get<gZFunction>( *zfun ).cont->val;
+		ZIFunction* var= FUNCTION_ZCONV( *zfun );
 		
 		switch ( var -> FunT )
 		{
@@ -99,7 +99,7 @@ namespace ZInterp
 		ZTOInstance zin;
 		ZTvarp hv = ZAlloc(ZTvar,1);
 		zin.val = ZAlloc(ZObjP,1);
-		boost::get<gZObject>(*zobj).cont->cpy(zin.val,Fargs);
+		gOBJECT_ZCONV(*zobj).cont->cpy(zin.val,Fargs);
 		*hv=zin;
 		ZInterp::setCustomNodeField(t1,hv);
 	}

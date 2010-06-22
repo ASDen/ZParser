@@ -108,7 +108,7 @@ namespace ZInterp
         {
             //arr=getNodeText(((pANTLR3_BASE_TREE)(( pANTLR3_BASE_TREE ) tstart -> getChild ( tstart , 0 ))->getChild((( pANTLR3_BASE_TREE ) tstart -> getChild ( tstart , 0 )),0)));
             //ZTvarp var=ZInterp::ZSym.getSymbol(arr,true);
-            list=( boost::get<gZList>( *(ZTvarp)( ( ( pANTLR3_BASE_TREE ) tstart -> getChild ( tstart , 0 ) ) ->u) )).cont;
+            list=( gLIST_ZCONV( *(ZTvarp)( ( ( pANTLR3_BASE_TREE ) tstart -> getChild ( tstart , 0 ) ) ->u) )).cont;
             start=0;
             end=list->val.size();
             
@@ -118,10 +118,10 @@ namespace ZInterp
         }
         else
         {
-			start= boost::get<gZFloat>(*(ZTvarp)((( pANTLR3_BASE_TREE ) tstart -> getChild ( tstart , 0 ))->u)).cont->val;
-            end=boost::get<gZFloat>(*(ZTvarp)((( pANTLR3_BASE_TREE ) tend -> getChild ( tend , 0 ))->u)).cont->val;
-            scale=( tby != NULL ) ? boost::get<gZFloat>(*(ZTvarp)((( pANTLR3_BASE_TREE ) tby -> getChild ( tby , 0 ))->u)).cont->val : 1.0;
-            cond= (twhere!=NULL)  ? boost::get<gZBool>(*(ZTvarp)((( pANTLR3_BASE_TREE ) twhere -> getChild ( twhere , 0 ))->u)).cont->val ==  ZBTrue : ZBTrue;
+			start= gFLOAT_ZCONV(*(ZTvarp)((( pANTLR3_BASE_TREE ) tstart -> getChild ( tstart , 0 ))->u)).cont->val;
+            end=gFLOAT_ZCONV(*(ZTvarp)((( pANTLR3_BASE_TREE ) tend -> getChild ( tend , 0 ))->u)).cont->val;
+            scale=( tby != NULL ) ? gFLOAT_ZCONV(*(ZTvarp)((( pANTLR3_BASE_TREE ) tby -> getChild ( tby , 0 ))->u)).cont->val : 1.0;
+            cond= (twhere!=NULL)  ? gBOOL_ZCONV(*(ZTvarp)((( pANTLR3_BASE_TREE ) twhere -> getChild ( twhere , 0 ))->u)).cont->val ==  ZBTrue : ZBTrue;
     		
 		    //f.val=start;
 		    
@@ -200,8 +200,9 @@ namespace ZInterp
 
 	void ContextExpr::Exec(pANTLR3_BASE_TREE timeNode,yatgFW_Ctx_struct* )
 	{
-		currentFrame = (int)boost::get<gZFloat>(*(ZTvarp)((( pANTLR3_BASE_TREE ) timeNode -> getChild ( timeNode , 2 ))->u)).cont->val;
+		currentFrame = (int)gFLOAT_ZCONV(*(ZTvarp)((( pANTLR3_BASE_TREE ) timeNode -> getChild ( timeNode , 2 ))->u)).cont->val;
 	}
+
 
 	void ContextExpr::Flush()
 	{
@@ -210,41 +211,49 @@ namespace ZInterp
 
 	void CaseExpr::Exec(pANTLR3_BASE_TREE caseNode, yatgFW_Ctx_struct * xyz)
 	{
-		ANTLR3_MARKER caseexpr=(((pANTLR3_BASE_TREE)caseNode->getChild(caseNode,0))->savedIndex);
-		ANTLR3_MARKER item=(((pANTLR3_BASE_TREE)caseNode->getChild(caseNode,1))->savedIndex);
-		pANTLR3_BASE_TREE titem=(pANTLR3_BASE_TREE)caseNode->getChild(caseNode,1);
-		
-		SEEK(item);
-		MATCHT(CASE_Item,NULL);
-		MATCHT ( ANTLR3_TOKEN_DOWN , NULL ) ;
+		int cnt = ((caseNode))->children->count;
+		ANTLR3_MARKER cend = (((pANTLR3_BASE_TREE)caseNode->getChild(caseNode,cnt-1))->savedIndex);
 
 		pANTLR3_BASE_TREE t = (pANTLR3_BASE_TREE)((pANTLR3_BASE_TREE)caseNode->getChild(caseNode,0));
 		pANTLR3_BASE_TREE p=(pANTLR3_BASE_TREE)t->getChild(t,0);
 		ZChar* var = getNodeText((pANTLR3_BASE_TREE)p->getChild(p,0));
         ZTvarp x= ZInterp::ZSym.getSymbol(var,ZBTrue);
-		string res=boost::apply_visitor(ToString(),*x);
 		
 		int c=1;
-		while((pANTLR3_BASE_TREE)(caseNode)->getChild(caseNode,c)!=NULL)
+		//while((pANTLR3_BASE_TREE)(caseNode)->getChild(caseNode,c)!=NULL)
+		for(int j=0;j<cnt-1;j++)
 		{
-			string itemstr=getNodeText((pANTLR3_BASE_TREE)((pANTLR3_BASE_TREE)(caseNode)->getChild(caseNode,c))->getChild((pANTLR3_BASE_TREE)(caseNode)->getChild(caseNode,c),0));
-			if(itemstr[0]=='"' )
-			{
-				itemstr.erase(0,1);
-				itemstr.erase(itemstr.size()-1,1);
-			}
-		
-			if(res== itemstr || itemstr == "DEFAULT")
+			ANTLR3_MARKER item=(((pANTLR3_BASE_TREE)caseNode->getChild(caseNode,c))->savedIndex);
+			
+			SEEK(item);
+			MATCHT(CASE_Item,NULL);
+			MATCHT ( ANTLR3_TOKEN_DOWN , NULL ) ;
+
+			xyz->constant(xyz);
+			ZTvarp y = ((ZTvarp)((pANTLR3_BASE_TREE)((pANTLR3_BASE_TREE)(caseNode)->getChild(caseNode,c))->getChild((pANTLR3_BASE_TREE)(caseNode)->getChild(caseNode,c),0))->u);
+
+			ZTvarp var=ZAlloc(ZTvar,1);
+			*var = boost::apply_visitor(Boolean::Equal(),*x,*y);
+			if(BOOL_ZCONV(*var))
 			{
 				pANTLR3_BASE_TREE tt = ( pANTLR3_BASE_TREE ) caseNode -> getChild ( caseNode , c ) ;
-				SEEK ( ( ( pANTLR3_BASE_TREE ) ( tt -> getChild ( tt , 1 ) ) ) -> savedIndex ) ;
+				pANTLR3_BASE_TREE tt1 = ( pANTLR3_BASE_TREE ) tt -> getChild ( tt , 1 ) ;
+				SEEK (  tt1-> savedIndex);
 				xyz -> expr_g ( xyz );
-				return;
+				//MATCHT ( ANTLR3_TOKEN_UP , NULL ) ;
+				break;
 			}
-			MATCHT ( ANTLR3_TOKEN_UP , NULL ) ;
+			//MATCHT ( ANTLR3_TOKEN_UP , NULL ) ;
 			c ++ ;
 		}
-		MATCHT(ANTLR3_TOKEN_UP , NULL);
-		MATCHT(ANTLR3_TOKEN_UP , NULL);
+		//MATCHT(ANTLR3_TOKEN_UP , NULL);
+		//MATCHT(ANTLR3_TOKEN_UP , NULL);
+		SEEK(cend);
+		xyz -> expr_g ( xyz );
+		//MATCHT(ANTLR3_TOKEN_DOWN , NULL);
+		//MATCHT(ECASE_END,NULL);
+		//MATCHT(ECASE_END,NULL);
+		//MATCHT(ECASE_END,NULL);
+		//MATCHT(ECASE_END,NULL);
 	}
 };

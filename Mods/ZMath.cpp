@@ -50,7 +50,7 @@ public:
 
 	ZTvarp Zsqrt(ZTvarS inp)
 	{
-		ZIFloat in = boost::get<gZFloat>(*inp[0]).cont->val;
+		ZIFloat in = FLOAT_ZCONV(*inp[0]);
 		//ZIInteger ai = boost::get<gZFloat>(a).cont->val;
 
 		ZIFloat fr = /*(float)*/sqrtf(in);
@@ -62,8 +62,8 @@ public:
 
 	ZTvarp Zpow(ZTvarS inp)
 	{
-		ZIFloat in = boost::get<gZFloat>(*inp[0]).cont->val;
-		ZIFloat ai = boost::get<gZFloat>(*inp[1]).cont->val;
+		ZIFloat in = FLOAT_ZCONV(*inp[0]);
+		ZIFloat ai = FLOAT_ZCONV(*inp[1]);
 
 		ZIFloat fr = (float)pow(in,ai);
 
@@ -74,7 +74,7 @@ public:
 
 	ZTvarp Zsin(ZTvarS inp)
 	{
-		ZIFloat in = boost::get<gZFloat>(*inp[0]).cont->val;
+		ZIFloat in = FLOAT_ZCONV(*inp[0]);
 		//ZIFloat ai = boost::get<gZInt>(*inp[1]).cont->val;
 
 		ZIFloat fr = (float)sin(in);
@@ -86,7 +86,7 @@ public:
 
 	ZTvarp Zcos(ZTvarS inp)
 	{
-		ZIFloat in = boost::get<gZFloat>(*inp[0]).cont->val;
+		ZIFloat in = FLOAT_ZCONV(*inp[0]);
 		//ZIFloat ai = boost::get<gZInt>(*inp[1]).cont->val;
 
 		ZIFloat fr = (float)cos(in);
@@ -98,7 +98,7 @@ public:
 
 	ZTvarp Ztan(ZTvarS inp)
 	{
-		ZIFloat in = boost::get<gZFloat>(*inp[0]).cont->val;
+		ZIFloat in = FLOAT_ZCONV(*inp[0]);
 		//ZIFloat ai = boost::get<gZInt>(*inp[1]).cont->val;
 
 		ZIFloat fr = (float)tan(in);

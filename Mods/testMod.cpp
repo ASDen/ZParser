@@ -49,7 +49,6 @@ ZTvarp Zprint(ZTvarS var)
 	*res=ZTBool(true);
 	return res;
 }
-
 ZTvarp ZprintL(ZTvarS var)
 {
 	std::cout<< boost::apply_visitor(ToString(),*(var[0])) <<endl;
@@ -57,11 +56,29 @@ ZTvarp ZprintL(ZTvarS var)
 	*res=ZTBool(true);
 	return res;
 }
+ZTvarp ZRead(ZTvarS var)
+{
+	string s;
+	std::cin>> s;
+	ZTString str=ZTString(s);
+	ZTvarp inp=ZAlloc(ZTvar,1);
+	*inp=str;
+	ZTInt i;
+	switch( boost::apply_visitor(getType(),*var[0]) )
+	{
+	case ZETInt:
+		i=INT_ZCONV(*inp);
+		break;
+	}
+	ZTvarp res=ZAlloc(ZTvar,1);
+	*res=ZTBool(true);
+	return res;
+}
 
 void ZModInit_Test()
 {
-	ZIFunction* zf=ZAlloc(ZIFunction,4);
-	ZTvarp zv=ZAlloc(ZTvar,4);
+	ZIFunction* zf=ZAlloc(ZIFunction,10);
+	ZTvarp zv=ZAlloc(ZTvar,10);
 
 	zf->pFunInit(1,Zprint);
 	*zv=ZTFunction(zf);
@@ -81,5 +98,10 @@ void ZModInit_Test()
 	zf->pFunInit(2,Zpower::Zpower_);
 	*zv=ZTFunction(zf);
 	ZInterp::ZSym.InsertSymbol(_ZC("pow"),zv);
+
+	zf++;zv++;
+	zf->pFunInit(2,ZRead);
+	*zv=ZTFunction(zf);
+	ZInterp::ZSym.InsertSymbol(_ZC("Read"),zv);
 
 }
