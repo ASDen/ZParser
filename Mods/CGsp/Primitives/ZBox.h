@@ -12,6 +12,14 @@ public:
 		PrimitiveAPI<ZBox>::Init();
 
 		StProps.InitScope();
+
+		AddFunction(_ZC("Length") ,1,&ZBox::Length);
+		AddFunction(_ZC("Width") ,1,&ZBox::Width);
+		AddFunction(_ZC("Height") ,1,&ZBox::Height);
+
+		AddFunction(_ZC("LengthSegs") ,1,&ZBox::LengthSegs);
+		AddFunction(_ZC("WidthSegs") ,1,&ZBox::WidthSegs);
+		AddFunction(_ZC("HeightSegs") ,1,&ZBox::HeightSegs);
 	
 		ZTObject::Inheriet(StProps);
 	}
@@ -53,5 +61,87 @@ public:
 		ZBox();
 	}
 
+	ZTvarp Length (ZTvarS inp)
+	{
+		if (inp.size() == 0)
+		{
+			ZIFloat fr = primt->length;
+			ZTvarp res=ZAlloc(ZTvar,1);
+			*res = ZTFloat(fr);
+			return res;
+		}
 
+		primt->length = FLOAT_ZCONV(*(inp[0]));
+		return NULL;
+	}
+
+	ZTvarp Width (ZTvarS inp)
+	{
+		if (inp.size() == 0)
+		{
+			ZIFloat fr = primt->width;
+			ZTvarp res=ZAlloc(ZTvar,1);
+			*res = ZTFloat(fr);
+			return res;
+		}
+
+		primt->width = FLOAT_ZCONV(*(inp[0]));
+		return NULL;
+	}
+
+	ZTvarp Height (ZTvarS inp)
+	{
+		if (inp.size() == 0)
+		{
+			ZIFloat fr = primt->height;
+			ZTvarp res=ZAlloc(ZTvar,1);
+			*res = ZTFloat(fr);
+			return res;
+		}
+
+		primt->height = FLOAT_ZCONV(*(inp[0]));
+		return NULL;
+	}
+
+	ZTvarp LengthSegs (ZTvarS inp)
+	{
+		if (inp.size() == 0)
+		{
+			ZTInt fr = primt->length_Seg;
+			ZTvarp res=ZAlloc(ZTvar,1);
+			*res = ZTFloat(fr);
+			return res;
+		}
+
+		primt->length_Seg = INT_ZCONV(*(inp[0]));
+		return NULL;
+	}
+
+	ZTvarp WidthSegs (ZTvarS inp)
+	{
+		if (inp.size() == 0)
+		{
+			ZTInt fr = primt->width_Seg;
+			ZTvarp res=ZAlloc(ZTvar,1);
+			*res = ZTFloat(fr);
+			return res;
+		}
+
+		primt->width_Seg = INT_ZCONV(*(inp[0]));
+		return NULL;
+	}
+
+	ZTvarp HeightSegs (ZTvarS inp)
+	{
+		if (inp.size() == 0)
+		{
+			ZTInt fr = primt->height_Seg;
+			ZTvarp res=ZAlloc(ZTvar,1);
+			*res = ZTFloat(fr);
+			return res;
+		}
+
+		primt->height_Seg = INT_ZCONV(*(inp[0]));
+		return NULL;
+	}
 };

@@ -465,6 +465,10 @@
 						>
 					</File>
 					<File
+						RelativePath=".\Mods\CGsp\ZBulgeType.h"
+						>
+					</File>
+					<File
 						RelativePath=".\Mods\CGsp\ZPoint.h"
 						>
 					</File>
@@ -588,10 +592,6 @@
 							</File>
 							<File
 								RelativePath=".\Mods\CGsp\Modifiers\Polyhedron\ZSkew.h"
-								>
-							</File>
-							<File
-								RelativePath=".\Mods\CGsp\Modifiers\Polyhedron\ZSlice.h"
 								>
 							</File>
 							<File

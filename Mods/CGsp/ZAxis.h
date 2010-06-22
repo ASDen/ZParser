@@ -22,6 +22,25 @@ public:
 		ZAxis();
 	}
 
+	static Axis getAxis(ZTvarp inp)
+	{
+		Axis RoAxis;
+		switch((int)(FLOAT_ZCONV(*inp)))
+		{
+		case 0:
+			RoAxis = Axis::X_ax;
+			break;
+		case 1:
+			RoAxis = Axis::Y_ax;
+			break;
+		case 2:
+			RoAxis = Axis::Z_ax;
+			break;
+		}
+
+		return RoAxis;
+	}
+
 	static void Init()
 	{
 		StProps.InitScope();

@@ -12,6 +12,10 @@ public:
 		PrimitiveAPI<ZSphere>::Init();
 
 		StProps.InitScope();
+
+		AddFunction(_ZC("Radius") ,1,&ZSphere::Radius);
+
+		AddFunction(_ZC("SideSegs") ,1,&ZSphere::SideSegs);
 	
 		ZTObject::Inheriet(StProps);
 	}
@@ -39,5 +43,33 @@ public:
 		primt->Draw();
 		InitNode(inp,primt);
 		ZSphere();
+	}
+
+	ZTvarp Radius (ZTvarS inp)
+	{
+		if (inp.size() == 0)
+		{
+			ZIFloat fr = primt->radius;
+			ZTvarp res = ZAlloc(ZTvar,1);
+			*res = ZTFloat(fr);
+			return res;
+		}
+
+		primt->radius = FLOAT_ZCONV(*(inp[0]));
+		return NULL;
+	}
+
+	ZTvarp SideSegs (ZTvarS inp)
+	{
+		if (inp.size() == 0)
+		{
+			ZTInt fr = primt->Segs;
+			ZTvarp res=ZAlloc(ZTvar,1);
+			*res = ZTFloat(fr);
+			return res;
+		}
+
+		primt->Segs = INT_ZCONV(*(inp[0]));
+		return NULL;
 	}
 };

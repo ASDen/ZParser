@@ -31,6 +31,9 @@ public:
 	//FIXME : int conversions
 	ZTwist(ZTvarS inp)
 	{
+		Point_3* p3;
+		pZObjP zins;
+
 		//constructor inits
 		switch(inp.size())
 		{
@@ -41,19 +44,23 @@ public:
 			primt = new Twist( FLOAT_ZCONV(*(inp[0])) );
 			break;
 		case 2:
-			primt = new Twist( FLOAT_ZCONV(*(inp[0])) );
+			primt = new Twist( FLOAT_ZCONV(*(inp[0])) , ZAxis::getAxis((inp[1])) );
 			break;
 		case 3:
-			primt = new Twist( FLOAT_ZCONV(*(inp[0])) );
+			zins=INSTANCE_ZCONV(*(inp[1]));
+			p3 = reinterpret_cast<ZPoint*>(zins)->getPnt();
+			primt = new Twist( FLOAT_ZCONV(*(inp[0])) , p3 , ZAxis::getAxis((inp[2])) );
 			break;
 		case 4:
-			primt = new Twist( FLOAT_ZCONV(*(inp[0])) );
-			break;
 		case 5:
-			primt = new Twist( FLOAT_ZCONV(*(inp[0])) );
+			zins=INSTANCE_ZCONV(*(inp[1]));
+			p3 = reinterpret_cast<ZPoint*>(zins)->getPnt();
+			primt = new Twist( FLOAT_ZCONV(*(inp[0])) , p3 , ZAxis::getAxis((inp[2])) , BOOL_ZCONV(*(inp[3])) );
 			break;
 		case 6:
-			primt = new Twist( FLOAT_ZCONV(*(inp[0])) );
+			zins=INSTANCE_ZCONV(*(inp[1]));
+			p3 = reinterpret_cast<ZPoint*>(zins)->getPnt();
+			primt = new Twist( FLOAT_ZCONV(*(inp[0])) , p3 , ZAxis::getAxis((inp[2])) , BOOL_ZCONV(*(inp[3])) , INT_ZCONV(*(inp[4])) , INT_ZCONV(*(inp[5])) );
 			break;
 		}
 		ZTwist();
@@ -87,13 +94,13 @@ public:
 		switch((int)(FLOAT_ZCONV(*(inp[0]))))
 		{
 		case 0:
-			primt->RoAxis = X_ax;
+			primt->RoAxis = Axis::X_ax;
 			break;
 		case 1:
-			primt->RoAxis = Y_ax;
+			primt->RoAxis = Axis::Y_ax;
 			break;
 		case 2:
-			primt->RoAxis = Z_ax;
+			primt->RoAxis = Axis::Z_ax;
 			break;
 		}
 		return NULL;
