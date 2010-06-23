@@ -30,7 +30,8 @@ public:
 	//FIXME : int conversions
 	ZCylindrical_Wave(ZTvarS inp)
 	{
-		Point_3* p3;
+		ZPoint* zp3;
+		ZAxis* za;
 		pZObjP zins;
 
 		//constructor inits
@@ -39,39 +40,113 @@ public:
 		case 0:
 			primt = new Cylindrical_Wave();
 			break;
+
 		case 1:
 			primt = new Cylindrical_Wave( FLOAT_ZCONV(*(inp[0])) );
 			break;
-		case 2:
-			primt = new Cylindrical_Wave( FLOAT_ZCONV(*(inp[0])) , FLOAT_ZCONV(*(inp[1])) );
-			//primt = new Cylindrical_Wave( FLOAT_ZCONV(*(inp[0])) , ZCylindrical_WaveType::getType((inp[1])) );
-			//primt = new Cylindrical_Wave( FLOAT_ZCONV(*(inp[0])) , ZAxis::getAxis((inp[1])) );
-			break;
-		case 3:
-			zins=INSTANCE_ZCONV(*(inp[2]));
-			p3 = reinterpret_cast<ZPoint*>(zins)->getPnt();
-			primt = new Cylindrical_Wave( FLOAT_ZCONV(*(inp[0])) , FLOAT_ZCONV(*(inp[1])) , FLOAT_ZCONV(*(inp[2])) );
-			//primt = new Cylindrical_Wave( FLOAT_ZCONV(*(inp[0])) , FLOAT_ZCONV(*(inp[1])) , p3 );
 
-			//zins=INSTANCE_ZCONV(*(inp[1]));
-			//p3 = reinterpret_cast<ZPoint*>(zins)->getPnt();
-			//primt = new Cylindrical_Wave( FLOAT_ZCONV(*(inp[0])) , FLOAT_ZCONV(*(inp[1])) , ZAxis::getAxis((inp[2])) );
-			//primt = new Cylindrical_Wave( FLOAT_ZCONV(*(inp[0])) , p3 , ZAxis::getAxis((inp[2])) );
+		case 2:
+			switch( GET_ZTYPE(*(inp[1])) )
+			{
+			case ZETFloat:
+				primt = new Cylindrical_Wave( FLOAT_ZCONV(*(inp[0])) , FLOAT_ZCONV(*(inp[1])) );
+				break;
+			case ZETInstance:
+				zins=INSTANCE_ZCONV(*(inp[1]));
+				if( (zp3 = dynamic_cast<ZPoint*>(zins)) != NULL)
+					primt = new Cylindrical_Wave( FLOAT_ZCONV(*(inp[0])) , zp3->getPnt() );
+				else if ( (za = dynamic_cast<ZAxis*>(zins)) != NULL)
+					primt = new Cylindrical_Wave( FLOAT_ZCONV(*(inp[0])) , za->ax );
+				else ZError::Throw<ZBadConversionError>();
+				break;
+			default:
+				ZError::Throw<ZBadConversionError>();
+			}
 			break;
+
+		case 3:
+			switch( GET_ZTYPE(*(inp[1])) )
+			{
+			case ZETFloat:
+				switch( GET_ZTYPE(*(inp[2])) )
+				{
+				case ZETFloat:
+					primt = new Cylindrical_Wave( FLOAT_ZCONV(*(inp[0])) , FLOAT_ZCONV(*(inp[1])) , FLOAT_ZCONV(*(inp[2])) );
+					break;
+				case ZETInstance:
+					zins=INSTANCE_ZCONV(*(inp[2]));
+					if( (zp3 = dynamic_cast<ZPoint*>(zins)) != NULL)
+						primt = new Cylindrical_Wave( FLOAT_ZCONV(*(inp[0])) , FLOAT_ZCONV(*(inp[1])) , zp3->getPnt() );
+					else if ( (za = dynamic_cast<ZAxis*>(zins)) != NULL)
+						primt = new Cylindrical_Wave( FLOAT_ZCONV(*(inp[0])) , FLOAT_ZCONV(*(inp[1])) , za->ax );
+					else ZError::Throw<ZBadConversionError>();
+					break;
+				default:
+					ZError::Throw<ZBadConversionError>();
+				}
+				break;
+
+			case ZETInstance:
+				switch( GET_ZTYPE(*(inp[2])) )
+				{
+				case ZETInstance:
+					zins=INSTANCE_ZCONV(*(inp[1]));
+					if( (zp3 = dynamic_cast<ZPoint*>(zins)) != NULL)
+					{
+						zins=INSTANCE_ZCONV(*(inp[2]));
+						if ( (za = dynamic_cast<ZAxis*>(zins)) != NULL)
+							primt = new Cylindrical_Wave( FLOAT_ZCONV(*(inp[0])) , zp3->getPnt() , za->ax );
+						else 
+							ZError::Throw<ZBadConversionError>();
+					}
+					else 
+						ZError::Throw<ZBadConversionError>();
+					break;
+				default:
+					ZError::Throw<ZBadConversionError>();
+				}
+				break;
+
+			default:
+				ZError::Throw<ZBadConversionError>();
+			}
+			break;
+
 		case 4:
-			zins=INSTANCE_ZCONV(*(inp[3]));
-			p3 = reinterpret_cast<ZPoint*>(zins)->getPnt();
-			primt = new Cylindrical_Wave( FLOAT_ZCONV(*(inp[0])) , FLOAT_ZCONV(*(inp[1])) , FLOAT_ZCONV(*(inp[2])) , p3);
-			//primt = new Cylindrical_Wave( FLOAT_ZCONV(*(inp[0])) , FLOAT_ZCONV(*(inp[1])) , FLOAT_ZCONV(*(inp[2])) , ZAxis::getAxis((inp[3])));
-			
-			//zins=INSTANCE_ZCONV(*(inp[2]));
-			//p3 = reinterpret_cast<ZPoint*>(zins)->getPnt();
-			//primt = new Cylindrical_Wave( FLOAT_ZCONV(*(inp[0])) , FLOAT_ZCONV(*(inp[1])) , p3 , ZAxis::getAxis((inp[3])) );
+			switch( GET_ZTYPE(*(inp[2])) )
+			{
+			case ZETFloat:
+				zins=INSTANCE_ZCONV(*(inp[3]));
+				if( (zp3 = dynamic_cast<ZPoint*>(zins)) != NULL)
+					primt = new Cylindrical_Wave( FLOAT_ZCONV(*(inp[0])) , FLOAT_ZCONV(*(inp[1])) , FLOAT_ZCONV(*(inp[2])) , zp3->getPnt() );
+				else if ( (za = dynamic_cast<ZAxis*>(zins)) != NULL)
+					primt = new Cylindrical_Wave( FLOAT_ZCONV(*(inp[0])) , FLOAT_ZCONV(*(inp[1])) , FLOAT_ZCONV(*(inp[2])) , za->ax );
+				else 
+					ZError::Throw<ZBadConversionError>();
+				break;
+
+			case ZETInstance:
+				zins=INSTANCE_ZCONV(*(inp[2]));
+				if( (zp3 = dynamic_cast<ZPoint*>(zins)) != NULL)
+				{
+					if ( (za = dynamic_cast<ZAxis*>(INSTANCE_ZCONV(*(inp[3])))) != NULL)
+						primt = new Cylindrical_Wave( FLOAT_ZCONV(*(inp[0])) , FLOAT_ZCONV(*(inp[1])) , zp3->getPnt() , za->ax );
+
+					else
+						ZError::Throw<ZBadConversionError>();
+				}
+				else 
+					ZError::Throw<ZBadConversionError>();
+				break;
+
+			default:
+				ZError::Throw<ZBadConversionError>();
+			}
 			break;
+
 		case 5:
-			zins=INSTANCE_ZCONV(*(inp[3]));
-			p3 = reinterpret_cast<ZPoint*>(zins)->getPnt();
-			primt = new Cylindrical_Wave( FLOAT_ZCONV(*(inp[0])) , FLOAT_ZCONV(*(inp[1])) , FLOAT_ZCONV(*(inp[2])) , p3 , ZAxis::getAxis((inp[4])) );
+			if ( (zp3 = dynamic_cast<ZPoint*>(INSTANCE_ZCONV(*(inp[3])))) != NULL && (za = dynamic_cast<ZAxis*>(INSTANCE_ZCONV(*(inp[4])))) != NULL)
+				primt = new Cylindrical_Wave( FLOAT_ZCONV(*(inp[0])) , FLOAT_ZCONV(*(inp[1])) , FLOAT_ZCONV(*(inp[2])) , zp3->getPnt() , za->ax );
 			break;
 		}
 		ZCylindrical_Wave();

@@ -36,7 +36,6 @@ public:
 			primt = new Sphere_3( FLOAT_ZCONV(*(inp[0])) );
 			break;
 		case 7:
-		default:
 			primt = new Sphere_3( FLOAT_ZCONV(*inp[0]) , INT_ZCONV(*inp[1]) );
 			break;
 		}

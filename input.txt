@@ -4,8 +4,8 @@ fn sc1 x=(
     	p=Plane(100,[0,0,0]);
     	vm.Add(p);
 
-    	t=Linear_Wave(3,ZPoint(5,5,5));
-	    be=Bend(0,ZPoint(0,0,-10),XAxis);
+    	t=Cylindrical_Wave(1,2,ZPoint(0,0,0),XAxis);
+	    be=Bulge(1,BRadial);
 	    --t.Axis(ZAxis);
     
     	b=Box(20,55,[0,0,10]);
@@ -14,12 +14,12 @@ fn sc1 x=(
         b.ApplyModifier(t);
         b.ApplyModifier(be);
     
-    animate on(
-	at time 1   (t.Amplitude(5); be.Angle(0))
-	at time 50  (t.Amplitude(36);be.Angle(90))
-	at time 100 (t.Amplitude(5); be.Angle(0))
-	at time 150 (t.Amplitude(36);be.Angle(-90))
-	at time 200 (t.Amplitude(5); be.Angle(0))
+    nimate on(
+	at time 1   (t.Amplitude(5); be.Amount(0))
+	at time 50  (t.Amplitude(36);be.Amount(90))
+	at time 100 (t.Amplitude(5); be.Amount(0))
+	at time 150 (t.Amplitude(36);be.Amount(-90))
+	at time 200 (t.Amplitude(5); be.Amount(0))
     )
     
 	vm.View();

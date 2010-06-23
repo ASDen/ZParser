@@ -15,6 +15,7 @@ public:
 
 		AddFunction(_ZC("Amount") ,1,&ZBulge::Amount);
 		AddFunction(_ZC("Axis") ,1,&ZBulge::Axis);
+		AddFunction(_ZC("Type") ,1,&ZBulge::Type);
 		AddFunction(_ZC("Center") ,1,&ZBulge::Center);
 		AddFunction(_ZC("Limited") ,1,&ZBulge::Limited);
 		AddFunction(_ZC("Upper_Limit") ,1,&ZBulge::Upper_Limit);
@@ -31,8 +32,10 @@ public:
 	//FIXME : int conversions
 	ZBulge(ZTvarS inp)
 	{
-		Point_3* p3;
+		ZPoint* zp3;
+		ZAxis* za;
 		pZObjP zins;
+		ZBulgeType* zbut;
 
 		//constructor inits
 		switch(inp.size())
@@ -40,27 +43,75 @@ public:
 		case 0:
 			primt = new Bulge();
 			break;
+
 		case 1:
 			primt = new Bulge( FLOAT_ZCONV(*(inp[0])) );
 			break;
+
 		case 2:
-			primt = new Bulge( FLOAT_ZCONV(*(inp[0])) , ZBulgeType::getType((inp[1])) );
+			switch( GET_ZTYPE(*(inp[1])) )
+			{
+			case ZETInstance:
+				zins=INSTANCE_ZCONV(*(inp[1]));
+				if( (zp3 = dynamic_cast<ZPoint*>(zins)) != NULL)
+					primt = new Bulge( FLOAT_ZCONV(*(inp[0])) , zp3->getPnt() );
+				else if ( (za = dynamic_cast<ZAxis*>(zins)) != NULL)
+					primt = new Bulge( FLOAT_ZCONV(*(inp[0])) , za->ax );
+				else if ( (zbut = dynamic_cast<ZBulgeType*>(zins)) != NULL)
+					primt = new Bulge( FLOAT_ZCONV(*(inp[0])) , zbut->buType );
+				else 
+					ZError::Throw<ZBadConversionError>();
+				break;
+			default:
+				ZError::Throw<ZBadConversionError>();
+			}
 			break;
+
 		case 3:
-			zins=INSTANCE_ZCONV(*(inp[1]));
-			p3 = reinterpret_cast<ZPoint*>(zins)->getPnt();
-			primt = new Bulge( FLOAT_ZCONV(*(inp[0])) , p3 , ZAxis::getAxis((inp[2])) );
+			if ( (zp3 = dynamic_cast<ZPoint*>(INSTANCE_ZCONV(*(inp[1])))) != NULL && (za = dynamic_cast<ZAxis*>(INSTANCE_ZCONV(*(inp[2])))) != NULL)
+				primt = new Bulge( FLOAT_ZCONV(*(inp[0])) , zp3->getPnt() , za->ax );
+			else
+				ZError::Throw<ZBadConversionError>();
 			break;
+
 		case 4:
+			if ( (zp3 = dynamic_cast<ZPoint*>(INSTANCE_ZCONV(*(inp[1])))) != NULL && (za = dynamic_cast<ZAxis*>(INSTANCE_ZCONV(*(inp[2])))) != NULL)
+			{
+			switch( GET_ZTYPE(*(inp[3])) )
+			{
+			case ZETBool:
+				primt = new Bulge( FLOAT_ZCONV(*(inp[0])) , zp3->getPnt() , za->ax , BOOL_ZCONV(*(inp[3])) );
+				break;
+			case ZETInstance:
+				if ( (zbut = dynamic_cast<ZBulgeType*>(INSTANCE_ZCONV(*(inp[3])))) != NULL)
+					primt = new Bulge( FLOAT_ZCONV(*(inp[0])) , zp3->getPnt() , za->ax , zbut->buType );
+				else
+					ZError::Throw<ZBadConversionError>();
+				break;
+			default:
+				ZError::Throw<ZBadConversionError>();
+			}
+			}
+			else
+				ZError::Throw<ZBadConversionError>();
+			break;
 		case 5:
-			zins=INSTANCE_ZCONV(*(inp[1]));
-			p3 = reinterpret_cast<ZPoint*>(zins)->getPnt();
-			primt = new Bulge( FLOAT_ZCONV(*(inp[0])) , p3 , ZAxis::getAxis((inp[2])) , BOOL_ZCONV(*(inp[3])) );
+			if ( (zp3 = dynamic_cast<ZPoint*>(INSTANCE_ZCONV(*(inp[1])))) != NULL && (za = dynamic_cast<ZAxis*>(INSTANCE_ZCONV(*(inp[2])))) != NULL && (zbut = dynamic_cast<ZBulgeType*>(INSTANCE_ZCONV(*(inp[3])))) != NULL)
+				primt = new Bulge( FLOAT_ZCONV(*(inp[0])) , zp3->getPnt() , za->ax , zbut->buType , BOOL_ZCONV(*(inp[4])) );
+			else
+				ZError::Throw<ZBadConversionError>();
 			break;
 		case 6:
-			zins=INSTANCE_ZCONV(*(inp[1]));
-			p3 = reinterpret_cast<ZPoint*>(zins)->getPnt();
-			primt = new Bulge( FLOAT_ZCONV(*(inp[0])) , p3 , ZAxis::getAxis((inp[2])) , BOOL_ZCONV(*(inp[3])) , INT_ZCONV(*(inp[4])) , INT_ZCONV(*(inp[5])) );
+			if ( (zp3 = dynamic_cast<ZPoint*>(INSTANCE_ZCONV(*(inp[1])))) != NULL && (za = dynamic_cast<ZAxis*>(INSTANCE_ZCONV(*(inp[2])))) != NULL)
+				primt = new Bulge( FLOAT_ZCONV(*(inp[0])) , zp3->getPnt() , za->ax , BOOL_ZCONV(*(inp[3])) , FLOAT_ZCONV(*(inp[4])) , FLOAT_ZCONV(*(inp[5])) );
+			else
+				ZError::Throw<ZBadConversionError>();
+			break;
+		case 7:
+			if ( (zp3 = dynamic_cast<ZPoint*>(INSTANCE_ZCONV(*(inp[1])))) != NULL && (za = dynamic_cast<ZAxis*>(INSTANCE_ZCONV(*(inp[2])))) != NULL && (zbut = dynamic_cast<ZBulgeType*>(INSTANCE_ZCONV(*(inp[3])))) != NULL)
+				primt = new Bulge( FLOAT_ZCONV(*(inp[0])) , zp3->getPnt() , za->ax , zbut->buType , BOOL_ZCONV(*(inp[4])) , FLOAT_ZCONV(*(inp[5])) , FLOAT_ZCONV(*(inp[6])) );
+			else
+				ZError::Throw<ZBadConversionError>();
 			break;
 		}
 		ZBulge();
@@ -95,6 +146,24 @@ public:
 
 		pZObjP zins=INSTANCE_ZCONV(*(inp[0]));
 		primt->RoAxis = reinterpret_cast<ZAxis*>(zins)->ax;
+		
+		return NULL;
+	}
+
+	ZTvarp Type (ZTvarS inp)
+	{
+		if (inp.size() == 0)
+		{
+			ZTvarS zvs;
+			ZTOInstance zin;
+			ZTvarp hv = ZAlloc(ZTvar,1);
+			zin.val = new ZBulgeType (primt->BuType); 
+			*hv=zin;
+			return hv;
+		}
+
+		pZObjP zins=INSTANCE_ZCONV(*(inp[0]));
+		primt->BuType = reinterpret_cast<ZBulgeType*>(zins)->buType;
 		
 		return NULL;
 	}

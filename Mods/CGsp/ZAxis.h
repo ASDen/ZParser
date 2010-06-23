@@ -4,13 +4,16 @@ public:
 
 	Axis ax;
 
-	ZAxis(){}
+	ZAxis()
+	{}
 
 	ZAxis(Axis a):ax(a)
 	{}
 
 	ZAxis(ZTvarS inp)
-	{ZAxis(X_ax);}
+	{
+		ZAxis(Z_ax);
+	}
 
 	static Axis getAxis(ZTvarp inp)
 	{

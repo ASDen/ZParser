@@ -34,6 +34,7 @@ public:
 		ZPoint* zp3;
 		Point_3* p3;
 		ZAxis* za;
+		ZAxis* zaf;
 		pZObjP zins;
 
 		//constructor inits
@@ -46,7 +47,6 @@ public:
 			primt = new Linear_Wave( FLOAT_ZCONV(*(inp[0])) );
 			break;
 		case 2:
-
 			switch( GET_ZTYPE(*(inp[1])) )
 			{
 			case ZETFloat:
@@ -60,51 +60,169 @@ public:
 					primt = new Linear_Wave( FLOAT_ZCONV(*(inp[0])) , za->ax );
 				else ZError::Throw<ZBadConversionError>();
 				break;
+			default:
+				ZError::Throw<ZBadConversionError>();
 			}
 			break;
 		case 3:
-			zins=INSTANCE_ZCONV(*(inp[2]));
-			p3 = reinterpret_cast<ZPoint*>(zins)->getPnt();
-			primt = new Linear_Wave( FLOAT_ZCONV(*(inp[0])) , FLOAT_ZCONV(*(inp[1])) , FLOAT_ZCONV(*(inp[2])) );
-			//primt = new Linear_Wave( FLOAT_ZCONV(*(inp[0])) , FLOAT_ZCONV(*(inp[1])) , p3 );
+			switch( GET_ZTYPE(*(inp[1])) )
+			{
+			case ZETFloat:
+				switch( GET_ZTYPE(*(inp[2])) )
+				{
+				case ZETFloat:
+					primt = new Linear_Wave( FLOAT_ZCONV(*(inp[0])) , FLOAT_ZCONV(*(inp[1])) , FLOAT_ZCONV(*(inp[2])) );
+					break;
+				case ZETInstance:
+					zins=INSTANCE_ZCONV(*(inp[2]));
+					if( (zp3 = dynamic_cast<ZPoint*>(zins)) != NULL)
+						primt = new Linear_Wave( FLOAT_ZCONV(*(inp[0])) , FLOAT_ZCONV(*(inp[1])) , zp3->getPnt() );
+					else if ( (za = dynamic_cast<ZAxis*>(zins)) != NULL)
+						primt = new Linear_Wave( FLOAT_ZCONV(*(inp[0])) , FLOAT_ZCONV(*(inp[1])) , za->ax );
+					else ZError::Throw<ZBadConversionError>();
+					break;
+				default:
+					ZError::Throw<ZBadConversionError>();
+				}
+				break;
 
-			//zins=INSTANCE_ZCONV(*(inp[1]));
-			//p3 = reinterpret_cast<ZPoint*>(zins)->getPnt();
-			//primt = new Linear_Wave( FLOAT_ZCONV(*(inp[0])) , FLOAT_ZCONV(*(inp[1])) , ZAxis::getAxis((inp[2])) );
-			//primt = new Linear_Wave( FLOAT_ZCONV(*(inp[0])) , p3 , ZAxis::getAxis((inp[2])) );
-			//primt = new Linear_Wave( FLOAT_ZCONV(*(inp[0])) , ZAxis::getAxis((inp[1])) , ZAxis::getAxis((inp[2])) );
+			case ZETInstance:
+				switch( GET_ZTYPE(*(inp[2])) )
+				{
+				case ZETInstance:
+					zins=INSTANCE_ZCONV(*(inp[1]));
+					if( (zp3 = dynamic_cast<ZPoint*>(zins)) != NULL)
+					{
+						zins=INSTANCE_ZCONV(*(inp[2]));
+						if ( (zaf = dynamic_cast<ZAxis*>(zins)) != NULL)
+							primt = new Linear_Wave( FLOAT_ZCONV(*(inp[0])) , zp3->getPnt() , zaf->ax );
+						else 
+							ZError::Throw<ZBadConversionError>();
+					}
+					else if ( (za = dynamic_cast<ZAxis*>(zins)) != NULL)
+					{
+						zins=INSTANCE_ZCONV(*(inp[2]));
+						if ( (zaf = dynamic_cast<ZAxis*>(zins)) != NULL)
+							primt = new Linear_Wave( FLOAT_ZCONV(*(inp[0])) , za->ax , zaf->ax );
+						else 
+							ZError::Throw<ZBadConversionError>();
+					}
+					else 
+						ZError::Throw<ZBadConversionError>();
+					break;
+				default:
+					ZError::Throw<ZBadConversionError>();
+				}
+				break;
+
+			default:
+				ZError::Throw<ZBadConversionError>();
+			}
 			break;
 		case 4:
-			zins=INSTANCE_ZCONV(*(inp[3]));
-			p3 = reinterpret_cast<ZPoint*>(zins)->getPnt();
-			primt = new Linear_Wave( FLOAT_ZCONV(*(inp[0])) , FLOAT_ZCONV(*(inp[1])) , FLOAT_ZCONV(*(inp[2])) , p3);
-			//primt = new Linear_Wave( FLOAT_ZCONV(*(inp[0])) , FLOAT_ZCONV(*(inp[1])) , FLOAT_ZCONV(*(inp[2])) , ZAxis::getAxis((inp[3])));
-			
-			//zins=INSTANCE_ZCONV(*(inp[2]));
-			//p3 = reinterpret_cast<ZPoint*>(zins)->getPnt();
-			//primt = new Linear_Wave( FLOAT_ZCONV(*(inp[0])) , FLOAT_ZCONV(*(inp[1])) , p3 , ZAxis::getAxis((inp[3])) );
-			//primt = new Linear_Wave( FLOAT_ZCONV(*(inp[0])) , FLOAT_ZCONV(*(inp[1])) , ZAxis::getAxis((inp[2])) , ZAxis::getAxis((inp[3])) );
+			switch( GET_ZTYPE(*(inp[1])) )
+			{
+			case ZETFloat:
+				switch( GET_ZTYPE(*(inp[2])) )
+				{
+				case ZETFloat:
+					if( (zp3 = dynamic_cast<ZPoint*>(zins)) != NULL)
+						primt = new Linear_Wave( FLOAT_ZCONV(*(inp[0])) , FLOAT_ZCONV(*(inp[1])) , FLOAT_ZCONV(*(inp[2])) , zp3->getPnt() );
+					else if ( (za = dynamic_cast<ZAxis*>(zins)) != NULL)
+						primt = new Linear_Wave( FLOAT_ZCONV(*(inp[0])) , FLOAT_ZCONV(*(inp[1])) , FLOAT_ZCONV(*(inp[2])) , za->ax );
+					else 
+						ZError::Throw<ZBadConversionError>();
+					break;
+				case ZETInstance:
+					zins=INSTANCE_ZCONV(*(inp[2]));
+					if( (zp3 = dynamic_cast<ZPoint*>(zins)) != NULL)
+					{
+						zins=INSTANCE_ZCONV(*(inp[3]));
+						if ( (zaf = dynamic_cast<ZAxis*>(zins)) != NULL)
+							primt = new Linear_Wave( FLOAT_ZCONV(*(inp[0])) , FLOAT_ZCONV(*(inp[1])) , zp3->getPnt() , zaf->ax );
+						else 
+							ZError::Throw<ZBadConversionError>();
+					}
+					else if ( (za = dynamic_cast<ZAxis*>(zins)) != NULL)
+					{
+						zins=INSTANCE_ZCONV(*(inp[3]));
+						if ( (zaf = dynamic_cast<ZAxis*>(zins)) != NULL)
+							primt = new Linear_Wave( FLOAT_ZCONV(*(inp[0])) , FLOAT_ZCONV(*(inp[1])) , za->ax , zaf->ax );
+						else 
+							ZError::Throw<ZBadConversionError>();
+					}
+					else 
+						ZError::Throw<ZBadConversionError>();
+					break;
+				default:
+					ZError::Throw<ZBadConversionError>();
+				}
+				break;
 
-			
-			//zins=INSTANCE_ZCONV(*(inp[1]));
-			//p3 = reinterpret_cast<ZPoint*>(zins)->getPnt();
-			//primt = new Linear_Wave( FLOAT_ZCONV(*(inp[0])) , p3 , ZAxis::getAxis((inp[2])) , ZAxis::getAxis((inp[3])) );
+			case ZETInstance:
+				zins=INSTANCE_ZCONV(*(inp[1]));
+				if( (zp3 = dynamic_cast<ZPoint*>(zins)) != NULL)
+				{
+					if ( (za = dynamic_cast<ZAxis*>(INSTANCE_ZCONV(*(inp[2])))) != NULL && (zaf = dynamic_cast<ZAxis*>(INSTANCE_ZCONV(*(inp[3])))) != NULL)
+						primt = new Linear_Wave( FLOAT_ZCONV(*(inp[0])) , zp3->getPnt() , za->ax , zaf->ax );
+
+					else
+						ZError::Throw<ZBadConversionError>();
+				}
+				else 
+					ZError::Throw<ZBadConversionError>();
+				break;
+
+			default:
+				ZError::Throw<ZBadConversionError>();
+			}
 			break;
 		case 5:
-			zins=INSTANCE_ZCONV(*(inp[3]));
-			p3 = reinterpret_cast<ZPoint*>(zins)->getPnt();
-			primt = new Linear_Wave( FLOAT_ZCONV(*(inp[0])) , FLOAT_ZCONV(*(inp[1])) , FLOAT_ZCONV(*(inp[2])) , p3 , ZAxis::getAxis((inp[4])) );
-			//primt = new Linear_Wave( FLOAT_ZCONV(*(inp[0])) , FLOAT_ZCONV(*(inp[1])) , FLOAT_ZCONV(*(inp[2])) , ZAxis::getAxis((inp[3])) , ZAxis::getAxis((inp[4])) );
-			
-			//zins=INSTANCE_ZCONV(*(inp[2]));
-			//p3 = reinterpret_cast<ZPoint*>(zins)->getPnt();
-			//primt = new Linear_Wave( FLOAT_ZCONV(*(inp[0])) , FLOAT_ZCONV(*(inp[1])) , p3 , ZAxis::getAxis((inp[3])) , ZAxis::getAxis((inp[4])) );
+			switch( GET_ZTYPE(*(inp[2])) )
+			{
+			case ZETFloat:
+				zins=INSTANCE_ZCONV(*(inp[3]));
+				if( (zp3 = dynamic_cast<ZPoint*>(zins)) != NULL)
+				{
+					zins=INSTANCE_ZCONV(*(inp[4]));
+					if ( (zaf = dynamic_cast<ZAxis*>(zins)) != NULL)
+						primt = new Linear_Wave( FLOAT_ZCONV(*(inp[0])) , FLOAT_ZCONV(*(inp[1])) , FLOAT_ZCONV(*(inp[2])) , zp3->getPnt() , zaf->ax );
+					else 
+						ZError::Throw<ZBadConversionError>();
+				}
+				else if ( (za = dynamic_cast<ZAxis*>(zins)) != NULL)
+				{
+					zins=INSTANCE_ZCONV(*(inp[4]));
+					if ( (zaf = dynamic_cast<ZAxis*>(zins)) != NULL)
+						primt = new Linear_Wave( FLOAT_ZCONV(*(inp[0])) , FLOAT_ZCONV(*(inp[1])) , FLOAT_ZCONV(*(inp[2])) , za->ax , zaf->ax );
+					else 
+						ZError::Throw<ZBadConversionError>();
+				}
+				else 
+					ZError::Throw<ZBadConversionError>();
+				break;
+
+			case ZETInstance:
+				zins=INSTANCE_ZCONV(*(inp[2]));
+				if( (zp3 = dynamic_cast<ZPoint*>(zins)) != NULL)
+				{
+					if ( (za = dynamic_cast<ZAxis*>(INSTANCE_ZCONV(*(inp[3])))) != NULL && (zaf = dynamic_cast<ZAxis*>(INSTANCE_ZCONV(*(inp[4])))) != NULL)
+						primt = new Linear_Wave( FLOAT_ZCONV(*(inp[0])) , FLOAT_ZCONV(*(inp[1])) , zp3->getPnt() , za->ax , zaf->ax );
+					else 
+						ZError::Throw<ZBadConversionError>();
+				}
+				else 
+					ZError::Throw<ZBadConversionError>();
+				break;
+
+			default:
+				ZError::Throw<ZBadConversionError>();
+			}
 			break;
 
 		case 6:
-			zins=INSTANCE_ZCONV(*(inp[3]));
-			p3 = reinterpret_cast<ZPoint*>(zins)->getPnt();
-			primt = new Linear_Wave( FLOAT_ZCONV(*(inp[0])) , FLOAT_ZCONV(*(inp[1])) , FLOAT_ZCONV(*(inp[2])) , p3 , ZAxis::getAxis((inp[4])) , ZAxis::getAxis((inp[5])) );
+			if ( (zp3 = dynamic_cast<ZPoint*>(INSTANCE_ZCONV(*(inp[3])))) != NULL && (za = dynamic_cast<ZAxis*>(INSTANCE_ZCONV(*(inp[4])))) != NULL && (zaf = dynamic_cast<ZAxis*>(INSTANCE_ZCONV(*(inp[5])))) != NULL)
+				primt = new Linear_Wave( FLOAT_ZCONV(*(inp[0])) , FLOAT_ZCONV(*(inp[1])) , FLOAT_ZCONV(*(inp[2])) , zp3->getPnt() , za->ax , zaf->ax );
 			break;
 		}
 		ZLinear_Wave();
