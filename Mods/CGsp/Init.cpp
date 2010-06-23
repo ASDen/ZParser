@@ -16,7 +16,7 @@
 
 void ZModInit_CGsp()
 {
-	ZTvarp zv = ZAlloc(ZTvar,35);
+	ZTvarp zv = ZAlloc(ZTvar,450);
 
 	ADD_CLASS(ZBox,"Box");
 	ADD_CLASS(ZCapsule,"Capsule");
@@ -73,9 +73,10 @@ void ZModInit_CGsp()
 	ZInterp::ZSym.InsertSymbol(_ZC("YAxis"),zv);
 	zv++;*/
 	
+	ADD_CLASS(ZBulgeType,"ZBulgeType");
 	ADD_CLASS(ZAxis  ,"__ZAxis");
 	ADD_CLASS(ZPoint ,"ZPoint");
-	ADD_CLASS(ZBulgeType,"ZBulgeType");
+	
 	
 
 }
