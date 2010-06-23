@@ -32,9 +32,9 @@ public:
 	ZTvarp toString(ZTvarS inp)
 	{
 		ostringstream s1;
-		s1 << " Box : Width = " << primt->width << " Height = "<<primt->height
-		   << " Length = " <<primt->length<<" Width Segments = " << primt->width_Seg 
-		   << " Height Segments = "<<primt->height_Seg <<" Height Segments = "<<primt->length_Seg<< endl;
+		s1 << " Box : Width = " << primt->width << ", Length = "<<primt->length
+		   << ", Height = " <<primt->height<<", Width Segments = " << primt->width_Seg 
+		   << ", Length Segments = "<<primt->length_Seg <<", Height Segments = "<<primt->height_Seg<< endl;
 		
 		INST_TO_STR( s1.str() );
 	}

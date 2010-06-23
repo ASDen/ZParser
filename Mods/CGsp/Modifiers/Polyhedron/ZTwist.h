@@ -19,6 +19,8 @@ public:
 		AddFunction(_ZC("Limited") ,1,&ZTwist::Limited);
 		AddFunction(_ZC("Upper_Limit") ,1,&ZTwist::Upper_Limit);
 		AddFunction(_ZC("Lower_Limit") ,1,&ZTwist::Lower_Limit);
+
+		AddFunction(_ZC("toString") ,1,&ZTwist::toString);
 	
 		ZTObject::Inheriet(StProps);
 	}
@@ -26,6 +28,16 @@ public:
 	Modifier* getModifier()
 	{
 		return primt;
+	}
+
+	ZTvarp toString(ZTvarS inp)
+	{
+		ostringstream s1;
+		s1 << " Twist : Angle = " << primt->TwAngle.val << ", Axis = " << ZAxis::toString(primt->RoAxis) 
+			<< ", Center = " << "NOT SET" << ", Limited = " << primt->Limited 
+		   << ", Upper_Limit = " << primt->Upper.val << ", Upper_Limit = " << primt->Lower.val << endl;
+		
+		INST_TO_STR( s1.str() );
 	}
 
 	//FIXME : int conversions

@@ -18,6 +18,8 @@ public:
 		AddFunction(_ZC("Phase") ,1,&ZCylindrical_Wave::Phase);
 		AddFunction(_ZC("Axis") ,1,&ZCylindrical_Wave::Axis);
 		AddFunction(_ZC("Center") ,1,&ZCylindrical_Wave::Center);
+
+		AddFunction(_ZC("toString") ,1,&ZCylindrical_Wave::toString);
 	
 		ZTObject::Inheriet(StProps);
 	}
@@ -25,6 +27,16 @@ public:
 	Modifier* getModifier()
 	{
 		return primt;
+	}
+
+	ZTvarp toString(ZTvarS inp)
+	{
+		ostringstream s1;
+		s1 << " Cylindrical Wave : Amplitude = " << primt->Amplitude.val << ", Wavelength = " << primt->Wavelength.val 
+			<< ", Phase = " << primt->Phase.val << ", Center = " << "NOT SET" 
+			<< ", Axis = " << ZAxis::toString(primt->AfAxis) << endl;
+		
+		INST_TO_STR( s1.str() );
 	}
 
 	//FIXME : int conversions
@@ -147,6 +159,8 @@ public:
 		case 5:
 			if ( (zp3 = dynamic_cast<ZPoint*>(INSTANCE_ZCONV(*(inp[3])))) != NULL && (za = dynamic_cast<ZAxis*>(INSTANCE_ZCONV(*(inp[4])))) != NULL)
 				primt = new Cylindrical_Wave( FLOAT_ZCONV(*(inp[0])) , FLOAT_ZCONV(*(inp[1])) , FLOAT_ZCONV(*(inp[2])) , zp3->getPnt() , za->ax );
+			else
+				ZError::Throw<ZBadConversionError>();
 			break;
 		}
 		ZCylindrical_Wave();

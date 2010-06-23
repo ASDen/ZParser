@@ -14,6 +14,8 @@ public:
 		StProps.InitScope();
 
 		AddFunction(_ZC("Degree") ,1,&ZSmooth::Degree);
+
+		AddFunction(_ZC("toString") ,1,&ZSmooth::toString);
 	
 		ZTObject::Inheriet(StProps);
 	}
@@ -21,6 +23,14 @@ public:
 	Modifier* getModifier()
 	{
 		return primt;
+	}
+
+	ZTvarp toString(ZTvarS inp)
+	{
+		ostringstream s1;
+		s1 << " Smooth : Degree = " << primt->S_Deg.val << endl;
+		
+		INST_TO_STR( s1.str() );
 	}
 
 	//FIXME : int conversions

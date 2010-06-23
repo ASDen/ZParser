@@ -63,16 +63,6 @@ void ZModInit_CGsp()
 	ADD_VAR( ZBulgeType (BRadial) , _ZC("BRadial") );
 	ADD_VAR( ZBulgeType (BLinear) , _ZC("BLinear") );
 
-	/*zin.val = new ZAxis (X_ax); 
-	*zv=zin;
-	ZInterp::ZSym.InsertSymbol(_ZC("XAxis"),zv);
-	zv++;
-
-	zin.val = new ZAxis (Y_ax); 
-	*zv=zin;
-	ZInterp::ZSym.InsertSymbol(_ZC("YAxis"),zv);
-	zv++;*/
-	
 	ADD_CLASS(ZBulgeType,"ZBulgeType");
 	ADD_CLASS(ZAxis  ,"__ZAxis");
 	ADD_CLASS(ZPoint ,"ZPoint");

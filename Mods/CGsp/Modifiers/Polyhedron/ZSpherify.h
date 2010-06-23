@@ -14,6 +14,8 @@ public:
 		StProps.InitScope();
 
 		AddFunction(_ZC("Amount") ,1,&ZSpherify::Amount);
+
+		AddFunction(_ZC("toString") ,1,&ZSpherify::toString);
 	
 		ZTObject::Inheriet(StProps);
 	}
@@ -21,6 +23,14 @@ public:
 	Modifier* getModifier()
 	{
 		return primt;
+	}
+
+	ZTvarp toString(ZTvarS inp)
+	{
+		ostringstream s1;
+		s1 << " Spherify : Amount = " << primt->SphAmount.val << endl;
+		
+		INST_TO_STR( s1.str() );
 	}
 
 	//FIXME : int conversions

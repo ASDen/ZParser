@@ -20,12 +20,24 @@ public:
 		AddFunction(_ZC("SideSegs") ,1,&ZCone::SideSegs);
 		AddFunction(_ZC("CapSegs") ,1,&ZCone::CapSegs);
 		AddFunction(_ZC("HeightSegs") ,1,&ZCone::HeightSegs);
+
+		AddFunction(_ZC("toString"),0,&ZCone::toString);
 	
 		ZTObject::Inheriet(StProps);
 	}
 
 	Primitives* getPrimtive()
 	{return primt;}
+
+	ZTvarp toString(ZTvarS inp)
+	{
+		ostringstream s1;
+		s1 << " Cone : Radius1 = " << primt->radius1 << ", Radius2 = " << primt->radius2
+		   << ", Height = " << primt->height <<", Side Segments = " << primt->side_Seg 
+		   << ", Cap Segments = " << primt->cap_Seg << ", Height Segments = " << primt->height_Seg << endl;
+		
+		INST_TO_STR( s1.str() );
+	}
 
 	//FIXME : int conversions
 	ZCone(ZTvarS inp)

@@ -20,12 +20,24 @@ public:
 		AddFunction(_ZC("SideSegs") ,1,&ZSpindle::SideSegs);
 		AddFunction(_ZC("CapSegs") ,1,&ZSpindle::CapSegs);
 		AddFunction(_ZC("HeightSegs") ,1,&ZSpindle::HeightSegs);
+
+		AddFunction(_ZC("toString"),0,&ZSpindle::toString);
 	
 		ZTObject::Inheriet(StProps);
 	}
 
 	Primitives* getPrimtive()
 	{return primt;}
+
+	ZTvarp toString(ZTvarS inp)
+	{
+		ostringstream s1;
+		s1 << " Spindle : Radius = " << primt->radius << ", Cap = " << primt->cap_height
+		   << ", Height = " << primt->height << ", Side Segments = " << primt->side_Seg 
+		   << ", Cap Segments = " << primt->cap_Seg << ", Height Segments = " << primt->height_Seg << endl;
+		
+		INST_TO_STR( s1.str() );
+	}
 
 	//FIXME : int conversions
 	ZSpindle(ZTvarS inp)

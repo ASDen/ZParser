@@ -20,12 +20,24 @@ public:
 
 		AddFunction(_ZC("SideSegs") ,1,&ZTorus::SideSegs);
 		AddFunction(_ZC("Segs") ,1,&ZTorus::Segs);
+
+		AddFunction(_ZC("toString"),0,&ZTorus::toString);
 	
 		ZTObject::Inheriet(StProps);
 	}
 
 	Primitives* getPrimtive()
 	{return primt;}
+
+	ZTvarp toString(ZTvarS inp)
+	{
+		ostringstream s1;
+		s1 << " Torus : Radius1 = " << primt->radius1 << ", Radius2 = " << primt->radius2
+		   << ", Rotation = " << primt->rotation << ", Twist = " << primt->twist 
+		   << ", Height Segments = " << primt->Seg << ", Side Segments = " << primt->side_Seg << endl;
+		
+		INST_TO_STR( s1.str() );
+	}
 
 	//FIXME : int conversions
 	ZTorus(ZTvarS inp)

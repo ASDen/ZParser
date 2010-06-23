@@ -98,19 +98,21 @@ int ANTLR3_CDECL _tmain(int argc, _TCHAR* argv[])
 		int ln=0,cpos=0;
 		while(true)
 		{
-			
 			p =nodes -> tnstream -> _LT ( nodes -> tnstream , 1 ) ;
 			p->savedIndex=nodes->tnstream->istream->index(nodes->tnstream->istream);
-			/*if( p->getToken(p)->line > ln )
+			if( p->getToken(p)->line != 0 )
 			{
 				ln = p->getToken(p)->line;
-				cpos = 0;
 			}
 			p->getToken(p)->line = ln;
-			cpos = std::max(cpos,(int)p->getCharPositionInLine(p));
+			
+			if( p->getCharPositionInLine(p) != 0 )
+			{
+				cpos = p->getCharPositionInLine(p);
+			}
 			p->getToken(p)->charPosition = cpos;
-			*///p->getToken(p)->line = nodes->tnstream->_LT(nodes->tnstream,0)->getL
-			//std::cout<<p->getToken(p)->line<<" "<<p->getCharPositionInLine(p)<<" "<<p->getText(p)->chars<<std::endl;
+			//p->getToken(p)->line = nodes->tnstream->_LT(nodes->tnstream,0)->getL
+			std::cout<<p->getToken(p)->line<<" "<<p->getCharPositionInLine(p)<<" "<<p->getText(p)->chars<<std::endl;
 			//p->getToken(p)->user1 = p->getToken(p)->line;
 			//std::cout<<p->getToken(p)->user1<<" ";
 			if(p->getType(p)==nodes->EOF_NODE.token->getType(nodes->EOF_NODE.token))break;

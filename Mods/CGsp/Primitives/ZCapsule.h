@@ -18,6 +18,8 @@ public:
 
 		AddFunction(_ZC("SideSegs") ,1,&ZCapsule::SideSegs);
 		AddFunction(_ZC("HeightSegs") ,1,&ZCapsule::HeightSegs);
+
+		AddFunction(_ZC("toString"),0,&ZCapsule::toString);
 	
 		ZTObject::Inheriet(StProps);
 	}
@@ -28,10 +30,12 @@ public:
 	ZTvarp toString(ZTvarS inp)
 	{
 		ostringstream s1;
-		s1 << " Capsula : Radius = " << primt->radius << " Segments = "<<primt->Segs<< endl;
+		s1 << " Capsule : Radius = " << primt->radius << ", Height = " << primt->height
+		   << ", Side Segments = " << primt->Segs << ", Height Segments = " << primt->h_Segs << endl;
 		
 		INST_TO_STR( s1.str() );
 	}
+
 	//FIXME : int conversions
 	ZCapsule(ZTvarS inp)
 	{

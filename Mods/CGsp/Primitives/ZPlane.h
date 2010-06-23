@@ -18,12 +18,23 @@ public:
 
 		AddFunction(_ZC("LengthSegs") ,1,&ZPlane::LengthSegs);
 		AddFunction(_ZC("WidthSegs") ,1,&ZPlane::WidthSegs);
+
+		AddFunction(_ZC("toString"),0,&ZPlane::toString);
 	
 		ZTObject::Inheriet(StProps);
 	}
 
 	Primitives* getPrimtive()
 	{return primt;}
+
+	ZTvarp toString(ZTvarS inp)
+	{
+		ostringstream s1;
+		s1 << " Plane : Width = " << primt->width << ", Length = " << primt->length
+		   << ", Width Segments = " << primt->width_Seg << ", Length Segments = " << primt->length_Seg << endl;
+		
+		INST_TO_STR( s1.str() );
+	}
 
 	//FIXME : int conversions
 	ZPlane(ZTvarS inp)

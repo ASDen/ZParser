@@ -15,8 +15,6 @@
 
 int ZError::Lnum()
 {
-	//pANTLR3_BASE_TREE x = (pANTLR3_BASE_TREE)(ZInterp::cxtr->pTreeParser->rec->getCurrentInputSymbol(ZInterp::cxtr->pTreeParser->rec, ZInterp::cxtr->pTreeParser->ctnstream->tnstream->istream));
-	//std::cout<<x->getToken(x)->getCharPositionInLine(x->getToken(x));
-	//return x->getToken(x)->line;
-	return 1;
+	pANTLR3_BASE_TREE x = (pANTLR3_BASE_TREE)(ZInterp::cxtr->pTreeParser->rec->getCurrentInputSymbol(ZInterp::cxtr->pTreeParser->rec, ZInterp::cxtr->pTreeParser->ctnstream->tnstream->istream));
+	return x->getToken(x)->line;
 }

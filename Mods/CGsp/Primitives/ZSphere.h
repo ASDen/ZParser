@@ -17,7 +17,7 @@ public:
 
 		AddFunction(_ZC("SideSegs") ,1,&ZSphere::SideSegs);
 
-		AddFunction(_ZC("toString"),0,&ZBox::toString);
+		AddFunction(_ZC("toString"),0,&ZSphere::toString);
 
 	
 		ZTObject::Inheriet(StProps);
@@ -29,10 +29,11 @@ public:
 	ZTvarp toString(ZTvarS inp)
 	{
 		ostringstream s1;
-		s1 << " Sphere : Radius = " << primt->radius << " Segments = "<<primt->Segs<< endl;
+		s1 << " Sphere : Radius = " << primt->radius << ", Segments = " << primt->Segs << endl;
 		
 		INST_TO_STR( s1.str() );
 	}
+
 	//FIXME : int conversions
 	ZSphere(ZTvarS inp)
 	{
