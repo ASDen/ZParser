@@ -25,6 +25,13 @@ public:
 	Primitives* getPrimtive()
 	{return primt;}
 
+	ZTvarp toString(ZTvarS inp)
+	{
+		ostringstream s1;
+		s1 << " Capsula : Radius = " << primt->radius << " Segments = "<<primt->Segs<< endl;
+		
+		INST_TO_STR( s1.str() );
+	}
 	//FIXME : int conversions
 	ZCapsule(ZTvarS inp)
 	{
@@ -32,6 +39,7 @@ public:
 		switch(inp.size())
 		{
 		case 0:
+		case 1:
 			primt = new Capsule_3();
 			break;
 		case 2:
@@ -44,8 +52,10 @@ public:
 			primt = new Capsule_3( FLOAT_ZCONV(*inp[0]) , FLOAT_ZCONV(*inp[1]) , INT_ZCONV(*inp[2]) );
 			break;
 		case 5:
-		default:
 			primt = new Capsule_3( FLOAT_ZCONV(*inp[0]) , FLOAT_ZCONV(*inp[1]) , INT_ZCONV(*inp[2]) , INT_ZCONV(*inp[3]) );
+			break;
+		default:
+			ZError::Throw<ZWrongNumberOfArguments>();
 			break;
 		}
 		primt->Draw();

@@ -11,6 +11,7 @@ namespace ZInterp
     extern ZIBool isExit,isContinue;
     extern vector <ANTLR3_MARKER> lend,lCon;
     extern int loopNum,actual,currentFrame;
+	extern yatgFW_Ctx_struct* cxtr;
 
 	class global
 	{

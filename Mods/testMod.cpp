@@ -44,14 +44,18 @@ public:
 
 ZTvarp Zprint(ZTvarS var)
 {
-	std::cout<< boost::apply_visitor(ToString(),*(var[0])) ;
+	if(var.size()>0)
+		std::cout<< boost::apply_visitor(ToString(),*(var[0])) ;
 	ZTvarp res=ZAlloc(ZTvar,1);
 	*res=ZTBool(true);
 	return res;
 }
 ZTvarp ZprintL(ZTvarS var)
 {
-	std::cout<< boost::apply_visitor(ToString(),*(var[0])) <<endl;
+	if(var.size()>0)
+		std::cout<< boost::apply_visitor(ToString(),*(var[0])) <<endl;
+	else
+		std::cout<<std::endl;
 	ZTvarp res=ZAlloc(ZTvar,1);
 	*res=ZTBool(true);
 	return res;

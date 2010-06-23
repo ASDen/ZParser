@@ -3,8 +3,11 @@
 enum ZErrorTypes{
 	ZBadConversionError,
 	ZOperationNotSupported,
-	ZDivisionByZeroException
+	ZDivisionByZeroException,
+	ZWrongNumberOfArguments
 };
+
+#define OUT_STRM std::cout
 
 class ZError
 {
@@ -12,15 +15,19 @@ public:
 	
 	static void DoWrite(ZChar* mess)
 	{
-		std::cout<<mess<<std::endl;
+		std::cout<<mess;
 	}
 
 	template <ZErrorTypes T>
 	static void Throw()
 	{
+		OUT_STRM<<(_ZC("Error : "));
 		Speak<T>();
+		OUT_STRM<<(_ZC(" , At Line : "))<<Lnum()<<std::endl;
 		exit(1);
 	}
+
+	static int Lnum();
 
 	template <ZErrorTypes T>
 	static void Speak()
@@ -29,16 +36,22 @@ public:
 
 	template <>
 	static void Speak<ZBadConversionError>(){
-		DoWrite(_ZC("Error un-expected type passed")); 
+		OUT_STRM<<(_ZC("Un-expected type passed")); 
 	}
 
 	template <>
 	static void Speak<ZOperationNotSupported>(){
-		DoWrite(_ZC("Operation not support on types")); 
+		OUT_STRM<<(_ZC("Operation not supported on types")); 
 	}
 
 	template <>
 	static void Speak<ZDivisionByZeroException>(){
-		DoWrite(_ZC("Division by Zero")); 
+		OUT_STRM<<(_ZC("Division by Zero")); 
 	}
+
+	template <>
+	static void Speak<ZWrongNumberOfArguments>(){
+		OUT_STRM<<(_ZC("Wrong number of passed arguments")); 
+	}
+	
 };

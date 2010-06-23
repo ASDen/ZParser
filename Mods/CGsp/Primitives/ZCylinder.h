@@ -19,6 +19,7 @@ public:
 		AddFunction(_ZC("SideSegs") ,1,&ZCylinder::SideSegs);
 		AddFunction(_ZC("CapSegs") ,1,&ZCylinder::CapSegs);
 		AddFunction(_ZC("HeightSegs") ,1,&ZCylinder::HeightSegs);
+		AddFunction(_ZC("toString"),0,&ZBox::toString);
 	
 		ZTObject::Inheriet(StProps);
 	}
@@ -26,6 +27,13 @@ public:
 	Primitives* getPrimtive()
 	{return primt;}
 
+	ZTvarp toString(ZTvarS inp)
+	{
+		ostringstream s1;
+		s1 << " Cylinder : Radius = " ;//<< primt->radius << " Segments = "<<primt->Segs<< endl;
+		
+		INST_TO_STR( s1.str() );
+	}
 	//FIXME : int conversions
 	ZCylinder(ZTvarS inp)
 	{
@@ -33,6 +41,7 @@ public:
 		switch(inp.size())
 		{
 		case 0:
+		case 1:
 			primt = new Cylinder_3();
 			break;
 		case 2:
@@ -46,6 +55,9 @@ public:
 			break;
 		case 6:
 			primt = new Cylinder_3( FLOAT_ZCONV(*inp[0]) , FLOAT_ZCONV(*inp[1]) , INT_ZCONV(*inp[2]) , INT_ZCONV(*inp[3]) , INT_ZCONV(*inp[4]) );
+			break;
+		default:
+			ZError::Throw<ZWrongNumberOfArguments>();
 			break;
 		}
 		primt->Draw();

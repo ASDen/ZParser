@@ -34,6 +34,7 @@ public:
 		switch(inp.size())
 		{
 		case 0:
+		case 1:
 			primt = new Torus_3();
 			break;
 		case 2:
@@ -44,6 +45,9 @@ public:
 			break;
 		case 7:
 			primt = new Torus_3( FLOAT_ZCONV(*inp[0]) , FLOAT_ZCONV(*inp[1]) , FLOAT_ZCONV(*inp[2]) , FLOAT_ZCONV(*inp[3]) , INT_ZCONV(*inp[4]) , INT_ZCONV(*inp[5]) );
+			break;
+		default:
+			ZError::Throw<ZWrongNumberOfArguments>();
 			break;
 		}
 		primt->Draw();

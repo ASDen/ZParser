@@ -20,12 +20,19 @@ public:
 
 	void InitNode(ZTvarS inp,Primitives* p)
 	{
-		ZTList zl = LIST_ZCONV(*inp[ inp.size()-1 ] );
-		pnode = new PolyhedronNode(p,osg::Vec3 (
-											FLOAT_ZCONV(*zl.Get(0)),
-											FLOAT_ZCONV(*zl.Get(1)),
-											FLOAT_ZCONV(*zl.Get(2))
-												));
+		if(inp.size()>0)
+		{
+			ZTList zl = LIST_ZCONV(*inp[ inp.size()-1 ] );
+			pnode = new PolyhedronNode(p,osg::Vec3 (
+				FLOAT_ZCONV(*zl.Get(0)),
+				FLOAT_ZCONV(*zl.Get(1)),
+				FLOAT_ZCONV(*zl.Get(2))
+				));
+		}
+		else
+		{
+			pnode = new PolyhedronNode(p,osg::Vec3 (0,0,0));
+		}
 	}
 
 	virtual Primitives* getPrimtive()=0;

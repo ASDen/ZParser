@@ -16,6 +16,9 @@ public:
 		AddFunction(_ZC("Radius") ,1,&ZSphere::Radius);
 
 		AddFunction(_ZC("SideSegs") ,1,&ZSphere::SideSegs);
+
+		AddFunction(_ZC("toString"),0,&ZBox::toString);
+
 	
 		ZTObject::Inheriet(StProps);
 	}
@@ -23,6 +26,13 @@ public:
 	Primitives* getPrimtive()
 	{return primt;}
 
+	ZTvarp toString(ZTvarS inp)
+	{
+		ostringstream s1;
+		s1 << " Sphere : Radius = " << primt->radius << " Segments = "<<primt->Segs<< endl;
+		
+		INST_TO_STR( s1.str() );
+	}
 	//FIXME : int conversions
 	ZSphere(ZTvarS inp)
 	{
@@ -30,14 +40,17 @@ public:
 		switch(inp.size())
 		{
 		case 0:
+		case 1:
 			primt = new Sphere_3();
 			break;
 		case 2:
 			primt = new Sphere_3( FLOAT_ZCONV(*(inp[0])) );
 			break;
-		case 7:
-		default:
+		case 3:
 			primt = new Sphere_3( FLOAT_ZCONV(*inp[0]) , INT_ZCONV(*inp[1]) );
+			break;
+		default:
+			ZError::Throw<ZWrongNumberOfArguments>();
 			break;
 		}
 		primt->Draw();

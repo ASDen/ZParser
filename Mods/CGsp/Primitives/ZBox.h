@@ -20,12 +20,24 @@ public:
 		AddFunction(_ZC("LengthSegs") ,1,&ZBox::LengthSegs);
 		AddFunction(_ZC("WidthSegs") ,1,&ZBox::WidthSegs);
 		AddFunction(_ZC("HeightSegs") ,1,&ZBox::HeightSegs);
-	
+
+		AddFunction(_ZC("toString"),0,&ZBox::toString);
+		
 		ZTObject::Inheriet(StProps);
 	}
 
 	Primitives* getPrimtive()
 	{return primt;}
+
+	ZTvarp toString(ZTvarS inp)
+	{
+		ostringstream s1;
+		s1 << " Box : Width = " << primt->width << " Height = "<<primt->height
+		   << " Length = " <<primt->length<<" Width Segments = " << primt->width_Seg 
+		   << " Height Segments = "<<primt->height_Seg <<" Height Segments = "<<primt->length_Seg<< endl;
+		
+		INST_TO_STR( s1.str() );
+	}
 
 	//FIXME : int conversions
 	ZBox(ZTvarS inp)
@@ -54,6 +66,9 @@ public:
 			break;
 		case 7:
 			primt = new Box_3( FLOAT_ZCONV(*inp[0]) , FLOAT_ZCONV(*inp[1]) , FLOAT_ZCONV(*inp[2]) , INT_ZCONV(*inp[3]) , INT_ZCONV(*inp[4]) , INT_ZCONV(*inp[5]) );
+			break;
+		default:
+			ZError::Throw<ZWrongNumberOfArguments>();
 			break;
 		}
 		primt->Draw();

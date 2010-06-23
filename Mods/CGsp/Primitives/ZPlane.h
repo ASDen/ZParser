@@ -32,6 +32,7 @@ public:
 		switch(inp.size())
 		{
 		case 0:
+		case 1:
 			primt = new Plane_3();
 			break;
 		case 2:
@@ -41,8 +42,10 @@ public:
 			primt = new Plane_3( FLOAT_ZCONV(*(inp[0])) , INT_ZCONV(*(inp[1])) );
 			break;
 		case 5:
-		default:
 			primt = new Plane_3( FLOAT_ZCONV(*inp[0]) , FLOAT_ZCONV(*inp[1]) , INT_ZCONV(*inp[2]) , INT_ZCONV(*inp[3]) );
+			break;
+		default:
+			ZError::Throw<ZWrongNumberOfArguments>();
 			break;
 		}
 		primt->Draw();

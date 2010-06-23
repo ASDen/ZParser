@@ -116,6 +116,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
+				AdditionalOptions="-Zm300"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
@@ -238,6 +239,18 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath=".\ZError.cpp"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="2"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
 				RelativePath=".\ZInterpControl.cpp"
 				>
 				<FileConfiguration
@@ -328,6 +341,16 @@
 								PrecompiledHeaderFile="$(IntDir)\XCGsp.pch"
 							/>
 						</FileConfiguration>
+						<FileConfiguration
+							Name="Release|Win32"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+								UsePrecompiledHeader="2"
+								PrecompiledHeaderThrough="XCGsp.h"
+								PrecompiledHeaderFile="$(IntDir)\XCGsp.pch"
+							/>
+						</FileConfiguration>
 					</File>
 					<File
 						RelativePath=".\Mods\testMod.cpp"
@@ -361,6 +384,16 @@
 							>
 							<Tool
 								Name="VCCLCompilerTool"
+								PrecompiledHeaderThrough="XCGsp.h"
+								PrecompiledHeaderFile="$(IntDir)\XCGsp.pch"
+							/>
+						</FileConfiguration>
+						<FileConfiguration
+							Name="Release|Win32"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+								UsePrecompiledHeader="1"
 								PrecompiledHeaderThrough="XCGsp.h"
 								PrecompiledHeaderFile="$(IntDir)\XCGsp.pch"
 							/>
