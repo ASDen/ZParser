@@ -27,4 +27,22 @@ public:
 	
 		ZTObject::Inheriet(StProps);
 	}
+
+	static ZIString toString(Axis ax)
+	{
+		switch (ax)
+		{
+		case X_ax:
+			return ZIString("X Axis");
+			break;
+		case Y_ax:
+			return ZIString("Y Axis");
+			break;
+		case Z_ax:
+			return ZIString("Z Axis");
+			break;
+		default:
+			return ZIString("Type Error");
+		}
+	}
 };

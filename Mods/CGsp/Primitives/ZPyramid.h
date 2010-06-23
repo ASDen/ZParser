@@ -20,12 +20,24 @@ public:
 		AddFunction(_ZC("DepthSegs") ,1,&ZPyramid::DepthSegs);
 		AddFunction(_ZC("WidthSegs") ,1,&ZPyramid::WidthSegs);
 		AddFunction(_ZC("HeightSegs") ,1,&ZPyramid::HeightSegs);
+
+		AddFunction(_ZC("toString"),0,&ZPyramid::toString);
 	
 		ZTObject::Inheriet(StProps);
 	}
 
 	Primitives* getPrimtive()
 	{return primt;}
+
+	ZTvarp toString(ZTvarS inp)
+	{
+		ostringstream s1;
+		s1 << " Pyramid : Width = " << primt->width << ", Depth = " << primt->depth 
+		   << ", Height = " << primt->height << ", Width Segments = " << primt->width_Seg 
+		   << ", Depth Segments = " << primt->depth_Seg << ", Height Segments = " << primt->height_Seg<< endl;
+		
+		INST_TO_STR( s1.str() );
+	}
 
 	//FIXME : int conversions
 	ZPyramid(ZTvarS inp)

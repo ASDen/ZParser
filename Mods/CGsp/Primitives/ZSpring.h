@@ -20,12 +20,24 @@ public:
 		AddFunction(_ZC("SideSegs") ,1,&ZSpring::SideSegs);
 		AddFunction(_ZC("Segs") ,1,&ZSpring::Segs);
 		AddFunction(_ZC("TurnNumber") ,1,&ZSpring::TurnNumber);
+
+		AddFunction(_ZC("toString"),0,&ZSpring::toString);
 	
 		ZTObject::Inheriet(StProps);
 	}
 
 	Primitives* getPrimtive()
 	{return primt;}
+
+	ZTvarp toString(ZTvarS inp)
+	{
+		ostringstream s1;
+		s1 << " Spring : Radius1 = " << primt->radius1 << ", Radius2 = " << primt->radius2
+		   << ", Height = " << primt->height << ", Side Segments = " << primt->side_Seg 
+		   << ", Height Segments = " << primt->Seg << ", Turns Number = " << primt->turn_number << endl;
+		
+		INST_TO_STR( s1.str() );
+	}
 
 	//FIXME : int conversions
 	ZSpring(ZTvarS inp)

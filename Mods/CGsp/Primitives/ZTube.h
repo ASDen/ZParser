@@ -20,12 +20,24 @@ public:
 		AddFunction(_ZC("SideSegs") ,1,&ZTube::SideSegs);
 		AddFunction(_ZC("CapSegs") ,1,&ZTube::CapSegs);
 		AddFunction(_ZC("HeightSegs") ,1,&ZTube::HeightSegs);
+
+		AddFunction(_ZC("toString"),0,&ZTube::toString);
 	
 		ZTObject::Inheriet(StProps);
 	}
 
 	Primitives* getPrimtive()
 	{return primt;}
+
+	ZTvarp toString(ZTvarS inp)
+	{
+		ostringstream s1;
+		s1 << " Tube : Radius1 = " << primt->radius1 << ", Radius2 = " << primt->radius2
+		   << ", Height = " << primt->height << ", Side Segments = " << primt->side_Seg 
+		   << ", Cap Segments = " << primt->cap_Seg << ", Height Segments = " << primt->height_Seg << endl;
+		
+		INST_TO_STR( s1.str() );
+	}
 
 	//FIXME : int conversions
 	ZTube(ZTvarS inp)

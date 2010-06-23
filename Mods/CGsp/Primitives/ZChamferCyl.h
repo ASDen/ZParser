@@ -21,12 +21,25 @@ public:
 		AddFunction(_ZC("CapSegs") ,1,&ZChamferCyl::CapSegs);
 		AddFunction(_ZC("HeightSegs") ,1,&ZChamferCyl::HeightSegs);
 		AddFunction(_ZC("FilletSegs") ,1,&ZChamferCyl::FilletSegs);
+
+		AddFunction(_ZC("toString"),0,&ZChamferCyl::toString);
 	
 		ZTObject::Inheriet(StProps);
 	}
 
 	Primitives* getPrimtive()
 	{return primt;}
+
+	ZTvarp toString(ZTvarS inp)
+	{
+		ostringstream s1;
+		s1 << " Chamfer Cylinder : Radius = " << primt->radius << ", Fillet = " << primt->fillet
+		   << ", Height = " << primt->height << ", Side Segments = " << primt->side_Seg 
+		   << ", Cap Segments = " << primt->cap_Seg <<", Height Segments = " << primt->height_Seg
+		   << ", Fillet Segments = " << primt->fillet_Seg << endl;
+		
+		INST_TO_STR( s1.str() );
+	}
 
 	//FIXME : int conversions
 	ZChamferCyl(ZTvarS inp)

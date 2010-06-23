@@ -91,6 +91,14 @@ public:
             return NULL;
         }
     }
+
+	static ZIString toString(Point_3 p)
+	{
+		ostringstream s1;
+		s1 << "Point(" << p.x() << ", " << p.y() << ", " << p.z() << ")" << endl;
+		
+		return s1.str();
+	}
     
 };
 

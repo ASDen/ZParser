@@ -20,6 +20,8 @@ public:
 		AddFunction(_ZC("Limited") ,1,&ZBulge::Limited);
 		AddFunction(_ZC("Upper_Limit") ,1,&ZBulge::Upper_Limit);
 		AddFunction(_ZC("Lower_Limit") ,1,&ZBulge::Lower_Limit);
+
+		AddFunction(_ZC("toString") ,1,&ZBulge::toString);
 	
 		ZTObject::Inheriet(StProps);
 	}
@@ -27,6 +29,16 @@ public:
 	Modifier* getModifier()
 	{
 		return primt;
+	}
+
+	ZTvarp toString(ZTvarS inp)
+	{
+		ostringstream s1;
+		s1 << " Bulge : Amount = " << primt->BuAmount.val << ", Axis = " << ZAxis::toString(primt->RoAxis) 
+			<< ", Type = " << ZBulgeType::toString(primt->BuType) << ", Center = " << "NOT SET" << ", Limited = " << primt->Limited 
+		   << ", Upper_Limit = " << primt->Upper.val << ", Upper_Limit = " << primt->Lower.val << endl;
+		
+		INST_TO_STR( s1.str() );
 	}
 
 	//FIXME : int conversions

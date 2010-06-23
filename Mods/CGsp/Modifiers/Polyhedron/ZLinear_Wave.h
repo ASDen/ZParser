@@ -19,6 +19,8 @@ public:
 		AddFunction(_ZC("Axis") ,1,&ZLinear_Wave::Axis);
 		AddFunction(_ZC("AFFAxis") ,1,&ZLinear_Wave::AFFAxis);
 		AddFunction(_ZC("Center") ,1,&ZLinear_Wave::Center);
+
+		AddFunction(_ZC("toString") ,1,&ZLinear_Wave::toString);
 	
 		ZTObject::Inheriet(StProps);
 	}
@@ -26,6 +28,16 @@ public:
 	Modifier* getModifier()
 	{
 		return primt;
+	}
+
+	ZTvarp toString(ZTvarS inp)
+	{
+		ostringstream s1;
+		s1 << " Linear Wave : Amplitude = " << primt->Amplitude.val << ", Wavelength = " << primt->Wavelength.val 
+			<< ", Phase = " << primt->Phase.val << ", Center = " << "NOT SET" 
+			<< ", Axis = " << ZAxis::toString(primt->RoAxis) << ", Affected Axis = " << ZAxis::toString(primt->AfAxis) << endl;
+		
+		INST_TO_STR( s1.str() );
 	}
 
 	//FIXME : int conversions
@@ -126,9 +138,9 @@ public:
 				switch( GET_ZTYPE(*(inp[2])) )
 				{
 				case ZETFloat:
-					if( (zp3 = dynamic_cast<ZPoint*>(zins)) != NULL)
+					if( (zp3 = dynamic_cast<ZPoint*>(INSTANCE_ZCONV(*(inp[3])))) != NULL)
 						primt = new Linear_Wave( FLOAT_ZCONV(*(inp[0])) , FLOAT_ZCONV(*(inp[1])) , FLOAT_ZCONV(*(inp[2])) , zp3->getPnt() );
-					else if ( (za = dynamic_cast<ZAxis*>(zins)) != NULL)
+					else if ( (za = dynamic_cast<ZAxis*>(INSTANCE_ZCONV(*(inp[3])))) != NULL)
 						primt = new Linear_Wave( FLOAT_ZCONV(*(inp[0])) , FLOAT_ZCONV(*(inp[1])) , FLOAT_ZCONV(*(inp[2])) , za->ax );
 					else 
 						ZError::Throw<ZBadConversionError>();
@@ -212,7 +224,7 @@ public:
 						ZError::Throw<ZBadConversionError>();
 				}
 				else 
-					ZError::Throw<ZBadConversionError>();
+						ZError::Throw<ZBadConversionError>();
 				break;
 
 			default:

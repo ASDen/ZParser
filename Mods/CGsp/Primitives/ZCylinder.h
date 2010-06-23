@@ -19,7 +19,8 @@ public:
 		AddFunction(_ZC("SideSegs") ,1,&ZCylinder::SideSegs);
 		AddFunction(_ZC("CapSegs") ,1,&ZCylinder::CapSegs);
 		AddFunction(_ZC("HeightSegs") ,1,&ZCylinder::HeightSegs);
-		AddFunction(_ZC("toString"),0,&ZBox::toString);
+
+		AddFunction(_ZC("toString"),0,&ZCylinder::toString);
 	
 		ZTObject::Inheriet(StProps);
 	}
@@ -30,7 +31,9 @@ public:
 	ZTvarp toString(ZTvarS inp)
 	{
 		ostringstream s1;
-		s1 << " Cylinder : Radius = " ;//<< primt->radius << " Segments = "<<primt->Segs<< endl;
+		s1 << " Cylinder : Radius = " << primt->radius
+		   << ", Height = " << primt->height <<", Side Segments = " << primt->side_Seg 
+		   << ", Cap Segments = " << primt->cap_Seg << ", Height Segments = " << primt->height_Seg << endl;
 		
 		INST_TO_STR( s1.str() );
 	}

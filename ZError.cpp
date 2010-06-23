@@ -37,4 +37,6 @@ int ZError::Cnum()
 			return x->getToken(x)->user2;
 		MATCHANYT();
 	}
+	pANTLR3_BASE_TREE x = (pANTLR3_BASE_TREE)(ZInterp::cxtr->pTreeParser->rec->getCurrentInputSymbol(ZInterp::cxtr->pTreeParser->rec, ZInterp::cxtr->pTreeParser->ctnstream->tnstream->istream));
+	return x->getToken(x)->line;
 }

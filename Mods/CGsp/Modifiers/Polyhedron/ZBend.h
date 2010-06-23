@@ -19,8 +19,20 @@ public:
 		AddFunction(_ZC("Limited") ,1,&ZBend::Limited);
 		AddFunction(_ZC("Upper_Limit") ,1,&ZBend::Upper_Limit);
 		AddFunction(_ZC("Lower_Limit") ,1,&ZBend::Lower_Limit);
+
+		AddFunction(_ZC("toString"),0,&ZBend::toString);
 	
 		ZTObject::Inheriet(StProps);
+	}
+
+	ZTvarp toString(ZTvarS inp)
+	{
+		ostringstream s1;
+		s1 << " Bend : Angle = " << primt->BeAngle.val << ", Axis = " << ZAxis::toString(primt->RoAxis) 
+			<< ", Center = " << "NOT SET" << ", Limited = " << primt->Limited 
+		   << ", Upper_Limit = " << primt->Upper.val << ", Upper_Limit = " << primt->Lower.val << endl;
+		
+		INST_TO_STR( s1.str() );
 	}
 
 	Modifier* getModifier()
