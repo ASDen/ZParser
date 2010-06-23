@@ -23,11 +23,12 @@ public:
 	{
 		OUT_STRM<<(_ZC("Error : "));
 		Speak<T>();
-		OUT_STRM<<(_ZC(" , At Line : "))<<Lnum()<<std::endl;
+		OUT_STRM<<(_ZC(" , at Line : "))<<Lnum()<<" At Character : "<<Cnum()<<std::endl;
 		exit(1);
 	}
 
 	static int Lnum();
+	static int Cnum();
 
 	template <ZErrorTypes T>
 	static void Speak()

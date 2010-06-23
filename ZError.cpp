@@ -1,5 +1,6 @@
 
 #include "stdafx.h"
+#include "ZError.h"
 #include "ZInterp.h"
 
 #define	    PARSER							ZInterp::cxtr->pTreeParser  
@@ -15,8 +16,25 @@
 
 int ZError::Lnum()
 {
-	//pANTLR3_BASE_TREE x = (pANTLR3_BASE_TREE)(ZInterp::cxtr->pTreeParser->rec->getCurrentInputSymbol(ZInterp::cxtr->pTreeParser->rec, ZInterp::cxtr->pTreeParser->ctnstream->tnstream->istream));
-	//std::cout<<x->getToken(x)->getCharPositionInLine(x->getToken(x));
-	//return x->getToken(x)->line;
-	return 1;
+	while(true)
+	{
+		pANTLR3_BASE_TREE x = (pANTLR3_BASE_TREE)(ZInterp::cxtr->pTreeParser->rec->getCurrentInputSymbol(ZInterp::cxtr->pTreeParser->rec, ZInterp::cxtr->pTreeParser->ctnstream->tnstream->istream));
+		if((x->getType(x)!=ANTLR3_TOKEN_UP) && (x->getType(x)!=ANTLR3_TOKEN_DOWN))
+		{
+			return x->getToken(x)->user1;
+		}
+		MATCHANYT();
+	}
+}
+
+int ZError::Cnum()
+{
+	while(true)
+	{
+		pANTLR3_BASE_TREE x = (pANTLR3_BASE_TREE)(ZInterp::cxtr->pTreeParser->rec->getCurrentInputSymbol(ZInterp::cxtr->pTreeParser->rec, ZInterp::cxtr->pTreeParser->ctnstream->tnstream->istream));
+		if((x->getType(x)!=ANTLR3_TOKEN_UP) && (x->getType(x)!=ANTLR3_TOKEN_DOWN))
+			//	if(x->getToken(x)->charPosition>0)
+			return x->getToken(x)->user2;
+		MATCHANYT();
+	}
 }

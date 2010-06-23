@@ -11,6 +11,7 @@ public:
 
 		AddFunction(_ZC("setPhysActor") ,2,&PrimitiveAPI::setPhysActor);
 		AddFunction(_ZC("ApplyModifier") ,1,&PrimitiveAPI::ApplyModifier);
+		AddFunction(_ZC("Modify") ,1,&PrimitiveAPI::Modify);
 		AddFunction(_ZC("setWire") ,1,&PrimitiveAPI::setWire);
 	
 		ZTObject::Inheriet(StProps);
@@ -43,6 +44,15 @@ public:
 		Primitives* pr=this->getPrimtive();
 		Modifier* m= (reinterpret_cast < ModifierAPI<ZTwist>* >(zrsg))->getModifier();
 		pr->ApplyModifier(m);
+		return NULL;
+	}
+
+	ZTvarp Modify (ZTvarS inp)
+	{
+		pZObjP zrsg = INSTANCE_ZCONV(*(inp[0]));
+		Primitives* pr=this->getPrimtive();
+		Modifier* m= (reinterpret_cast < ModifierAPI<ZTwist>* >(zrsg))->getModifier();
+		m->Do(pr->Mesh);
 		return NULL;
 	}
 

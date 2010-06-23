@@ -95,22 +95,29 @@ int ANTLR3_CDECL _tmain(int argc, _TCHAR* argv[])
 		// Tree parsers are given a common tree node stream (or your override)
 		//
 		pANTLR3_BASE_TREE p;
-		int ln=0,cpos=0;
+		int ln=0,cpos=0,xcc;
 		while(true)
 		{
-			
 			p =nodes -> tnstream -> _LT ( nodes -> tnstream , 1 ) ;
 			p->savedIndex=nodes->tnstream->istream->index(nodes->tnstream->istream);
-			/*if( p->getToken(p)->line > ln )
+			if( p->getToken(p)->line != 0 )
 			{
 				ln = p->getToken(p)->line;
-				cpos = 0;
+				cpos=0;
 			}
-			p->getToken(p)->line = ln;
-			cpos = std::max(cpos,(int)p->getCharPositionInLine(p));
-			p->getToken(p)->charPosition = cpos;
-			*///p->getToken(p)->line = nodes->tnstream->_LT(nodes->tnstream,0)->getL
-			//std::cout<<p->getToken(p)->line<<" "<<p->getCharPositionInLine(p)<<" "<<p->getText(p)->chars<<std::endl;
+			//p->getToken(p)->setLine(p->getToken(p),ln) ;
+			p->getToken(p)->user1 = ln;
+
+			if( (xcc=p->getCharPositionInLine(p)) != 0 )
+			{
+				cpos = xcc;
+				//cpos = p->getCharPositionInLine(p);
+			}
+			p->getToken(p)->user2 = cpos;
+
+			
+			//p->getToken(p)->line = nodes->tnstream->_LT(nodes->tnstream,0)->getL
+			//std::cout<<p->getToken(p)->user1<<" "<<p->getToken(p)->user2<<" "<<p->getText(p)->chars<<std::endl;
 			//p->getToken(p)->user1 = p->getToken(p)->line;
 			//std::cout<<p->getToken(p)->user1<<" ";
 			if(p->getType(p)==nodes->EOF_NODE.token->getType(nodes->EOF_NODE.token))break;

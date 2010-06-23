@@ -117,8 +117,9 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalOptions="-Zm300"
-				Optimization="2"
+				Optimization="0"
 				EnableIntrinsicFunctions="true"
+				WholeProgramOptimization="false"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
@@ -144,6 +145,7 @@
 				SubSystem="1"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
+				LinkTimeCodeGeneration="0"
 				TargetMachine="1"
 				Profile="false"
 			/>
@@ -181,6 +183,14 @@
 			<File
 				RelativePath=".\config.cpp"
 				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="2"
+					/>
+				</FileConfiguration>
 				<FileConfiguration
 					Name="Release|Win32"
 					>
@@ -242,6 +252,14 @@
 				RelativePath=".\ZError.cpp"
 				>
 				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="2"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
 					Name="Release|Win32"
 					>
 					<Tool
@@ -273,6 +291,14 @@
 			<File
 				RelativePath=".\ZInterpFunction.cpp"
 				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="2"
+					/>
+				</FileConfiguration>
 				<FileConfiguration
 					Name="Release|Win32"
 					>
@@ -360,6 +386,7 @@
 							>
 							<Tool
 								Name="VCCLCompilerTool"
+								UsePrecompiledHeader="0"
 								PrecompiledHeaderThrough="../StdAfx.h"
 							/>
 						</FileConfiguration>
@@ -372,6 +399,7 @@
 							>
 							<Tool
 								Name="VCCLCompilerTool"
+								UsePrecompiledHeader="0"
 								PrecompiledHeaderThrough="../StdAfx.h"
 							/>
 						</FileConfiguration>
@@ -411,6 +439,7 @@
 							>
 							<Tool
 								Name="VCCLCompilerTool"
+								UsePrecompiledHeader="0"
 								PrecompiledHeaderThrough="../StdAfx.h"
 							/>
 						</FileConfiguration>
@@ -423,6 +452,7 @@
 							>
 							<Tool
 								Name="VCCLCompilerTool"
+								UsePrecompiledHeader="0"
 								PrecompiledHeaderThrough="../StdAfx.h"
 							/>
 						</FileConfiguration>
@@ -593,6 +623,10 @@
 							</File>
 							<File
 								RelativePath=".\Mods\CGsp\Modifiers\Facet\ZOutline.h"
+								>
+							</File>
+							<File
+								RelativePath=".\Mods\CGsp\Modifiers\Facet\ZTriangulate.h"
 								>
 							</File>
 						</Filter>

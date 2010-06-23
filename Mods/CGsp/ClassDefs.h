@@ -25,6 +25,7 @@
 #include "Modifiers/Facet/ZExtrude.h"
 #include "Modifiers/Facet/ZOutline.h"
 #include "Modifiers/Facet/ZBevel.h"
+#include "Modifiers/Facet/ZTriangulate.h"
 
 #include "Modifiers/Polyhedron/ZBend.h"
 #include "Modifiers/Polyhedron/ZBulge.h"
@@ -38,7 +39,6 @@
 #include "Modifiers/Polyhedron/ZSqueeze.h"
 #include "Modifiers/Polyhedron/ZStretch.h"
 #include "Modifiers/Polyhedron/ZTaper.h"
-//#include "Modifiers/Polyhedron/ZTriangulate.h"
 #include "Modifiers/Polyhedron/ZTwist.h"
 
 #include "Physics/RigidBodySimulation.h"

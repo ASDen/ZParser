@@ -160,7 +160,7 @@ while_loop
 
 do_loop 
 	: KW_DO exp=expr_g KW_WHILE cond=expr_g
-	-> ^( EDO  ^(EDO_CON $cond) ^(EDO_EXP $exp) EDO_END)
+	-> ^( EDO  ^(EDO_CON $cond) ^(EDO_EXP $exp) EDO_END )
 	;
 
 for_loop 

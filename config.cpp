@@ -17,10 +17,10 @@ extern void ZModInit_CGsp();
 //--- Begin Module Inserions ---//
 ZBuiltinModule ZBMods[]={
 
-	//{_ZC("Test"),ZModInit_Test},
-	//{_ZC("Test2"),ZModInit_Test2},
-	//{_ZC("ZMath"),ZModInit_ZMath},
-	//{_ZC("ZArray"),ZModInit_ZArray},
+	{_ZC("Test"),ZModInit_Test},
+	{_ZC("Test2"),ZModInit_Test2},
+	{_ZC("ZMath"),ZModInit_ZMath},
+	{_ZC("ZArray"),ZModInit_ZArray},
 	{_ZC("CGsp"),ZModInit_CGsp},
 	{0,0}
 };
