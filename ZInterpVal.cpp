@@ -225,8 +225,11 @@ namespace ZInterp
 
 	void ExprSeq::_ESEQ(pANTLR3_BASE_TREE e)
 	{
-		pANTLR3_BASE_TREE p=((pANTLR3_BASE_TREE)(e->getChild(e, e->getChildCount(e)-1)));
-		e->u=p->u;
+		if(e->children->count>0)
+		{
+			pANTLR3_BASE_TREE p=((pANTLR3_BASE_TREE)(e->getChild(e, e->getChildCount(e)-1)));
+			e->u=p->u;
+		}
 	}
 
 	void AssingmentExpr::Exec(pANTLR3_BASE_TREE r,pANTLR3_BASE_TREE l,pANTLR3_BASE_TREE e)

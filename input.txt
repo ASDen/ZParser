@@ -1,126 +1,24 @@
---b=Box(12,[23,45,12])
---b=Box()
---b=Sphere()
---b=Sphere(3,[3,4,5])
---b=Sphere(3,5,[3,4,5])
---b=Capsule()
---b=ChamferCyl()
---b=Cone()
---b=Cylinder()
---b=Plane()
---b=Pyramid()
---b=Spindle()
---b=Spring()
---b=Torus()
---b=Tube()
---p=ZPoint([12,7,3])
---b=Cylindrical_Wave()
-
---b=Cylindrical_Wave(12)
-
---b=Cylindrical_Wave(12,XAxis)
---b=Cylindrical_Wave(12,p)
---b=Cylindrical_Wave(1.2,12.3)
-
---b=Cylindrical_Wave(12,12,23)
---b=Cylindrical_Wave(12,12,p)
---b=Cylindrical_Wave(12,12,ZAxis)
---b=Cylindrical_Wave(12,ZAxis,p)
---b=Cylindrical_Wave(12,p,p)
-
---b=Cylindrical_Wave(12,12,23,p)
---b=Cylindrical_Wave(12,12,12,YAxis)
---b=Cylindrical_Wave(12,12,p,YAxis)
---b=Cylindrical_Wave(12,ZAxis,23,23)
---b=Cylindrical_Wave(12,p,p,p)
---b=Cylindrical_Wave(12,23,12,ZPoint(2,0,3),p)
-
---b=Linear_Wave()
-
---b=Linear_Wave(12)
-
---b=Linear_Wave(12,XAxis)
---b=Linear_Wave(12,p)
---b=Linear_Wave(1.2,12.3)
-
---b=Linear_Wave(12,12,23)
---b=Linear_Wave(12,12,p)
---b=Linear_Wave(12,12,ZAxis)
---b=Linear_Wave(12,ZAxis,p)
---b=Linear_Wave(12,p,p)
-
---b=Linear_Wave(12,12,23,p)
---b=Linear_Wave(12,12,12,YAxis)
---b=Linear_Wave(12,12,p,YAxis)
---b=Linear_Wave(12,ZAxis,23,23)
---b=Linear_Wave(12,p,p,p)
-
---b=Linear_Wave(12,12,23,p,ZAxis)
---b=Linear_Wave(12,12,45,XAxis,YAxis)
---b=Linear_Wave(12,12,34,XAxis,XAxis)
---b=Linear_Wave(12,12,p,XAxis,XAxis)
---b=Linear_Wave(12,12,12,12,12)
---b=Linear_Wave(XAxis,XAxis,XAxis,XAxis,XAxis)
---b=Linear_Wave(12,12,12,p,XAxis,XAxis)
---b=Linear_Wave(12,12,p1,XAxis,XAxis)
-
---b=Bulge()
-
---b=Bulge(12)
---b=Bulge(ZAxis)
-
---b=Bulge(12,XAxis)
---b=Bulge(12,p)
---b=Bulge(1.2,12.3)
-
---b=Bulge(12,BLinear)
---b=Bulge(12,BRadial)
---b=Bulge(12,12,p)
---b=Bulge(12,12,ZAxis)
---b=Bulge(12,p,ZAxis)
---b=Bulge(12,ZAxis,p)
---b=Bulge(12,p,p)
-
---b=Bulge(12,p,YAxis,BLinear)
---b=Bulge(12,p,YAxis,true)
---b=Bulge(12,p,YAxis,false)
---b=Bulge(12,12,12,YAxis)
---b=Bulge(12,12,p,YAxis)
---b=Bulge(12,ZAxis,23,23)
---b=Bulge(12,p,p,p)
-
---b=Bulge(12,p,YAxis,BLinear,true)
---b=Bulge(12,p,YAxis,BLinear,true)
---b=Bulge(12,p,YAxis,BLinear,false)
-
---b=Bulge(12,p,YAxis,true,23,23)
---b=Bulge(12,p,YAxis,true,23,34)
---b=Bulge(12,p,YAxis,1,23,34)
---b=Bulge(12,ZPoint([1,2,3]),YAxis,true,23,34)
-
---b=Bulge(12,12,23,p,ZAxis)
---b=Bulge(12,12,45,XAxis,YAxis)
---b=Bulge(12,12,34,XAxis,XAxis)
---b=Bulge(12,12,p,XAxis,XAxis)
---b=Bulge(12,12,12,12,12)
---b=Bulge(XAxis,XAxis,XAxis,XAxis,XAxis)
---b=Bulge(12,12,12,p,XAxis,XAxis)
---b=Bulge(12,12,p1,XAxis,XAxis)
-
---printL(b.toString())
---y=x-1
-
---y = Bend()
-
---b = Bend();
---b = Bulge();
---b = Cylindrical_Wave();
---b = Linear_Wave();
---b = Skew();
---b = Smooth();
---b = Spherify();
---b = Squeeze();
---b = Stretch();
---b = Taper();
-b = Twist();
-printL(b.toString())
+x=23
+a=12
+case x of
+(
+(a+11):
+	(
+		printL(a+20)
+	)
+(a*2 - 1):
+	(
+		print("a*2=")
+		printL(a*3)
+	)
+default:
+	(
+		a=12
+		b=a-10
+		printL(b)
+	)
+)
+printL("asd");
+a=10+30
+a=100+-20
+printL(a)

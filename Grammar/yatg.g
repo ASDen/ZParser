@@ -3,11 +3,11 @@ grammar yatg;
 options 
 {
 	output=AST;
-	language=C;
+	//language=C;
 	backtrack=true;
     	memoize=true;
     	k=2;
-    	ASTLabelType    = pANTLR3_BASE_TREE;
+    	//ASTLabelType    = pANTLR3_BASE_TREE;
 }
 
 
@@ -185,7 +185,7 @@ loop_continue
 
 case_expr
 	 : KW_CASE ( expr_g )? KW_OF SS_OPAREN ( case_item )* SS_CPAREN
-	 ->^(CASE ^(CASE_Exp expr_g)? ^( case_item)* ECASE_END)
+	 ->^(CASE ^(CASE_Exp expr_g)? ^( case_item)*  ECASE_END )
 	 ;
 
 case_item 
@@ -367,7 +367,7 @@ relational_expression
 
 expr_seq
 	: SS_OPAREN (expr )* SS_CPAREN
-	-> ^(ESEQ expr+)
+	-> ^(ESEQ expr*)
 	;
 expr_g
 	:  expr_seq
