@@ -105,12 +105,14 @@ tokens {
 	ID_MORE;
 	SET;
 	PRIM_EXP;
+	// NUMBER
+	NUMBER;
 }
 
 
 
 program
-	: ( expr )+
+	: ( expr )*
 	;
 	
 expr
@@ -185,7 +187,7 @@ loop_continue
 
 case_expr
 	 : KW_CASE ( expr_g )? KW_OF SS_OPAREN ( case_item )* SS_CPAREN
-	 ->^(CASE ^(CASE_Exp expr_g)? ^( case_item)* ECASE_END)
+	 ->^(CASE ^(CASE_Exp expr_g)? ^( case_item)*  ECASE_END )
 	 ;
 
 case_item 
@@ -297,7 +299,7 @@ operand_op
 
 constant
     	:
-    	  DIGIT
+    	  number
     	| HEX_LITERAL
     	| STRING_LITERIAL
     	| SS_HASH IDENTIFIER
@@ -313,11 +315,17 @@ constant
     	| KW_OK
     	| KW_UNDEFINED
     	| KW_UNSUPPLIED
-    	| SS_MINUS expr_g
+    	| SS_MINUS expr_seq
    	| expr_seq
     	;
 
-/////
+///
+
+number	:
+	(SS_MINUS)? DIGIT
+    	  ->^(NUMBER (SS_MINUS)? DIGIT )
+	;
+//
 constant_expression
 	: logical_expression
 	;
@@ -367,7 +375,7 @@ relational_expression
 
 expr_seq
 	: SS_OPAREN (expr )* SS_CPAREN
-	-> ^(ESEQ expr+)
+	-> ^(ESEQ expr*)
 	;
 expr_g
 	:  expr_seq
@@ -756,7 +764,7 @@ LETTER
 	| '_'
 	;
 	
-DIGIT 	:('-')? ('0'..'9')+('.'('0'..'9')+)?
+DIGIT 	: ('0'..'9')+('.'('0'..'9')+)?
 	;
 
 HEX_LITERAL 

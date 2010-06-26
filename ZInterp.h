@@ -114,6 +114,12 @@ namespace ZInterp
 	public:
 		static void Exec(pANTLR3_BASE_TREE conNode,yatgFW_Ctx_struct* xyz);
 	};
+	class Number
+	{
+	public:
+		static void Exec(pANTLR3_BASE_TREE conNode);
+	};
+
 };
 
 #endif

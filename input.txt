@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 vm=KeyFrameAnimation();
 p=Plane(100,[0,0,0]);
 vm.Add(p);
@@ -19,3 +20,6 @@ for i=0 to 10 do
 )
 
 vm.View();
+=======
+sddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd=23
+>>>>>>> FETCH_HEAD

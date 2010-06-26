@@ -19,6 +19,7 @@ namespace ZInterp
 	void IfExpr::Exec(pANTLR3_BASE_TREE ifnode,pANTLR3_BASE_TREE cond,yatgFW_Ctx_struct* xyz)
 	{
 		pANTLR3_BASE_TREE r;
+
 		if(boost::apply_visitor(BoolVal(),*((ZTvarp)(cond->u)))== ZBTrue )
 		{
 			r=(pANTLR3_BASE_TREE)(ifnode->getChild(ifnode,1));
@@ -31,6 +32,7 @@ namespace ZInterp
 			SEEK(r->savedIndex);
 			MATCHT(EIF_END,NULL);
 		}
+		
 		else
 		{
 			r=(pANTLR3_BASE_TREE)(ifnode->getChild(ifnode,2));
@@ -41,8 +43,9 @@ namespace ZInterp
 				MATCHT(ANTLR3_TOKEN_DOWN,NULL);
 				r=(xyz->expr_g(xyz)).start;
 				ifnode->u=r->u;
+				MATCHT(ANTLR3_TOKEN_UP,NULL);
 			}
-			MATCHT(ANTLR3_TOKEN_UP,NULL);
+			
 			MATCHT(EIF_END,NULL);
 		}
 	}
@@ -229,32 +232,43 @@ namespace ZInterp
 			SEEK(item);
 			MATCHT(CASE_Item,NULL);
 			MATCHT ( ANTLR3_TOKEN_DOWN , NULL ) ;
-
-			xyz->constant(xyz);
-			ZTvarp y = ((ZTvarp)((pANTLR3_BASE_TREE)((pANTLR3_BASE_TREE)(caseNode)->getChild(caseNode,c))->getChild((pANTLR3_BASE_TREE)(caseNode)->getChild(caseNode,c),0))->u);
-
-			ZTvarp var=ZAlloc(ZTvar,1);
-			*var = boost::apply_visitor(Boolean::Equal(),*x,*y);
-			if(BOOL_ZCONV(*var))
+			pANTLR3_BASE_TREE cur=((pANTLR3_BASE_TREE)((pANTLR3_BASE_TREE)(caseNode)->getChild(caseNode,c))->getChild((pANTLR3_BASE_TREE)(caseNode)->getChild(caseNode,c),0));
+			char* curStr=getNodeText(cur);
+			if(strcmp(curStr,"DEFAULT")==0)
 			{
 				pANTLR3_BASE_TREE tt = ( pANTLR3_BASE_TREE ) caseNode -> getChild ( caseNode , c ) ;
 				pANTLR3_BASE_TREE tt1 = ( pANTLR3_BASE_TREE ) tt -> getChild ( tt , 1 ) ;
 				SEEK (  tt1-> savedIndex);
 				xyz -> expr_g ( xyz );
-				//MATCHT ( ANTLR3_TOKEN_UP , NULL ) ;
 				break;
 			}
-			//MATCHT ( ANTLR3_TOKEN_UP , NULL ) ;
+			else
+			{
+				xyz->expr_g(xyz);
+				ZTvarp y = ((ZTvarp)cur->u);
+
+				string str=boost::apply_visitor(ToString(),*y);
+
+				ZTvarp var=ZAlloc(ZTvar,1);
+				*var = boost::apply_visitor(Boolean::Equal(),*x,*y);
+				string str1=boost::apply_visitor(ToString(),*var);
+				
+				if(BOOL_ZCONV(*var))
+				{
+					pANTLR3_BASE_TREE tt = ( pANTLR3_BASE_TREE ) caseNode -> getChild ( caseNode , c ) ;
+					pANTLR3_BASE_TREE tt1 = ( pANTLR3_BASE_TREE ) tt -> getChild ( tt , 1 ) ;
+					SEEK (  tt1-> savedIndex);
+					xyz -> expr_g ( xyz );
+					//MATCHT ( ANTLR3_TOKEN_UP , NULL ) ;
+					break;
+				}
+				//MATCHT ( ANTLR3_TOKEN_UP , NULL ) ;
+				
+			}
 			c ++ ;
 		}
-		//MATCHT(ANTLR3_TOKEN_UP , NULL);
-		//MATCHT(ANTLR3_TOKEN_UP , NULL);
 		SEEK(cend);
-		xyz -> expr_g ( xyz );
-		//MATCHT(ANTLR3_TOKEN_DOWN , NULL);
-		//MATCHT(ECASE_END,NULL);
-		//MATCHT(ECASE_END,NULL);
-		//MATCHT(ECASE_END,NULL);
-		//MATCHT(ECASE_END,NULL);
+		//MATCHT(ANTLR3_TOKEN_UP,NULL);
+		MATCHT(ECASE_END,NULL);
 	}
 };

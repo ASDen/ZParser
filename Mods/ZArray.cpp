@@ -37,7 +37,6 @@ public:
 	ZTvarp toString(ZTvarS inp)
 	{
 		ZTvarp res=ZAlloc(ZTvar,1);
-		//ZIString str=_ZC("Array Object");
 		
 		*res=ZTString(boost::apply_visitor(ToString(),ZTvar(myList)));
 		return res;
