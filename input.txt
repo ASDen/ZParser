@@ -1,47 +1,21 @@
-fn sc1 x=(
-    vm=KeyFrameAnimation();
-    p=Plane(100,[0,0,0]);
-    vm.Add(p);
-    --t.Axis(ZAxis().X_ax);
-    --for j=0 to x do(
-	--	t = Triangulate();
-        b=Box(50,10,[0,0,0]);
-    --  b.Modify(t);
-        vm.Add(b);
-        b.setWire(true);
-        
-        animate on(
-		at time 30 ( b.Width(9);b.Length(9);b.Height(9) )
-		--at time 40 ( b.Width(9);b.Length(9);b.Height(12) )
-		at time 40 ( b.Position([150,150,150]);b.Rotation([1.5,1.5,1.5]);b.Scale([6,6,6]) )
-		--at time 30 ( b.LengthSegs(5);b.WidthSegs(5);b.HeightSegs(5) )
-		)
-    --)
-    vm.View();
+vm=KeyFrameAnimation();
+p=Plane(100,[0,0,0]);
+vm.Add(p);
+
+for j=0 to 10 do
+for i=0 to 10 do
+(
+	b=Box(10,[20*i,20*j,5])	
+	b.Color(ZPoint(10*i,10*j,10*i))
+	b.setWire(true);
+	vm.Add(b);
+	v=(20+i+j*10)
+	w=(30+i+j*10)
+	animate on
+	(
+		at time (20+i+j*10) (b.Height(100);b.Position([20*i,20*j,50]) )
+		at time (30+i+j*10) (b.Height(10) ;b.Position([20*i,20*j,5]) )
+	)
 )
 
-fn sc2 x,y,z =(
-    vv=PhysicsSimulation();
-    p=Plane(100,[0,0,0]);
-    p.setPhysActor(vv,vv.ZPhysPLANE);
-    p.Color(ZPoint(255,0,0))
-    vv.AddRigid(p);
-    
-    --px=Plane(20,70,[0,0,80]);
-    --px.setPhysActor(vv,vv.ZPhysCLOTH);
-    --vv.AddCloth(px);
-
-
-    for k=0 to z do(
-        for i=0 to x do(
-            for j=0 to y do(
-                b=Box(2,[k*2,j*2,i*2+1]);
-                b.setPhysActor(vv,vv.ZPhysBOX);
-                b.setWire(true);
-                b.Color(ZPoint(i*10,j*10,k*10))
-                vv.AddRigid(b);
-            )
-        )
-    )
-    vv.View();
-)
+vm.View();
