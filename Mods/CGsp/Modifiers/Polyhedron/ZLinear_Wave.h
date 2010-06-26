@@ -48,6 +48,7 @@ public:
 		ZAxis* za;
 		ZAxis* zaf;
 		pZObjP zins;
+		bool CenterExists = false;
 
 		//constructor inits
 		switch(inp.size())
@@ -67,7 +68,10 @@ public:
 			case ZETInstance:
 				zins=INSTANCE_ZCONV(*(inp[1]));
 				if( (zp3 = dynamic_cast<ZPoint*>(zins)) != NULL)
-					primt = new Linear_Wave( FLOAT_ZCONV(*(inp[0])) , zp3->getPnt() );
+				{
+					primt = new Linear_Wave( FLOAT_ZCONV(*(inp[0])) , zp3->getPnt() );	
+					CenterExists = true;
+				}
 				else if ( (za = dynamic_cast<ZAxis*>(zins)) != NULL)
 					primt = new Linear_Wave( FLOAT_ZCONV(*(inp[0])) , za->ax );
 				else ZError::Throw<ZBadConversionError>();
@@ -88,7 +92,10 @@ public:
 				case ZETInstance:
 					zins=INSTANCE_ZCONV(*(inp[2]));
 					if( (zp3 = dynamic_cast<ZPoint*>(zins)) != NULL)
-						primt = new Linear_Wave( FLOAT_ZCONV(*(inp[0])) , FLOAT_ZCONV(*(inp[1])) , zp3->getPnt() );
+					{
+						primt = new Linear_Wave( FLOAT_ZCONV(*(inp[0])) , FLOAT_ZCONV(*(inp[1])) , zp3->getPnt() );	
+						CenterExists = true;
+					}
 					else if ( (za = dynamic_cast<ZAxis*>(zins)) != NULL)
 						primt = new Linear_Wave( FLOAT_ZCONV(*(inp[0])) , FLOAT_ZCONV(*(inp[1])) , za->ax );
 					else ZError::Throw<ZBadConversionError>();
@@ -107,7 +114,10 @@ public:
 					{
 						zins=INSTANCE_ZCONV(*(inp[2]));
 						if ( (zaf = dynamic_cast<ZAxis*>(zins)) != NULL)
+						{
 							primt = new Linear_Wave( FLOAT_ZCONV(*(inp[0])) , zp3->getPnt() , zaf->ax );
+							CenterExists = true;
+						}
 						else 
 							ZError::Throw<ZBadConversionError>();
 					}
@@ -139,7 +149,10 @@ public:
 				{
 				case ZETFloat:
 					if( (zp3 = dynamic_cast<ZPoint*>(INSTANCE_ZCONV(*(inp[3])))) != NULL)
+					{
 						primt = new Linear_Wave( FLOAT_ZCONV(*(inp[0])) , FLOAT_ZCONV(*(inp[1])) , FLOAT_ZCONV(*(inp[2])) , zp3->getPnt() );
+						CenterExists = true;
+					}
 					else if ( (za = dynamic_cast<ZAxis*>(INSTANCE_ZCONV(*(inp[3])))) != NULL)
 						primt = new Linear_Wave( FLOAT_ZCONV(*(inp[0])) , FLOAT_ZCONV(*(inp[1])) , FLOAT_ZCONV(*(inp[2])) , za->ax );
 					else 
@@ -151,7 +164,10 @@ public:
 					{
 						zins=INSTANCE_ZCONV(*(inp[3]));
 						if ( (zaf = dynamic_cast<ZAxis*>(zins)) != NULL)
+						{
 							primt = new Linear_Wave( FLOAT_ZCONV(*(inp[0])) , FLOAT_ZCONV(*(inp[1])) , zp3->getPnt() , zaf->ax );
+							CenterExists = true;
+						}
 						else 
 							ZError::Throw<ZBadConversionError>();
 					}
@@ -176,8 +192,10 @@ public:
 				if( (zp3 = dynamic_cast<ZPoint*>(zins)) != NULL)
 				{
 					if ( (za = dynamic_cast<ZAxis*>(INSTANCE_ZCONV(*(inp[2])))) != NULL && (zaf = dynamic_cast<ZAxis*>(INSTANCE_ZCONV(*(inp[3])))) != NULL)
+					{
 						primt = new Linear_Wave( FLOAT_ZCONV(*(inp[0])) , zp3->getPnt() , za->ax , zaf->ax );
-
+						CenterExists = true;
+					}
 					else
 						ZError::Throw<ZBadConversionError>();
 				}
@@ -198,7 +216,10 @@ public:
 				{
 					zins=INSTANCE_ZCONV(*(inp[4]));
 					if ( (zaf = dynamic_cast<ZAxis*>(zins)) != NULL)
+					{
 						primt = new Linear_Wave( FLOAT_ZCONV(*(inp[0])) , FLOAT_ZCONV(*(inp[1])) , FLOAT_ZCONV(*(inp[2])) , zp3->getPnt() , zaf->ax );
+						CenterExists = true;
+					}
 					else 
 						ZError::Throw<ZBadConversionError>();
 				}
@@ -219,7 +240,10 @@ public:
 				if( (zp3 = dynamic_cast<ZPoint*>(zins)) != NULL)
 				{
 					if ( (za = dynamic_cast<ZAxis*>(INSTANCE_ZCONV(*(inp[3])))) != NULL && (zaf = dynamic_cast<ZAxis*>(INSTANCE_ZCONV(*(inp[4])))) != NULL)
+					{
 						primt = new Linear_Wave( FLOAT_ZCONV(*(inp[0])) , FLOAT_ZCONV(*(inp[1])) , zp3->getPnt() , za->ax , zaf->ax );
+						CenterExists = true;
+					}
 					else 
 						ZError::Throw<ZBadConversionError>();
 				}
@@ -234,9 +258,22 @@ public:
 
 		case 6:
 			if ( (zp3 = dynamic_cast<ZPoint*>(INSTANCE_ZCONV(*(inp[3])))) != NULL && (za = dynamic_cast<ZAxis*>(INSTANCE_ZCONV(*(inp[4])))) != NULL && (zaf = dynamic_cast<ZAxis*>(INSTANCE_ZCONV(*(inp[5])))) != NULL)
+			{
 				primt = new Linear_Wave( FLOAT_ZCONV(*(inp[0])) , FLOAT_ZCONV(*(inp[1])) , FLOAT_ZCONV(*(inp[2])) , zp3->getPnt() , za->ax , zaf->ax );
+				CenterExists = true;
+			}
+			else 
+				ZError::Throw<ZBadConversionError>();
 			break;
 		}
+
+		if (!CenterExists)
+		{
+			primt->X_Center.FrameValues[0]  = 0;
+			primt->Y_Center.FrameValues[0]  = 0;
+			primt->Z_Center.FrameValues[0]  = 0;
+		}
+
 		ZLinear_Wave();
 	}
 

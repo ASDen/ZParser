@@ -4,6 +4,13 @@ public:
 
 	Spindle_3* primt;
 
+	SpindlePropsD* cRadius;
+	SpindlePropsD* cCap;
+	SpindlePropsD* cHeight;
+	SpindlePropsI* cSideSegs;
+	SpindlePropsI* cCapSegs;
+	SpindlePropsI* cHeightSegs;
+
 	ZSpindle()
 	{}
 
@@ -13,13 +20,13 @@ public:
 
 		StProps.InitScope();
 
-		AddFunction(_ZC("Radius") ,1,&ZSpindle::Radius);
-		AddFunction(_ZC("Cap") ,1,&ZSpindle::Cap);
-		AddFunction(_ZC("Height") ,1,&ZSpindle::Height);
+		AddFunction(_ZC("Radius") ,1,&ZSpindle::MFactory<SpindlePropsD,double,&ZSpindle::cRadius>);
+		AddFunction(_ZC("Cap") ,1,&ZSpindle::MFactory<SpindlePropsD,double,&ZSpindle::cCap>);
+		AddFunction(_ZC("Height") ,1,&ZSpindle::MFactory<SpindlePropsD,double,&ZSpindle::cHeight>);
 
-		AddFunction(_ZC("SideSegs") ,1,&ZSpindle::SideSegs);
-		AddFunction(_ZC("CapSegs") ,1,&ZSpindle::CapSegs);
-		AddFunction(_ZC("HeightSegs") ,1,&ZSpindle::HeightSegs);
+		AddFunction(_ZC("SideSegs") ,1,&ZSpindle::MFactory<SpindlePropsI,int,&ZSpindle::cSideSegs>);
+		AddFunction(_ZC("CapSegs") ,1,&ZSpindle::MFactory<SpindlePropsI,int,&ZSpindle::cCapSegs>);
+		AddFunction(_ZC("HeightSegs") ,1,&ZSpindle::MFactory<SpindlePropsI,int,&ZSpindle::cHeightSegs>);
 
 		AddFunction(_ZC("toString"),0,&ZSpindle::toString);
 	
@@ -42,8 +49,26 @@ public:
 	//FIXME : int conversions
 	ZSpindle(ZTvarS inp)
 	{
+		int inputNumber = 0;
+		bool PositionExists = false;
+
+		if (inp.size() != 0)
+		{
+			inputNumber = inp.size() - 1;
+			if (GET_ZTYPE(*(inp[inputNumber])) == ZETList)
+			{
+				inputNumber = inp.size();
+				PositionExists = true;
+			}
+
+			else
+			{
+				inputNumber = inp.size() + 1;
+			}
+		}
+
 		//constructor inits
-		switch(inp.size())
+		switch(inputNumber)
 		{
 		case 0:
 		case 1:
@@ -59,6 +84,7 @@ public:
 			primt = new Spindle_3( FLOAT_ZCONV(*inp[0]) , FLOAT_ZCONV(*inp[1]) , FLOAT_ZCONV(*inp[2]) );
 			break;
 		case 5:
+		case 6:
 			primt = new Spindle_3( FLOAT_ZCONV(*inp[0]) , FLOAT_ZCONV(*inp[1]) , FLOAT_ZCONV(*inp[2]) , INT_ZCONV(*inp[3]) );
 			break;
 		case 7:
@@ -70,90 +96,37 @@ public:
 		}
 		primt->Draw();
 		InitNode(inp,primt);
+
+		cRadius		= new SpindlePropsD(&Spindle_3::radius,primt,primt->radius);
+		cCap		= new SpindlePropsD(&Spindle_3::cap_height,primt,primt->cap_height);
+		cHeight		= new SpindlePropsD(&Spindle_3::height,primt,primt->height);
+		cSideSegs	= new SpindlePropsI(&Spindle_3::side_Seg,primt,primt->side_Seg);
+		cCapSegs	= new SpindlePropsI(&Spindle_3::cap_Seg,primt,primt->cap_Seg);
+		cHeightSegs = new SpindlePropsI(&Spindle_3::height_Seg,primt,primt->height_Seg);
+
+		
+		primt->ApplyModifier(cRadius);
+		primt->ApplyModifier(cCap);
+		primt->ApplyModifier(cHeight);
+		primt->ApplyModifier(cSideSegs);
+		primt->ApplyModifier(cCapSegs);
+		primt->ApplyModifier(cHeightSegs);
+
 		ZSpindle();
 	}
 
-	ZTvarp Radius (ZTvarS inp)
+	template<class T,class S,T* ZSpindle::*mod>
+	ZTvarp MFactory (ZTvarS inp)
 	{
 		if (inp.size() == 0)
 		{
-			ZIFloat fr = primt->radius;
+			ZIFloat fr = (this->*mod)->PolyP.FrameValues[ZInterp::currentFrame];
 			ZTvarp res=ZAlloc(ZTvar,1);
 			*res = ZTFloat(fr);
 			return res;
 		}
 
-		primt->radius = FLOAT_ZCONV(*(inp[0]));
-		return NULL;
-	}
-
-	ZTvarp Cap (ZTvarS inp)
-	{
-		if (inp.size() == 0)
-		{
-			ZIFloat fr = primt->cap_height;
-			ZTvarp res=ZAlloc(ZTvar,1);
-			*res = ZTFloat(fr);
-			return res;
-		}
-
-		primt->cap_height = FLOAT_ZCONV(*(inp[0]));
-		return NULL;
-	}
-
-	ZTvarp Height (ZTvarS inp)
-	{
-		if (inp.size() == 0)
-		{
-			ZIFloat fr = primt->height;
-			ZTvarp res=ZAlloc(ZTvar,1);
-			*res = ZTFloat(fr);
-			return res;
-		}
-
-		primt->height = FLOAT_ZCONV(*(inp[0]));
-		return NULL;
-	}
-
-	ZTvarp SideSegs (ZTvarS inp)
-	{
-		if (inp.size() == 0)
-		{
-			ZTInt fr = primt->side_Seg;
-			ZTvarp res=ZAlloc(ZTvar,1);
-			*res = ZTFloat(fr);
-			return res;
-		}
-
-		primt->side_Seg = INT_ZCONV(*(inp[0]));
-		return NULL;
-	}
-
-	ZTvarp CapSegs (ZTvarS inp)
-	{
-		if (inp.size() == 0)
-		{
-			ZTInt fr = primt->cap_Seg;
-			ZTvarp res=ZAlloc(ZTvar,1);
-			*res = ZTFloat(fr);
-			return res;
-		}
-
-		primt->cap_Seg = INT_ZCONV(*(inp[0]));
-		return NULL;
-	}
-
-	ZTvarp HeightSegs (ZTvarS inp)
-	{
-		if (inp.size() == 0)
-		{
-			ZTInt fr = primt->height_Seg;
-			ZTvarp res=ZAlloc(ZTvar,1);
-			*res = ZTFloat(fr);
-			return res;
-		}
-
-		primt->height_Seg = INT_ZCONV(*(inp[0]));
+		FrameCreater::FillFrames(ZInterp::currentFrame,(S)(FLOAT_ZCONV(*(inp[0]))),&T::PolyP,*(this->*mod) );
 		return NULL;
 	}
 };

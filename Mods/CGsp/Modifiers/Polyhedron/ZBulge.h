@@ -15,7 +15,7 @@ public:
 
 		AddFunction(_ZC("Amount") ,1,&ZBulge::Amount);
 		AddFunction(_ZC("Axis") ,1,&ZBulge::Axis);
-		AddFunction(_ZC("Type") ,1,&ZBulge::Type);
+		AddFunction(_ZC("BulgeType") ,1,&ZBulge::BulgeType);
 		AddFunction(_ZC("Center") ,1,&ZBulge::Center);
 		AddFunction(_ZC("Limited") ,1,&ZBulge::Limited);
 		AddFunction(_ZC("Upper_Limit") ,1,&ZBulge::Upper_Limit);
@@ -48,6 +48,7 @@ public:
 		ZAxis* za;
 		pZObjP zins;
 		ZBulgeType* zbut;
+		bool CenterExists = false;
 
 		//constructor inits
 		switch(inp.size())
@@ -66,7 +67,10 @@ public:
 			case ZETInstance:
 				zins=INSTANCE_ZCONV(*(inp[1]));
 				if( (zp3 = dynamic_cast<ZPoint*>(zins)) != NULL)
+				{
 					primt = new Bulge( FLOAT_ZCONV(*(inp[0])) , zp3->getPnt() );
+					CenterExists = true;
+				}
 				else if ( (za = dynamic_cast<ZAxis*>(zins)) != NULL)
 					primt = new Bulge( FLOAT_ZCONV(*(inp[0])) , za->ax );
 				else if ( (zbut = dynamic_cast<ZBulgeType*>(zins)) != NULL)
@@ -81,7 +85,10 @@ public:
 
 		case 3:
 			if ( (zp3 = dynamic_cast<ZPoint*>(INSTANCE_ZCONV(*(inp[1])))) != NULL && (za = dynamic_cast<ZAxis*>(INSTANCE_ZCONV(*(inp[2])))) != NULL)
+			{
 				primt = new Bulge( FLOAT_ZCONV(*(inp[0])) , zp3->getPnt() , za->ax );
+				CenterExists = true;
+			}
 			else
 				ZError::Throw<ZBadConversionError>();
 			break;
@@ -93,10 +100,14 @@ public:
 			{
 			case ZETBool:
 				primt = new Bulge( FLOAT_ZCONV(*(inp[0])) , zp3->getPnt() , za->ax , BOOL_ZCONV(*(inp[3])) );
+				CenterExists = true;
 				break;
 			case ZETInstance:
 				if ( (zbut = dynamic_cast<ZBulgeType*>(INSTANCE_ZCONV(*(inp[3])))) != NULL)
+				{
 					primt = new Bulge( FLOAT_ZCONV(*(inp[0])) , zp3->getPnt() , za->ax , zbut->buType );
+					CenterExists = true;
+				}
 				else
 					ZError::Throw<ZBadConversionError>();
 				break;
@@ -109,23 +120,40 @@ public:
 			break;
 		case 5:
 			if ( (zp3 = dynamic_cast<ZPoint*>(INSTANCE_ZCONV(*(inp[1])))) != NULL && (za = dynamic_cast<ZAxis*>(INSTANCE_ZCONV(*(inp[2])))) != NULL && (zbut = dynamic_cast<ZBulgeType*>(INSTANCE_ZCONV(*(inp[3])))) != NULL)
+			{
 				primt = new Bulge( FLOAT_ZCONV(*(inp[0])) , zp3->getPnt() , za->ax , zbut->buType , BOOL_ZCONV(*(inp[4])) );
+				CenterExists = true;
+			}
 			else
 				ZError::Throw<ZBadConversionError>();
 			break;
 		case 6:
 			if ( (zp3 = dynamic_cast<ZPoint*>(INSTANCE_ZCONV(*(inp[1])))) != NULL && (za = dynamic_cast<ZAxis*>(INSTANCE_ZCONV(*(inp[2])))) != NULL)
+			{
 				primt = new Bulge( FLOAT_ZCONV(*(inp[0])) , zp3->getPnt() , za->ax , BOOL_ZCONV(*(inp[3])) , FLOAT_ZCONV(*(inp[4])) , FLOAT_ZCONV(*(inp[5])) );
+				CenterExists = true;
+			}
 			else
 				ZError::Throw<ZBadConversionError>();
 			break;
 		case 7:
 			if ( (zp3 = dynamic_cast<ZPoint*>(INSTANCE_ZCONV(*(inp[1])))) != NULL && (za = dynamic_cast<ZAxis*>(INSTANCE_ZCONV(*(inp[2])))) != NULL && (zbut = dynamic_cast<ZBulgeType*>(INSTANCE_ZCONV(*(inp[3])))) != NULL)
+			{
 				primt = new Bulge( FLOAT_ZCONV(*(inp[0])) , zp3->getPnt() , za->ax , zbut->buType , BOOL_ZCONV(*(inp[4])) , FLOAT_ZCONV(*(inp[5])) , FLOAT_ZCONV(*(inp[6])) );
+				CenterExists = true;
+			}
 			else
 				ZError::Throw<ZBadConversionError>();
 			break;
 		}
+
+		if (!CenterExists)
+		{
+			primt->X_Center.FrameValues[0]  = 0;
+			primt->Y_Center.FrameValues[0]  = 0;
+			primt->Z_Center.FrameValues[0]  = 0;
+		}
+
 		ZBulge();
 	}
 
@@ -162,7 +190,7 @@ public:
 		return NULL;
 	}
 
-	ZTvarp Type (ZTvarS inp)
+	ZTvarp BulgeType (ZTvarS inp)
 	{
 		if (inp.size() == 0)
 		{

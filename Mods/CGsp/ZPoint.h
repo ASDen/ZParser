@@ -9,6 +9,8 @@ public:
         AddFunction(_ZC("X"),1,&ZPoint::X);
         AddFunction(_ZC("Y"),1,&ZPoint::Y);
         AddFunction(_ZC("Z"),1,&ZPoint::Z);
+
+        AddFunction(_ZC("toString"),1,&ZPoint::toString);
         ZTObject::Inheriet(StProps);
     }
 
@@ -91,13 +93,21 @@ public:
             return NULL;
         }
     }
-
+	
 	static ZIString toString(Point_3 p)
 	{
 		ostringstream s1;
-		s1 << "Point(" << p.x() << ", " << p.y() << ", " << p.z() << ")" << endl;
+		s1 << "(" << p.x() << ", " << p.y() << ", " << p.z() << ")" << endl;
 		
 		return s1.str();
+	}
+	
+	ZTvarp toString(ZTvarS inp)
+	{
+		ostringstream s1;
+		s1 << " Point(" << FLOAT_ZCONV(*(myList.Get(0))) << ", " << FLOAT_ZCONV(*(myList.Get(1))) << ", " << FLOAT_ZCONV(*(myList.Get(2))) << ")" << endl;
+		
+		INST_TO_STR( s1.str() );
 	}
     
 };

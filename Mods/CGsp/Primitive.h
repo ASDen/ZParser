@@ -19,9 +19,9 @@ public:
 
 	PolyhedronNode* pnode;
 
-	void InitNode(ZTvarS inp,Primitives* p)
+	void InitNode(ZTvarS inp,Primitives* p,bool exists = false)
 	{
-		if(inp.size()>0)
+		if(exists)
 		{
 			ZTList zl = LIST_ZCONV(*inp[ inp.size()-1 ] );
 			pnode = new PolyhedronNode(p,osg::Vec3 (

@@ -4,6 +4,9 @@ public:
 
 	Sphere_3* primt;
 
+	SpherePropsD* sRadius;
+	SpherePropsI* sSideSegs;
+
 	ZSphere()
 	{}
 
@@ -13,9 +16,9 @@ public:
 
 		StProps.InitScope();
 
-		AddFunction(_ZC("Radius") ,1,&ZSphere::Radius);
+		AddFunction(_ZC("Radius") ,1,&ZSphere::MFactory<SpherePropsD,double,&ZSphere::sRadius>);
 
-		AddFunction(_ZC("SideSegs") ,1,&ZSphere::SideSegs);
+		AddFunction(_ZC("SideSegs") ,1,&ZSphere::MFactory<SpherePropsI,int,&ZSphere::sSideSegs>);
 
 		AddFunction(_ZC("toString"),0,&ZSphere::toString);
 
@@ -37,8 +40,26 @@ public:
 	//FIXME : int conversions
 	ZSphere(ZTvarS inp)
 	{
+		int inputNumber = 0;
+		bool PositionExists = false;
+
+		if (inp.size() != 0)
+		{
+			inputNumber = inp.size() - 1;
+			if (GET_ZTYPE(*(inp[inputNumber])) == ZETList)
+			{
+				inputNumber = inp.size();
+				PositionExists = true;
+			}
+
+			else
+			{
+				inputNumber = inp.size() + 1;
+			}
+		}
+
 		//constructor inits
-		switch(inp.size())
+		switch(inputNumber)
 		{
 		case 0:
 		case 1:
@@ -56,34 +77,29 @@ public:
 		}
 		primt->Draw();
 		InitNode(inp,primt);
+
+		sRadius   = new SpherePropsD(&Sphere_3::radius,primt,primt->radius);
+		sSideSegs = new SpherePropsI(&Sphere_3::Segs,primt,primt->Segs);
+
+		
+		primt->ApplyModifier(sRadius);
+		primt->ApplyModifier(sSideSegs);
+
 		ZSphere();
 	}
 
-	ZTvarp Radius (ZTvarS inp)
+	template<class T,class S,T* ZSphere::*mod>
+	ZTvarp MFactory (ZTvarS inp)
 	{
 		if (inp.size() == 0)
 		{
-			ZIFloat fr = primt->radius;
-			ZTvarp res = ZAlloc(ZTvar,1);
-			*res = ZTFloat(fr);
-			return res;
-		}
-
-		primt->radius = FLOAT_ZCONV(*(inp[0]));
-		return NULL;
-	}
-
-	ZTvarp SideSegs (ZTvarS inp)
-	{
-		if (inp.size() == 0)
-		{
-			ZTInt fr = primt->Segs;
+			ZIFloat fr = (this->*mod)->PolyP.FrameValues[ZInterp::currentFrame];
 			ZTvarp res=ZAlloc(ZTvar,1);
 			*res = ZTFloat(fr);
 			return res;
 		}
 
-		primt->Segs = INT_ZCONV(*(inp[0]));
+		FrameCreater::FillFrames(ZInterp::currentFrame,(S)(FLOAT_ZCONV(*(inp[0]))),&T::PolyP,*(this->*mod) );
 		return NULL;
 	}
 };

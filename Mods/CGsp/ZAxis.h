@@ -24,6 +24,7 @@ public:
 	static void Init()
 	{
 		StProps.InitScope();
+        AddFunction(_ZC("toString"),1,&ZAxis::toString);
 	
 		ZTObject::Inheriet(StProps);
 	}
@@ -44,5 +45,27 @@ public:
 		default:
 			return ZIString("Type Error");
 		}
+	}
+	
+	ZTvarp toString(ZTvarS inp)
+	{
+		ostringstream s1;
+
+		switch (ax)
+		{
+		case X_ax:
+			s1 << " Axis : " << "X Axis" << endl;
+			break;
+		case Y_ax:
+			s1 << " Axis : " << "Y Axis" << endl;
+			break;
+		case Z_ax:
+			s1 << " Axis : " << "Z Axis" << endl;
+			break;
+		default:
+			s1 << " Axis : " << "Type Error" << endl;
+		}
+		
+		INST_TO_STR( s1.str() );
 	}
 };

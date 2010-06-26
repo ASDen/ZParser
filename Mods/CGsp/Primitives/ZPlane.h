@@ -4,6 +4,11 @@ public:
 
 	Plane_3* primt;
 
+	PlanePropsD* pWidth;
+	PlanePropsD* pLength;
+	PlanePropsI* pSWidth;
+	PlanePropsI* pSLength;
+
 	ZPlane()
 	{}
 
@@ -13,11 +18,11 @@ public:
 
 		StProps.InitScope();
 
-		AddFunction(_ZC("Length") ,1,&ZPlane::Length);
-		AddFunction(_ZC("Width") ,1,&ZPlane::Width);
+		AddFunction(_ZC("Width")  ,1,&ZPlane::MFactory<PlanePropsD,double,&ZPlane::pWidth>);
+		AddFunction(_ZC("Length") ,1,&ZPlane::MFactory<PlanePropsD,double,&ZPlane::pLength>);
 
-		AddFunction(_ZC("LengthSegs") ,1,&ZPlane::LengthSegs);
-		AddFunction(_ZC("WidthSegs") ,1,&ZPlane::WidthSegs);
+		AddFunction(_ZC("WidthSegs") ,1,&ZPlane::MFactory<PlanePropsI,int,&ZPlane::pSWidth>);
+		AddFunction(_ZC("LengthSegs") ,1,&ZPlane::MFactory<PlanePropsI,int,&ZPlane::pSLength>);
 
 		AddFunction(_ZC("toString"),0,&ZPlane::toString);
 	
@@ -39,8 +44,26 @@ public:
 	//FIXME : int conversions
 	ZPlane(ZTvarS inp)
 	{
+		int inputNumber = 0;
+		bool PositionExists = false;
+
+		if (inp.size() != 0)
+		{
+			inputNumber = inp.size() - 1;
+			if (GET_ZTYPE(*(inp[inputNumber])) == ZETList)
+			{
+				inputNumber = inp.size();
+				PositionExists = true;
+			}
+
+			else
+			{
+				inputNumber = inp.size() + 1;
+			}
+		}
+
 		//constructor inits
-		switch(inp.size())
+		switch(inputNumber)
 		{
 		case 0:
 		case 1:
@@ -50,6 +73,7 @@ public:
 			primt = new Plane_3( FLOAT_ZCONV(*(inp[0])) );
 			break;
 		case 3:
+		case 4:
 			primt = new Plane_3( FLOAT_ZCONV(*(inp[0])) , INT_ZCONV(*(inp[1])) );
 			break;
 		case 5:
@@ -61,62 +85,33 @@ public:
 		}
 		primt->Draw();
 		InitNode(inp,primt);
+
+		pWidth   = new PlanePropsD(&Plane_3::width,primt,primt->width);
+		pLength  = new PlanePropsD(&Plane_3::length,primt,primt->length);
+		pSWidth  = new PlanePropsI(&Plane_3::width_Seg,primt,primt->width_Seg);
+		pSLength = new PlanePropsI(&Plane_3::length_Seg,primt,primt->length_Seg);
+
+
+		primt->ApplyModifier(pWidth);
+		primt->ApplyModifier(pLength);
+		primt->ApplyModifier(pSWidth);
+		primt->ApplyModifier(pSLength);
+
 		ZPlane();
 	}
-	
-	ZTvarp Length (ZTvarS inp)
+
+	template<class T,class S,T* ZPlane::*mod>
+	ZTvarp MFactory (ZTvarS inp)
 	{
 		if (inp.size() == 0)
 		{
-			ZIFloat fr = primt->length;
+			ZIFloat fr = (this->*mod)->PolyP.FrameValues[ZInterp::currentFrame];
 			ZTvarp res=ZAlloc(ZTvar,1);
 			*res = ZTFloat(fr);
 			return res;
 		}
 
-		primt->length = FLOAT_ZCONV(*(inp[0]));
-		return NULL;
-	}
-
-	ZTvarp Width (ZTvarS inp)
-	{
-		if (inp.size() == 0)
-		{
-			ZIFloat fr = primt->width;
-			ZTvarp res=ZAlloc(ZTvar,1);
-			*res = ZTFloat(fr);
-			return res;
-		}
-
-		primt->width = FLOAT_ZCONV(*(inp[0]));
-		return NULL;
-	}
-
-	ZTvarp LengthSegs (ZTvarS inp)
-	{
-		if (inp.size() == 0)
-		{
-			ZTInt fr = primt->length_Seg;
-			ZTvarp res=ZAlloc(ZTvar,1);
-			*res = ZTFloat(fr);
-			return res;
-		}
-
-		primt->length_Seg = INT_ZCONV(*(inp[0]));
-		return NULL;
-	}
-
-	ZTvarp WidthSegs (ZTvarS inp)
-	{
-		if (inp.size() == 0)
-		{
-			ZTInt fr = primt->width_Seg;
-			ZTvarp res=ZAlloc(ZTvar,1);
-			*res = ZTFloat(fr);
-			return res;
-		}
-
-		primt->width_Seg = INT_ZCONV(*(inp[0]));
+		FrameCreater::FillFrames(ZInterp::currentFrame,(S)(FLOAT_ZCONV(*(inp[0]))),&T::PolyP,*(this->*mod) );
 		return NULL;
 	}
 };

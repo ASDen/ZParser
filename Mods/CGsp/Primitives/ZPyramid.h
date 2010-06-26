@@ -4,6 +4,13 @@ public:
 
 	Pyramid_3* primt;
 
+	PyramidPropsD* pWidth;
+	PyramidPropsD* pHeight;
+	PyramidPropsD* pDepth;
+	PyramidPropsI* pSWidth;
+	PyramidPropsI* pSHeight;
+	PyramidPropsI* pSDepth;
+
 	ZPyramid()
 	{}
 
@@ -13,13 +20,13 @@ public:
 
 		StProps.InitScope();
 
-		AddFunction(_ZC("Depth") ,1,&ZPyramid::Depth);
-		AddFunction(_ZC("Width") ,1,&ZPyramid::Width);
-		AddFunction(_ZC("Height") ,1,&ZPyramid::Height);
+		AddFunction(_ZC("Depth") ,1,&ZPyramid::MFactory<PyramidPropsD,double,&ZPyramid::pDepth>);
+		AddFunction(_ZC("Width")  ,1,&ZPyramid::MFactory<PyramidPropsD,double,&ZPyramid::pWidth>);
+		AddFunction(_ZC("Height") ,1,&ZPyramid::MFactory<PyramidPropsD,double,&ZPyramid::pHeight>);
 
-		AddFunction(_ZC("DepthSegs") ,1,&ZPyramid::DepthSegs);
-		AddFunction(_ZC("WidthSegs") ,1,&ZPyramid::WidthSegs);
-		AddFunction(_ZC("HeightSegs") ,1,&ZPyramid::HeightSegs);
+		AddFunction(_ZC("DepthSegs") ,1,&ZPyramid::MFactory<PyramidPropsI,int,&ZPyramid::pSDepth>);
+		AddFunction(_ZC("WidthSegs") ,1,&ZPyramid::MFactory<PyramidPropsI,int,&ZPyramid::pSWidth>);
+		AddFunction(_ZC("HeightSegs") ,1,&ZPyramid::MFactory<PyramidPropsI,int,&ZPyramid::pSHeight>);
 
 		AddFunction(_ZC("toString"),0,&ZPyramid::toString);
 	
@@ -42,8 +49,26 @@ public:
 	//FIXME : int conversions
 	ZPyramid(ZTvarS inp)
 	{
+		int inputNumber = 0;
+		bool PositionExists = false;
+
+		if (inp.size() != 0)
+		{
+			inputNumber = inp.size() - 1;
+			if (GET_ZTYPE(*(inp[inputNumber])) == ZETList)
+			{
+				inputNumber = inp.size();
+				PositionExists = true;
+			}
+
+			else
+			{
+				inputNumber = inp.size() + 1;
+			}
+		}
+
 		//constructor inits
-		switch(inp.size())
+		switch(inputNumber)
 		{
 		case 0:
 		case 1:
@@ -73,90 +98,37 @@ public:
 		}
 		primt->Draw();
 		InitNode(inp,primt);
+
+		pWidth   = new PyramidPropsD(&Pyramid_3::width,primt,primt->width);
+		pHeight  = new PyramidPropsD(&Pyramid_3::height,primt,primt->height);
+		pDepth   = new PyramidPropsD(&Pyramid_3::depth,primt,primt->depth);
+		pSWidth  = new PyramidPropsI(&Pyramid_3::width_Seg,primt,primt->width_Seg);
+		pSHeight = new PyramidPropsI(&Pyramid_3::height_Seg,primt,primt->height_Seg);
+		pSDepth	 = new PyramidPropsI(&Pyramid_3::depth_Seg,primt,primt->depth_Seg);
+
+		
+		primt->ApplyModifier(pWidth);
+		primt->ApplyModifier(pHeight);
+		primt->ApplyModifier(pDepth);
+		primt->ApplyModifier(pSWidth);
+		primt->ApplyModifier(pSHeight);
+		primt->ApplyModifier(pSDepth);
+
 		ZPyramid();
 	}
 
-	ZTvarp Depth (ZTvarS inp)
+	template<class T,class S,T* ZPyramid::*mod>
+	ZTvarp MFactory (ZTvarS inp)
 	{
 		if (inp.size() == 0)
 		{
-			ZIFloat fr = primt->depth;
+			ZIFloat fr = (this->*mod)->PolyP.FrameValues[ZInterp::currentFrame];
 			ZTvarp res=ZAlloc(ZTvar,1);
 			*res = ZTFloat(fr);
 			return res;
 		}
 
-		primt->depth = FLOAT_ZCONV(*(inp[0]));
-		return NULL;
-	}
-
-	ZTvarp Width (ZTvarS inp)
-	{
-		if (inp.size() == 0)
-		{
-			ZIFloat fr = primt->width;
-			ZTvarp res=ZAlloc(ZTvar,1);
-			*res = ZTFloat(fr);
-			return res;
-		}
-
-		primt->width = FLOAT_ZCONV(*(inp[0]));
-		return NULL;
-	}
-
-	ZTvarp Height (ZTvarS inp)
-	{
-		if (inp.size() == 0)
-		{
-			ZIFloat fr = primt->height;
-			ZTvarp res=ZAlloc(ZTvar,1);
-			*res = ZTFloat(fr);
-			return res;
-		}
-
-		primt->height = FLOAT_ZCONV(*(inp[0]));
-		return NULL;
-	}
-
-	ZTvarp DepthSegs (ZTvarS inp)
-	{
-		if (inp.size() == 0)
-		{
-			ZTInt fr = primt->depth_Seg;
-			ZTvarp res=ZAlloc(ZTvar,1);
-			*res = ZTFloat(fr);
-			return res;
-		}
-
-		primt->depth_Seg = INT_ZCONV(*(inp[0]));
-		return NULL;
-	}
-
-	ZTvarp WidthSegs (ZTvarS inp)
-	{
-		if (inp.size() == 0)
-		{
-			ZTInt fr = primt->width_Seg;
-			ZTvarp res=ZAlloc(ZTvar,1);
-			*res = ZTFloat(fr);
-			return res;
-		}
-
-		primt->width_Seg = INT_ZCONV(*(inp[0]));
-		return NULL;
-	}
-
-	ZTvarp HeightSegs (ZTvarS inp)
-	{
-		if (inp.size() == 0)
-		{
-			ZTInt fr = primt->height_Seg;
-			ZTvarp res=ZAlloc(ZTvar,1);
-			*res = ZTFloat(fr);
-			return res;
-		}
-
-		primt->height_Seg = INT_ZCONV(*(inp[0]));
+		FrameCreater::FillFrames(ZInterp::currentFrame,(S)(FLOAT_ZCONV(*(inp[0]))),&T::PolyP,*(this->*mod) );
 		return NULL;
 	}
 };
