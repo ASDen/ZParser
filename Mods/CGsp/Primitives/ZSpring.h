@@ -4,6 +4,13 @@ public:
 
 	Spring_3* primt;
 
+	SpringPropsD* sRadius1;
+	SpringPropsD* sRadius2;
+	SpringPropsD* sHeight;
+	SpringPropsI* sSideSegs;
+	SpringPropsI* sHeightSegs;
+	SpringPropsI* sTurnNumber;
+
 	ZSpring()
 	{}
 
@@ -13,13 +20,13 @@ public:
 
 		StProps.InitScope();
 
-		AddFunction(_ZC("Radius1") ,1,&ZSpring::Radius1);
-		AddFunction(_ZC("Radius2") ,1,&ZSpring::Radius2);
-		AddFunction(_ZC("Height") ,1,&ZSpring::Height);
+		AddFunction(_ZC("Radius1") ,1,&ZSpring::MFactory<SpringPropsD,double,&ZSpring::sRadius1>);
+		AddFunction(_ZC("Radius2") ,1,&ZSpring::MFactory<SpringPropsD,double,&ZSpring::sRadius2>);
+		AddFunction(_ZC("Height") ,1,&ZSpring::MFactory<SpringPropsD,double,&ZSpring::sHeight>);
 
-		AddFunction(_ZC("SideSegs") ,1,&ZSpring::SideSegs);
-		AddFunction(_ZC("Segs") ,1,&ZSpring::Segs);
-		AddFunction(_ZC("TurnNumber") ,1,&ZSpring::TurnNumber);
+		AddFunction(_ZC("SideSegs") ,1,&ZSpring::MFactory<SpringPropsI,int,&ZSpring::sSideSegs>);
+		AddFunction(_ZC("HeightSegs") ,1,&ZSpring::MFactory<SpringPropsI,int,&ZSpring::sHeightSegs>);
+		AddFunction(_ZC("TurnNumber") ,1,&ZSpring::MFactory<SpringPropsI,int,&ZSpring::sTurnNumber>);
 
 		AddFunction(_ZC("toString"),0,&ZSpring::toString);
 	
@@ -42,8 +49,26 @@ public:
 	//FIXME : int conversions
 	ZSpring(ZTvarS inp)
 	{
+		int inputNumber = 0;
+		bool PositionExists = false;
+
+		if (inp.size() != 0)
+		{
+			inputNumber = inp.size() - 1;
+			if (GET_ZTYPE(*(inp[inputNumber])) == ZETList)
+			{
+				inputNumber = inp.size();
+				PositionExists = true;
+			}
+
+			else
+			{
+				inputNumber = inp.size() + 1;
+			}
+		}
+
 		//constructor inits
-		switch(inp.size())
+		switch(inputNumber)
 		{
 		case 0:
 		case 1:
@@ -59,6 +84,7 @@ public:
 			primt = new Spring_3( FLOAT_ZCONV(*inp[0]) , FLOAT_ZCONV(*inp[1]) , FLOAT_ZCONV(*inp[2]) );
 			break;
 		case 5:
+		case 6:
 			primt = new Spring_3( FLOAT_ZCONV(*inp[0]) , FLOAT_ZCONV(*inp[1]) , FLOAT_ZCONV(*inp[2]) , INT_ZCONV(*inp[3]) );
 			break;
 		case 7:
@@ -70,90 +96,37 @@ public:
 		}
 		primt->Draw();
 		InitNode(inp,primt);
+
+		sRadius1	= new SpringPropsD(&Spring_3::radius1,primt,primt->radius1);
+		sRadius2	= new SpringPropsD(&Spring_3::radius2,primt,primt->radius2);
+		sHeight		= new SpringPropsD(&Spring_3::height,primt,primt->height);
+		sSideSegs	= new SpringPropsI(&Spring_3::side_Seg,primt,primt->side_Seg);
+		sHeightSegs = new SpringPropsI(&Spring_3::Seg,primt,primt->Seg);
+		sTurnNumber	= new SpringPropsI(&Spring_3::turn_number,primt,primt->turn_number);
+
+		
+		primt->ApplyModifier(sRadius1);
+		primt->ApplyModifier(sRadius2);
+		primt->ApplyModifier(sHeight);
+		primt->ApplyModifier(sSideSegs);
+		primt->ApplyModifier(sHeightSegs);
+		primt->ApplyModifier(sTurnNumber);
+
 		ZSpring();
 	}
 
-	ZTvarp Radius1 (ZTvarS inp)
+	template<class T,class S,T* ZSpring::*mod>
+	ZTvarp MFactory (ZTvarS inp)
 	{
 		if (inp.size() == 0)
 		{
-			ZIFloat fr = primt->radius1;
+			ZIFloat fr = (this->*mod)->PolyP.FrameValues[ZInterp::currentFrame];
 			ZTvarp res=ZAlloc(ZTvar,1);
 			*res = ZTFloat(fr);
 			return res;
 		}
 
-		primt->radius1 = FLOAT_ZCONV(*(inp[0]));
-		return NULL;
-	}
-
-	ZTvarp Radius2 (ZTvarS inp)
-	{
-		if (inp.size() == 0)
-		{
-			ZIFloat fr = primt->radius2;
-			ZTvarp res=ZAlloc(ZTvar,1);
-			*res = ZTFloat(fr);
-			return res;
-		}
-
-		primt->radius2 = FLOAT_ZCONV(*(inp[0]));
-		return NULL;
-	}
-
-	ZTvarp Height (ZTvarS inp)
-	{
-		if (inp.size() == 0)
-		{
-			ZIFloat fr = primt->height;
-			ZTvarp res=ZAlloc(ZTvar,1);
-			*res = ZTFloat(fr);
-			return res;
-		}
-
-		primt->height = FLOAT_ZCONV(*(inp[0]));
-		return NULL;
-	}
-
-	ZTvarp SideSegs (ZTvarS inp)
-	{
-		if (inp.size() == 0)
-		{
-			ZTInt fr = primt->side_Seg;
-			ZTvarp res=ZAlloc(ZTvar,1);
-			*res = ZTFloat(fr);
-			return res;
-		}
-
-		primt->side_Seg = INT_ZCONV(*(inp[0]));
-		return NULL;
-	}
-
-	ZTvarp Segs (ZTvarS inp)
-	{
-		if (inp.size() == 0)
-		{
-			ZTInt fr = primt->Seg;
-			ZTvarp res=ZAlloc(ZTvar,1);
-			*res = ZTFloat(fr);
-			return res;
-		}
-
-		primt->Seg = INT_ZCONV(*(inp[0]));
-		return NULL;
-	}
-
-	ZTvarp TurnNumber (ZTvarS inp)
-	{
-		if (inp.size() == 0)
-		{
-			ZTInt fr = primt->turn_number;
-			ZTvarp res=ZAlloc(ZTvar,1);
-			*res = ZTFloat(fr);
-			return res;
-		}
-
-		primt->turn_number = INT_ZCONV(*(inp[0]));
+		FrameCreater::FillFrames(ZInterp::currentFrame,(S)(FLOAT_ZCONV(*(inp[0]))),&T::PolyP,*(this->*mod) );
 		return NULL;
 	}
 };

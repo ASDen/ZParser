@@ -43,8 +43,11 @@ public:
 	//FIXME : int conversions
 	ZSqueeze(ZTvarS inp)
 	{
+		ZPoint* zp3;
+		ZAxis* za;
 		Point_3* p3;
 		pZObjP zins;
+		bool CenterExists = false;
 
 		//constructor inits
 		switch(inp.size())
@@ -56,25 +59,48 @@ public:
 			primt = new Squeeze( FLOAT_ZCONV(*(inp[0])) );
 			break;
 		case 2:
-			primt = new Squeeze( FLOAT_ZCONV(*(inp[0])) , ZAxis::getAxis((inp[1])) );
+			if ((za = dynamic_cast<ZAxis*>(INSTANCE_ZCONV(*(inp[1])))) != NULL)
+				primt = new Squeeze( FLOAT_ZCONV(*(inp[0])) , za->ax );
+			else
+				ZError::Throw<ZBadConversionError>();
 			break;
 		case 3:
-			zins=INSTANCE_ZCONV(*(inp[1]));
-			p3 = reinterpret_cast<ZPoint*>(zins)->getPnt();
-			primt = new Squeeze( FLOAT_ZCONV(*(inp[0])) , p3 , ZAxis::getAxis((inp[2])) );
+			if ((zp3 = dynamic_cast<ZPoint*>(INSTANCE_ZCONV(*(inp[1])))) != NULL && (za = dynamic_cast<ZAxis*>(INSTANCE_ZCONV(*(inp[2])))) != NULL)
+			{
+				primt = new Squeeze( FLOAT_ZCONV(*(inp[0])) , zp3->getPnt() , za->ax );
+				CenterExists = true;
+			}	
+			else
+				ZError::Throw<ZBadConversionError>();
 			break;
 		case 4:
 		case 5:
-			zins=INSTANCE_ZCONV(*(inp[1]));
-			p3 = reinterpret_cast<ZPoint*>(zins)->getPnt();
-			primt = new Squeeze( FLOAT_ZCONV(*(inp[0])) , p3 , ZAxis::getAxis((inp[2])) , BOOL_ZCONV(*(inp[3])) );
+			if ((zp3 = dynamic_cast<ZPoint*>(INSTANCE_ZCONV(*(inp[1])))) != NULL && (za = dynamic_cast<ZAxis*>(INSTANCE_ZCONV(*(inp[2])))) != NULL)
+			{
+				primt = new Squeeze( FLOAT_ZCONV(*(inp[0])) , zp3->getPnt() , za->ax , BOOL_ZCONV(*(inp[3])) );
+				CenterExists = true;
+			}
+			else
+				ZError::Throw<ZBadConversionError>();
 			break;
 		case 6:
-			zins=INSTANCE_ZCONV(*(inp[1]));
-			p3 = reinterpret_cast<ZPoint*>(zins)->getPnt();
-			primt = new Squeeze( FLOAT_ZCONV(*(inp[0])) , p3 , ZAxis::getAxis((inp[2])) , BOOL_ZCONV(*(inp[3])) , INT_ZCONV(*(inp[4])) , INT_ZCONV(*(inp[5])) );
+			if ((zp3 = dynamic_cast<ZPoint*>(INSTANCE_ZCONV(*(inp[1])))) != NULL && (za = dynamic_cast<ZAxis*>(INSTANCE_ZCONV(*(inp[2])))) != NULL)
+			{
+				primt = new Squeeze( FLOAT_ZCONV(*(inp[0])) , zp3->getPnt() , za->ax , BOOL_ZCONV(*(inp[3])) , INT_ZCONV(*(inp[4])) , INT_ZCONV(*(inp[5])) );
+				CenterExists = true;
+			}
+			else
+				ZError::Throw<ZBadConversionError>();
 			break;
 		}
+
+		if (!CenterExists)
+		{
+			primt->X_Center.FrameValues[0]  = 0;
+			primt->Y_Center.FrameValues[0]  = 0;
+			primt->Z_Center.FrameValues[0]  = 0;
+		}
+
 		ZSqueeze();
 	}
 

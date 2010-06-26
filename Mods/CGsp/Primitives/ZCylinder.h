@@ -4,6 +4,12 @@ public:
 
 	Cylinder_3* primt;
 
+	CylinderPropsD* cRadius;
+	CylinderPropsD* cHeight;
+	CylinderPropsI* cSideSegs;
+	CylinderPropsI* cCapSegs;
+	CylinderPropsI* cHeightSegs;
+
 	ZCylinder()
 	{}
 
@@ -13,12 +19,12 @@ public:
 
 		StProps.InitScope();
 
-		AddFunction(_ZC("Radius") ,1,&ZCylinder::Radius);
-		AddFunction(_ZC("Height") ,1,&ZCylinder::Height);
+		AddFunction(_ZC("Radius") ,1,&ZCylinder::MFactory<CylinderPropsD,double,&ZCylinder::cRadius>);
+		AddFunction(_ZC("Height") ,1,&ZCylinder::MFactory<CylinderPropsD,double,&ZCylinder::cHeight>);
 
-		AddFunction(_ZC("SideSegs") ,1,&ZCylinder::SideSegs);
-		AddFunction(_ZC("CapSegs") ,1,&ZCylinder::CapSegs);
-		AddFunction(_ZC("HeightSegs") ,1,&ZCylinder::HeightSegs);
+		AddFunction(_ZC("SideSegs") ,1,&ZCylinder::MFactory<CylinderPropsI,int,&ZCylinder::cSideSegs>);
+		AddFunction(_ZC("CapSegs") ,1,&ZCylinder::MFactory<CylinderPropsI,int,&ZCylinder::cCapSegs>);
+		AddFunction(_ZC("HeightSegs") ,1,&ZCylinder::MFactory<CylinderPropsI,int,&ZCylinder::cHeightSegs>);
 
 		AddFunction(_ZC("toString"),0,&ZCylinder::toString);
 	
@@ -40,8 +46,26 @@ public:
 	//FIXME : int conversions
 	ZCylinder(ZTvarS inp)
 	{
+		int inputNumber = 0;
+		bool PositionExists = false;
+
+		if (inp.size() != 0)
+		{
+			inputNumber = inp.size() - 1;
+			if (GET_ZTYPE(*(inp[inputNumber])) == ZETList)
+			{
+				inputNumber = inp.size();
+				PositionExists = true;
+			}
+
+			else
+			{
+				inputNumber = inp.size() + 1;
+			}
+		}
+
 		//constructor inits
-		switch(inp.size())
+		switch(inputNumber)
 		{
 		case 0:
 		case 1:
@@ -54,6 +78,7 @@ public:
 			primt = new Cylinder_3( FLOAT_ZCONV(*(inp[0])) , INT_ZCONV(*(inp[1])) );
 			break;
 		case 4:
+		case 5:
 			primt = new Cylinder_3( FLOAT_ZCONV(*inp[0]) , FLOAT_ZCONV(*inp[1]) , INT_ZCONV(*inp[2]) );
 			break;
 		case 6:
@@ -65,76 +90,35 @@ public:
 		}
 		primt->Draw();
 		InitNode(inp,primt);
+
+		cRadius		= new CylinderPropsD(&Cylinder_3::radius,primt,primt->radius);
+		cHeight		= new CylinderPropsD(&Cylinder_3::height,primt,primt->height);
+		cSideSegs	= new CylinderPropsI(&Cylinder_3::side_Seg,primt,primt->side_Seg);
+		cCapSegs	= new CylinderPropsI(&Cylinder_3::cap_Seg,primt,primt->cap_Seg);
+		cHeightSegs = new CylinderPropsI(&Cylinder_3::height_Seg,primt,primt->height_Seg);
+
+		
+		primt->ApplyModifier(cRadius);
+		primt->ApplyModifier(cHeight);
+		primt->ApplyModifier(cSideSegs);
+		primt->ApplyModifier(cCapSegs);
+		primt->ApplyModifier(cHeightSegs);
+
 		ZCylinder();
 	}
 
-	ZTvarp Radius (ZTvarS inp)
+	template<class T,class S,T* ZCylinder::*mod>
+	ZTvarp MFactory (ZTvarS inp)
 	{
 		if (inp.size() == 0)
 		{
-			ZIFloat fr = primt->radius;
-			ZTvarp res = ZAlloc(ZTvar,1);
-			*res = ZTFloat(fr);
-			return res;
-		}
-
-		primt->radius = FLOAT_ZCONV(*(inp[0]));
-		return NULL;
-	}
-
-	ZTvarp Height (ZTvarS inp)
-	{
-		if (inp.size() == 0)
-		{
-			ZIFloat fr = primt->height;
+			ZIFloat fr = (this->*mod)->PolyP.FrameValues[ZInterp::currentFrame];
 			ZTvarp res=ZAlloc(ZTvar,1);
 			*res = ZTFloat(fr);
 			return res;
 		}
 
-		primt->height = FLOAT_ZCONV(*(inp[0]));
-		return NULL;
-	}
-
-	ZTvarp SideSegs (ZTvarS inp)
-	{
-		if (inp.size() == 0)
-		{
-			ZTInt fr = primt->side_Seg;
-			ZTvarp res=ZAlloc(ZTvar,1);
-			*res = ZTFloat(fr);
-			return res;
-		}
-
-		primt->side_Seg = INT_ZCONV(*(inp[0]));
-		return NULL;
-	}
-
-	ZTvarp CapSegs (ZTvarS inp)
-	{
-		if (inp.size() == 0)
-		{
-			ZTInt fr = primt->cap_Seg;
-			ZTvarp res=ZAlloc(ZTvar,1);
-			*res = ZTFloat(fr);
-			return res;
-		}
-
-		primt->cap_Seg = INT_ZCONV(*(inp[0]));
-		return NULL;
-	}
-
-	ZTvarp HeightSegs (ZTvarS inp)
-	{
-		if (inp.size() == 0)
-		{
-			ZTInt fr = primt->height_Seg;
-			ZTvarp res=ZAlloc(ZTvar,1);
-			*res = ZTFloat(fr);
-			return res;
-		}
-
-		primt->height_Seg = INT_ZCONV(*(inp[0]));
+		FrameCreater::FillFrames(ZInterp::currentFrame,(S)(FLOAT_ZCONV(*(inp[0]))),&T::PolyP,*(this->*mod) );
 		return NULL;
 	}
 };

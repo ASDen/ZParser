@@ -27,6 +27,7 @@ public:
 
 		AddFunction(_ZC("LengthSegs") ,1,&ZBox::MFactory<BoxPropsI,int,&ZBox::bSLength>);
 		AddFunction(_ZC("WidthSegs") ,1,&ZBox::MFactory<BoxPropsI,int,&ZBox::bSWidth>);
+
 		AddFunction(_ZC("HeightSegs") ,1,&ZBox::MFactory<BoxPropsI,int,&ZBox::bSHeight>);
 
 		AddFunction(_ZC("toString"),0,&ZBox::toString);
@@ -40,9 +41,9 @@ public:
 	ZTvarp toString(ZTvarS inp)
 	{
 		ostringstream s1;
-		s1 << " Box : Width = " << primt->width << ", Length = "<<primt->length
-		   << ", Height = " <<primt->height<<", Width Segments = " << primt->width_Seg 
-		   << ", Length Segments = "<<primt->length_Seg <<", Height Segments = "<<primt->height_Seg<< endl;
+		s1 << " Box : Width = " << primt->width << ", Length = "<< primt->length
+		   << ", Height = " << primt->height<<", Width Segments = " << primt->width_Seg 
+		   << ", Length Segments = " << primt->length_Seg << ", Height Segments = " << primt->height_Seg << endl;
 		
 		INST_TO_STR( s1.str() );
 	}
@@ -50,8 +51,26 @@ public:
 	//FIXME : int conversions
 	ZBox(ZTvarS inp)
 	{
+		int inputNumber = 0;
+		bool PositionExists = false;
+
+		if (inp.size() != 0)
+		{
+			inputNumber = inp.size() - 1;
+			if (GET_ZTYPE(*(inp[inputNumber])) == ZETList)
+			{
+				inputNumber = inp.size();
+				PositionExists = true;
+			}
+
+			else
+			{
+				inputNumber = inp.size() + 1;
+			}
+		}
+
 		//constructor inits
-		switch(inp.size())
+		switch(inputNumber)
 		{
 		case 0:
 		case 1:
@@ -80,7 +99,8 @@ public:
 			break;
 		}
 		primt->Draw();
-		InitNode(inp,primt);
+
+		InitNode(inp,primt,PositionExists);
 
 		bWidth   = new BoxPropsD(&Box_3::width,primt,primt->width);
 		bHeight  = new BoxPropsD(&Box_3::height,primt,primt->height);
@@ -125,5 +145,4 @@ public:
 		bSLength->mxFrame = std::max( bSLength->mxFrame , (this->*mod)->mxFrame );
 		return NULL;
 	}
-
 };

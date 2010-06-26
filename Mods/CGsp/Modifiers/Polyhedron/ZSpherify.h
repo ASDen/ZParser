@@ -46,6 +46,7 @@ public:
 			primt = new Spherify( FLOAT_ZCONV(*(inp[0])) );
 			break;
 		}
+
 		ZSpherify();
 	}
 
