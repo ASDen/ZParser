@@ -111,19 +111,33 @@ namespace ZInterp
 	// TODO : use a pool of preallocaed temps , should affect
 	//		  performance greatly
 
+	void Number::Exec(pANTLR3_BASE_TREE numNode)
+	{
+		ZTvarp var=ZAlloc(ZTvar,1);
+		string str=getNodeText(numNode);
+		int cc=numNode->getChildCount(numNode);
+		
+		if(numNode->getChildCount(numNode)>1)
+		{
+			pANTLR3_BASE_TREE num=(pANTLR3_BASE_TREE)numNode->getChild(numNode,1);
+			*var=ZTFloat(boost::lexical_cast<float,ZChar*>(getNodeText(num))*-1);
+			setCustomNodeField(numNode,var);
+		}
+		else
+		{
+			pANTLR3_BASE_TREE num=(pANTLR3_BASE_TREE)numNode->getChild(numNode,0);
+			*var=ZTFloat(boost::lexical_cast<float,ZChar*>(getNodeText(num)));
+			setCustomNodeField(numNode,var);
+		}
+
+	}
+
 	void Constant::Exec(pANTLR3_BASE_TREE c)
 	{
 		ZTvarp var=ZAlloc(ZTvar,1);
 		string str;
 		switch(c->getToken(c)->type)
 		{
-		case DIGIT:
-			str=getNodeText(c);
-			//if(str.find('.')!=string::npos)
-			*var=ZTFloat(boost::lexical_cast<float,ZChar*>(getNodeText(c)));
-			//else
-			//	*var=ZTInt(boost::lexical_cast<int,ZChar*>(getNodeText(c)));
-			break;
 		case HEX_LITERAL:
 			{
 				int x;   
@@ -225,15 +239,25 @@ namespace ZInterp
 
 	void ExprSeq::_ESEQ(pANTLR3_BASE_TREE e)
 	{
-		if(e->children->count>0)
+		if(e->getChildCount(e)>0)
 		{
 			pANTLR3_BASE_TREE p=((pANTLR3_BASE_TREE)(e->getChild(e, e->getChildCount(e)-1)));
 			e->u=p->u;
+		}
+		else
+		{
+			pANTLR3_BASE_TREE p=((pANTLR3_BASE_TREE)(e->getChild(e, e->getChildCount(e)-1)));
+			ZIFloat fr = (float)0;
+
+			ZTvarp res=ZAlloc(ZTvar,1);
+			*res = ZTFloat(fr);
+			e->u=res;
 		}
 	}
 
 	void AssingmentExpr::Exec(pANTLR3_BASE_TREE r,pANTLR3_BASE_TREE l,pANTLR3_BASE_TREE e)
 	{
+		pANTLR3_BASE_TREE p;
 		switch(r->getToken(r)->type)
 		{
 		case SS_EQUAL:

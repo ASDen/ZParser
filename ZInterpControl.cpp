@@ -18,6 +18,7 @@ namespace ZInterp
 	void IfExpr::Exec(pANTLR3_BASE_TREE ifnode,pANTLR3_BASE_TREE cond,yatgFW_Ctx_struct* xyz)
 	{
 		pANTLR3_BASE_TREE r;
+
 		if(boost::apply_visitor(BoolVal(),*((ZTvarp)(cond->u)))== ZBTrue )
 		{
 			r=(pANTLR3_BASE_TREE)(ifnode->getChild(ifnode,1));
@@ -30,6 +31,7 @@ namespace ZInterp
 			SEEK(r->savedIndex);
 			MATCHT(EIF_END,NULL);
 		}
+		
 		else
 		{
 			r=(pANTLR3_BASE_TREE)(ifnode->getChild(ifnode,2));
@@ -40,8 +42,9 @@ namespace ZInterp
 				MATCHT(ANTLR3_TOKEN_DOWN,NULL);
 				r=(xyz->expr_g(xyz)).start;
 				ifnode->u=r->u;
+				MATCHT(ANTLR3_TOKEN_UP,NULL);
 			}
-			MATCHT(ANTLR3_TOKEN_UP,NULL);
+			
 			MATCHT(EIF_END,NULL);
 		}
 	}

@@ -31,7 +31,7 @@ namespace ZInterp
 			ZIFunction* ifun=ZAlloc(ZIFunction,1);
 			ifun -> FunData . NodeID = ( funNode ) -> savedIndex ;
 			ifun -> FunT = ZInternal;
-            ifun -> NumArgs = ( ( pANTLR3_BASE_TREE ) funNode -> getChild ( funNode , 1 ) ) -> children -> count;
+			ifun -> NumArgs = ( ( pANTLR3_BASE_TREE ) funNode -> getChild ( funNode , 1 ) ) ->getChildCount(( ( pANTLR3_BASE_TREE ) funNode -> getChild ( funNode , 1 ) ));
 			*fun=ZTFunction(ifun);
 			ZSym.InsertSymbol ( fName , fun );
 		}
@@ -129,6 +129,8 @@ namespace ZInterp
 		case ZETFunction:
 			CallFunction(Fargs,inp,t1,arg,xyz);
 			break;
+		default:
+			cout<<"This is not defined Function\n";
 		}
 	}
 	////////////////////////////////////////////////

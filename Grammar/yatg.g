@@ -105,12 +105,14 @@ tokens {
 	ID_MORE;
 	SET;
 	PRIM_EXP;
+	// NUMBER
+	NUMBER;
 }
 
 
 
 program
-	: ( expr )+
+	: ( expr )*
 	;
 	
 expr
@@ -297,7 +299,7 @@ operand_op
 
 constant
     	:
-    	  DIGIT
+    	  number
     	| HEX_LITERAL
     	| STRING_LITERIAL
     	| SS_HASH IDENTIFIER
@@ -313,11 +315,17 @@ constant
     	| KW_OK
     	| KW_UNDEFINED
     	| KW_UNSUPPLIED
-    	| SS_MINUS expr_g
+    	| SS_MINUS expr_seq
    	| expr_seq
     	;
 
-/////
+///
+
+number	:
+	(SS_MINUS)? DIGIT
+    	  ->^(NUMBER (SS_MINUS)? DIGIT )
+	;
+//
 constant_expression
 	: logical_expression
 	;
@@ -756,7 +764,7 @@ LETTER
 	| '_'
 	;
 	
-DIGIT 	:('-')? ('0'..'9')+('.'('0'..'9')+)?
+DIGIT 	: ('0'..'9')+('.'('0'..'9')+)?
 	;
 
 HEX_LITERAL 

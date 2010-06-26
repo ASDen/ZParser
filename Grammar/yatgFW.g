@@ -199,9 +199,10 @@ operand_op
 
 constant
     	: 
+    	number
+    	|
     	(
-    	  e = DIGIT		
-    	| e = HEX_LITERAL
+    	  e = HEX_LITERAL
     	| e = STRING_LITERIAL
     	| e = KW_TRUE
     	| e = KW_FALSE
@@ -219,10 +220,12 @@ constant
     	| box2
    	| point3
    	| point2
-    	| SS_MINUS expr_g
+    	| SS_MINUS expr_seq
    	| expr_seq
     	;
-    	
+number	:
+	^(e=NUMBER (SS_MINUS)? DIGIT ){ZInterp::Number::EXEC($e);}
+	;
 assignment_expression
 	: 
 	^(r=assignment_operator l=lvalue e=expr)
@@ -274,7 +277,7 @@ assignment_operator
 
 expr_seq
 	:
-	^(e=ESEQ{ZInterp::global::IncScope();} expr+{ZInterp::global::DecScope();})
+	^(e=ESEQ{ZInterp::global::IncScope();} expr*{ZInterp::global::DecScope();})
 	{
 	ZInterp::ExprSeq::_ESEQ($e);
 	}

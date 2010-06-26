@@ -38,7 +38,6 @@ public:
 	{
 		ZTvarp res=ZAlloc(ZTvar,1);
 		ZIString str=_ZC("Array Object");
-		
 		*res=ZTString(str);
 		return res;
 	}
