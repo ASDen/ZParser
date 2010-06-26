@@ -115,20 +115,17 @@ int ANTLR3_CDECL _tmain(int argc, _TCHAR* argv[])
 			}
 			p->getToken(p)->user2 = cpos;
 
+			/*p->freshenPACIndexesAll(p);
+			((pANTLR3_BASE_TREE)p->super)->getParent(((pANTLR3_BASE_TREE)p->super))->getChildCount
+				(((pANTLR3_BASE_TREE)p->super)->getParent(((pANTLR3_BASE_TREE)p->super)));*/
 			
+			/*for(int i=0;i<p->getChildCount(p);i++)
+			{
+				((pANTLR3_BASE_TREE)p->getChild(p,i))->setParent((pANTLR3_BASE_TREE)p->getChild(p,i),p);
+			}*/
+
 			//p->getToken(p)->line = nodes->tnstream->_LT(nodes->tnstream,0)->getL
 			//std::cout<<p->getToken(p)->user1<<" "<<p->getToken(p)->user2<<" "<<p->getText(p)->chars<<std::endl;
-			}
-			p->getToken(p)->line = ln;
-			
-			if( p->getCharPositionInLine(p) != 0 )
-			{
-				cpos = p->getCharPositionInLine(p);
-			}
-			p->getToken(p)->charPosition = cpos;
-			//p->getToken(p)->line = nodes->tnstream->_LT(nodes->tnstream,0)->getL
-			std::cout<<p->getToken(p)->line<<" "<<p->getCharPositionInLine(p)<<" "<<p->getText(p)->chars<<std::endl;
->>>>>>> FETCH_HEAD
 			//p->getToken(p)->user1 = p->getToken(p)->line;
 			//std::cout<<p->getToken(p)->user1<<" ";
 			if(p->getType(p)==nodes->EOF_NODE.token->getType(nodes->EOF_NODE.token))break;

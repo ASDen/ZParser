@@ -115,7 +115,6 @@ public:
 	{
 		if (inp.size() == 0)
 		{
-			//Point_3* fr = (primt->Center);
 			ZTvarS zvs;
 			ZTvarp zg = ZAlloc(ZTvar,3);
 			

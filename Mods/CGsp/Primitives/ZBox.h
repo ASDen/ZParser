@@ -4,8 +4,16 @@ public:
 
 	Box_3* primt;
 
+	BoxPropsD* bWidth;
+	BoxPropsD* bHeight;
+	BoxPropsD* bLength;
+	BoxPropsI* bSWidth;
+	BoxPropsI* bSHeight;
+	BoxPropsI* bSLength;
+
 	ZBox()
-	{}
+	{
+	}
 
 	static void Init()
 	{
@@ -13,13 +21,13 @@ public:
 
 		StProps.InitScope();
 
-		AddFunction(_ZC("Length") ,1,&ZBox::Length);
-		AddFunction(_ZC("Width") ,1,&ZBox::Width);
-		AddFunction(_ZC("Height") ,1,&ZBox::Height);
+		AddFunction(_ZC("Length") ,1,&ZBox::MFactory<BoxPropsD,double,&ZBox::bLength>);
+		AddFunction(_ZC("Width")  ,1,&ZBox::MFactory<BoxPropsD,double,&ZBox::bWidth>);
+		AddFunction(_ZC("Height") ,1,&ZBox::MFactory<BoxPropsD,double,&ZBox::bHeight>);
 
-		AddFunction(_ZC("LengthSegs") ,1,&ZBox::LengthSegs);
-		AddFunction(_ZC("WidthSegs") ,1,&ZBox::WidthSegs);
-		AddFunction(_ZC("HeightSegs") ,1,&ZBox::HeightSegs);
+		AddFunction(_ZC("LengthSegs") ,1,&ZBox::MFactory<BoxPropsI,int,&ZBox::bSLength>);
+		AddFunction(_ZC("WidthSegs") ,1,&ZBox::MFactory<BoxPropsI,int,&ZBox::bSWidth>);
+		AddFunction(_ZC("HeightSegs") ,1,&ZBox::MFactory<BoxPropsI,int,&ZBox::bSHeight>);
 
 		AddFunction(_ZC("toString"),0,&ZBox::toString);
 		
@@ -73,90 +81,49 @@ public:
 		}
 		primt->Draw();
 		InitNode(inp,primt);
+
+		bWidth   = new BoxPropsD(&Box_3::width,primt,primt->width);
+		bHeight  = new BoxPropsD(&Box_3::height,primt,primt->height);
+		bLength  = new BoxPropsD(&Box_3::length,primt,primt->length);
+		bSWidth  = new BoxPropsI(&Box_3::width_Seg,primt,primt->width_Seg);
+		bSHeight = new BoxPropsI(&Box_3::height_Seg,primt,primt->height_Seg);
+		bSLength = new BoxPropsI(&Box_3::length_Seg,primt,primt->length_Seg);
+
+		DoFor(bWidth);
+		DoFor(bHeight);
+		DoFor(bLength);
+		DoFor(bSWidth);
+		DoFor(bSHeight);
+		DoFor(bSLength);
+
+		bSLength->commit = true;
+
 		ZBox();
 	}
 
-	ZTvarp Length (ZTvarS inp)
+	template<class T>
+	void DoFor(T* mod)
+	{
+		mod->extrensic = false;
+		mod->CalcmxF();
+		primt->ApplyModifier( mod );
+	}
+	
+	template<class T,class S,T* ZBox::*mod>
+	ZTvarp MFactory (ZTvarS inp)
 	{
 		if (inp.size() == 0)
 		{
-			ZIFloat fr = primt->length;
+			ZIFloat fr = (this->*mod)->PolyP.FrameValues[ZInterp::currentFrame];
 			ZTvarp res=ZAlloc(ZTvar,1);
 			*res = ZTFloat(fr);
 			return res;
 		}
 
-		primt->length = FLOAT_ZCONV(*(inp[0]));
+		FrameCreater::FillFrames(ZInterp::currentFrame,(S)(FLOAT_ZCONV(*(inp[0]))),&T::PolyP,*(this->*mod) );
+		(this->*mod)->CalcmxF();
+		bSLength->mxFrame = std::max( bSLength->mxFrame , (this->*mod)->mxFrame );
 		return NULL;
 	}
 
-	ZTvarp Width (ZTvarS inp)
-	{
-		if (inp.size() == 0)
-		{
-			ZIFloat fr = primt->width;
-			ZTvarp res=ZAlloc(ZTvar,1);
-			*res = ZTFloat(fr);
-			return res;
-		}
-
-		primt->width = FLOAT_ZCONV(*(inp[0]));
-		return NULL;
-	}
-
-	ZTvarp Height (ZTvarS inp)
-	{
-		if (inp.size() == 0)
-		{
-			ZIFloat fr = primt->height;
-			ZTvarp res=ZAlloc(ZTvar,1);
-			*res = ZTFloat(fr);
-			return res;
-		}
-
-		primt->height = FLOAT_ZCONV(*(inp[0]));
-		return NULL;
-	}
-
-	ZTvarp LengthSegs (ZTvarS inp)
-	{
-		if (inp.size() == 0)
-		{
-			ZTInt fr = primt->length_Seg;
-			ZTvarp res=ZAlloc(ZTvar,1);
-			*res = ZTFloat(fr);
-			return res;
-		}
-
-		primt->length_Seg = INT_ZCONV(*(inp[0]));
-		return NULL;
-	}
-
-	ZTvarp WidthSegs (ZTvarS inp)
-	{
-		if (inp.size() == 0)
-		{
-			ZTInt fr = primt->width_Seg;
-			ZTvarp res=ZAlloc(ZTvar,1);
-			*res = ZTFloat(fr);
-			return res;
-		}
-
-		primt->width_Seg = INT_ZCONV(*(inp[0]));
-		return NULL;
-	}
-
-	ZTvarp HeightSegs (ZTvarS inp)
-	{
-		if (inp.size() == 0)
-		{
-			ZTInt fr = primt->height_Seg;
-			ZTvarp res=ZAlloc(ZTvar,1);
-			*res = ZTFloat(fr);
-			return res;
-		}
-
-		primt->height_Seg = INT_ZCONV(*(inp[0]));
-		return NULL;
-	}
 };
