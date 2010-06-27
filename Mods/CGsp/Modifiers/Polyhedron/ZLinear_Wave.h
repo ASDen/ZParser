@@ -34,8 +34,8 @@ public:
 	{
 		ostringstream s1;
 		s1 << " Linear Wave : Amplitude = " << primt->Amplitude.val << ", Wavelength = " << primt->Wavelength.val 
-			<< ", Phase = " << primt->Phase.val << ", Center = " << "NOT SET" 
-			<< ", Axis = " << ZAxis::toString(primt->RoAxis) << ", Affected Axis = " << ZAxis::toString(primt->AfAxis) << endl;
+		   << ", Phase = " << primt->Phase.val << ", Center = (" << primt->X_Center.val << ", " << primt->Y_Center.val << ", " << primt->Z_Center.val << ")" 
+		   << ", Axis = " << ZAxis::toString(primt->RoAxis) << ", Affected Axis = " << ZAxis::toString(primt->AfAxis) << endl;
 		
 		INST_TO_STR( s1.str() );
 	}

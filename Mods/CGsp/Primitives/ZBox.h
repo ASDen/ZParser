@@ -27,7 +27,6 @@ public:
 
 		AddFunction(_ZC("LengthSegs") ,1,&ZBox::MFactory<BoxPropsI,int,&ZBox::bSLength>);
 		AddFunction(_ZC("WidthSegs") ,1,&ZBox::MFactory<BoxPropsI,int,&ZBox::bSWidth>);
-
 		AddFunction(_ZC("HeightSegs") ,1,&ZBox::MFactory<BoxPropsI,int,&ZBox::bSHeight>);
 
 		AddFunction(_ZC("toString"),0,&ZBox::toString);
@@ -146,6 +145,7 @@ public:
 		FrameCreater::FillFrames(ZInterp::currentFrame,(S)(FLOAT_ZCONV(*(inp[0]))),&T::PolyP,*(this->*mod) );
 		(this->*mod)->CalcmxF();
 		bSLength->mxFrame = std::max( bSLength->mxFrame , (this->*mod)->mxFrame );
+
 		return NULL;
 	}
 };

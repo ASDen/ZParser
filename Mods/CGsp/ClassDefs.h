@@ -12,7 +12,7 @@
 #include "Primitives/ZChamferCyl.h"
 #include "Primitives/ZCone.h"
 #include "Primitives/ZCylinder.h"
-//#include "Primitives/ZLathe.h"
+#include "Primitives/ZLathe.h"
 #include "Primitives/ZPlane.h"
 #include "Primitives/ZPyramid.h"
 #include "Primitives/ZSphere.h"

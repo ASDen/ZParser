@@ -2,18 +2,16 @@ vm=KeyFrameAnimation();
 p=Plane(100,[0,0,0]);
 vm.Add(p);
 
-c = Bend();
---b = Lathe([ZPoint(6,0,3),ZPoint(8,0,4),ZPoint(3,0,5),ZPoint(5,0,6),ZPoint(5,0,6)],ZPoint(0,0,0),XAxis,20,0)
-b=Box(10);
+b = Lathe([ZPoint(6,0,3),ZPoint(8,0,4),ZPoint(3,0,5),ZPoint(5,0,6),ZPoint(5,0,6)],ZPoint(0,0,0),XAxis,20,0,[0,0,8])
+--b.Color(ZPoint(0.5,0.5,0.8))
 vm.Add(b);
 
---b.Axis(ZAxis);
+b.Axis(ZAxis);
 printL(b);
-printL(c);
-/*animate on
+animate on
 (
-    at time 1 ( b.Angle(0) )
+    at time 50 ( b.Angle(180) )
     at time 100 ( b.Angle(360) )
-)*/
+)
 
 vm.View();

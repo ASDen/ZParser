@@ -35,8 +35,8 @@ public:
 	{
 		ostringstream s1;
 		s1 << " Bulge : Amount = " << primt->BuAmount.val << ", Axis = " << ZAxis::toString(primt->RoAxis) 
-			<< ", Type = " << ZBulgeType::toString(primt->BuType) << ", Center = " << "NOT SET" << ", Limited = " << primt->Limited 
-		   << ", Upper_Limit = " << primt->Upper.val << ", Upper_Limit = " << primt->Lower.val << endl;
+		   << ", Type = " << ZBulgeType::toString(primt->BuType) << ", Center = (" << primt->X_Center.val << ", " << primt->Y_Center.val << ", " << primt->Z_Center.val << ")" 
+		   << ", Limited = " << primt->Limited << ", Upper_Limit = " << primt->Upper.val << ", Upper_Limit = " << primt->Lower.val << endl;
 		
 		INST_TO_STR( s1.str() );
 	}
@@ -256,8 +256,8 @@ public:
 		if (inp.size() == 0)
 		{
 			ZTBool fr = primt->Limited;
-			ZTvarp res=ZAlloc(ZTvar,1);
-			*res = ZTFloat(fr);
+			ZTvarp res = ZAlloc(ZTvar,1);
+			*res = ZTBool(fr);
 			return res;
 		}
 
