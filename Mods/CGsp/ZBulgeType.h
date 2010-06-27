@@ -24,6 +24,7 @@ public:
 	static void Init()
 	{
 		StProps.InitScope();
+        AddFunction(_ZC("toString"),1,&ZBulgeType::toString);
 	
 		ZTObject::Inheriet(StProps);
 	}
@@ -40,7 +41,24 @@ public:
 			break;
 		default:
 			return ZIString("Type Error");
-
 		}
+	}
+	
+	ZTvarp toString(ZTvarS inp)
+	{
+		ostringstream s1;
+		switch (buType)
+		{
+		case BRadial:	
+			s1 << " Bulge Type : " << "Radial" << endl;
+			break;
+		case BLinear:
+			s1 << " Bulge Type : " << "Linear" << endl;
+			break;
+		default:
+			s1 << " Bulge Type : " << "Type Error" << endl;
+		};
+		
+		INST_TO_STR( s1.str() );
 	}
 };

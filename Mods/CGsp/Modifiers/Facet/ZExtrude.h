@@ -24,6 +24,14 @@ public:
 		return primt;
 	}
 
+	ZTvarp toString(ZTvarS inp)
+	{
+		ostringstream s1;
+		s1 << " Extrude : Face Number = " << primt->Fnum.val << ", Extrude Amount = " << primt->ExAmount.val << endl;
+		
+		INST_TO_STR( s1.str() );
+	}
+
 	//FIXME : int conversions
 	ZExtrude(ZTvarS inp)
 	{

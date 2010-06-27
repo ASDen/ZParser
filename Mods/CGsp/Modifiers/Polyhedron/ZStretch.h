@@ -34,8 +34,8 @@ public:
 	{
 		ostringstream s1;
 		s1 << " Stretch : Amount = " << primt->StAmount.val << ", Axis = " << ZAxis::toString(primt->RoAxis) 
-			<< ", Center = " << "NOT SET" << ", Limited = " << primt->Limited 
-		   << ", Upper_Limit = " << primt->Upper.val << ", Upper_Limit = " << primt->Lower.val << endl;
+		   << ", Center = (" << primt->X_Center.val << ", " << primt->Y_Center.val << ", " << primt->Z_Center.val << ")" 
+		   << ", Limited = " << primt->Limited << ", Upper_Limit = " << primt->Upper.val << ", Upper_Limit = " << primt->Lower.val << endl;
 		
 		INST_TO_STR( s1.str() );
 	}
@@ -43,8 +43,11 @@ public:
 	//FIXME : int conversions
 	ZStretch(ZTvarS inp)
 	{
+		ZPoint* zp3;
+		ZAxis* za;
 		Point_3* p3;
 		pZObjP zins;
+		bool CenterExists = false;
 
 		//constructor inits
 		switch(inp.size())
@@ -56,25 +59,48 @@ public:
 			primt = new Stretch( FLOAT_ZCONV(*(inp[0])) );
 			break;
 		case 2:
-			primt = new Stretch( FLOAT_ZCONV(*(inp[0])) , ZAxis::getAxis((inp[1])) );
+			if ((za = dynamic_cast<ZAxis*>(INSTANCE_ZCONV(*(inp[1])))) != NULL)
+				primt = new Stretch( FLOAT_ZCONV(*(inp[0])) , ZAxis::getAxis((inp[1])) );
+			else
+				ZError::Throw<ZBadConversionError>();
 			break;
 		case 3:
-			zins=INSTANCE_ZCONV(*(inp[1]));
-			p3 = reinterpret_cast<ZPoint*>(zins)->getPnt();
-			primt = new Stretch( FLOAT_ZCONV(*(inp[0])) , p3 , ZAxis::getAxis((inp[2])) );
+			if ((zp3 = dynamic_cast<ZPoint*>(INSTANCE_ZCONV(*(inp[1])))) != NULL && (za = dynamic_cast<ZAxis*>(INSTANCE_ZCONV(*(inp[2])))) != NULL)
+			{
+				primt = new Stretch( FLOAT_ZCONV(*(inp[0])) , p3 , ZAxis::getAxis((inp[2])) );
+				CenterExists = true;
+			}
+			else
+				ZError::Throw<ZBadConversionError>();
 			break;
 		case 4:
 		case 5:
-			zins=INSTANCE_ZCONV(*(inp[1]));
-			p3 = reinterpret_cast<ZPoint*>(zins)->getPnt();
-			primt = new Stretch( FLOAT_ZCONV(*(inp[0])) , p3 , ZAxis::getAxis((inp[2])) , BOOL_ZCONV(*(inp[3])) );
+			if ((zp3 = dynamic_cast<ZPoint*>(INSTANCE_ZCONV(*(inp[1])))) != NULL && (za = dynamic_cast<ZAxis*>(INSTANCE_ZCONV(*(inp[2])))) != NULL)
+			{
+				primt = new Stretch( FLOAT_ZCONV(*(inp[0])) , p3 , ZAxis::getAxis((inp[2])) , BOOL_ZCONV(*(inp[3])) );
+				CenterExists = true;
+			}
+			else
+				ZError::Throw<ZBadConversionError>();
 			break;
 		case 6:
-			zins=INSTANCE_ZCONV(*(inp[1]));
-			p3 = reinterpret_cast<ZPoint*>(zins)->getPnt();
-			primt = new Stretch( FLOAT_ZCONV(*(inp[0])) , p3 , ZAxis::getAxis((inp[2])) , BOOL_ZCONV(*(inp[3])) , INT_ZCONV(*(inp[4])) , INT_ZCONV(*(inp[5])) );
+			if ((zp3 = dynamic_cast<ZPoint*>(INSTANCE_ZCONV(*(inp[1])))) != NULL && (za = dynamic_cast<ZAxis*>(INSTANCE_ZCONV(*(inp[2])))) != NULL)
+			{
+				primt = new Stretch( FLOAT_ZCONV(*(inp[0])) , p3 , ZAxis::getAxis((inp[2])) , BOOL_ZCONV(*(inp[3])) , INT_ZCONV(*(inp[4])) , INT_ZCONV(*(inp[5])) );
+				CenterExists = true;
+			}
+			else
+				ZError::Throw<ZBadConversionError>();
 			break;
 		}
+
+		if (!CenterExists)
+		{
+			primt->X_Center.FrameValues[0]  = 0;
+			primt->Y_Center.FrameValues[0]  = 0;
+			primt->Z_Center.FrameValues[0]  = 0;
+		}
+
 		ZStretch();
 	}
 
@@ -160,7 +186,7 @@ public:
 		{
 			ZTBool fr = primt->Limited;
 			ZTvarp res=ZAlloc(ZTvar,1);
-			*res = ZTFloat(fr);
+			*res = ZTBool(fr);
 			return res;
 		}
 

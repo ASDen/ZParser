@@ -682,10 +682,6 @@
 								>
 							</File>
 							<File
-								RelativePath=".\Mods\CGsp\Modifiers\Polyhedron\ZTriangulate.h"
-								>
-							</File>
-							<File
 								RelativePath=".\Mods\CGsp\Modifiers\Polyhedron\ZTwist.h"
 								>
 							</File>

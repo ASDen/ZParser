@@ -25,6 +25,15 @@ public:
 		return primt;
 	}
 
+	ZTvarp toString(ZTvarS inp)
+	{
+		ostringstream s1;
+		s1 << " Bevel : Face Number = " << primt->Fnum.val << ", Extrude Amount = " << primt->ExAmount.val 
+			<< ", Outline Amount = " << primt->OutlineAmount.val << endl;
+		
+		INST_TO_STR( s1.str() );
+	}
+
 	//FIXME : int conversions
 	ZBevel(ZTvarS inp)
 	{

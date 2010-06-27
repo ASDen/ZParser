@@ -33,8 +33,8 @@ public:
 	{
 		ostringstream s1;
 		s1 << " Cylindrical Wave : Amplitude = " << primt->Amplitude.val << ", Wavelength = " << primt->Wavelength.val 
-			<< ", Phase = " << primt->Phase.val << ", Center = " << "NOT SET" 
-			<< ", Axis = " << ZAxis::toString(primt->AfAxis) << endl;
+		   << ", Phase = " << primt->Phase.val << ", Center = (" << primt->X_Center.val << ", " << primt->Y_Center.val << ", " << primt->Z_Center.val << ")" 
+		   << ", Axis = " << ZAxis::toString(primt->AfAxis) << endl;
 		
 		INST_TO_STR( s1.str() );
 	}
@@ -45,6 +45,7 @@ public:
 		ZPoint* zp3;
 		ZAxis* za;
 		pZObjP zins;
+		bool CenterExists = false;
 
 		//constructor inits
 		switch(inp.size())
@@ -66,7 +67,10 @@ public:
 			case ZETInstance:
 				zins=INSTANCE_ZCONV(*(inp[1]));
 				if( (zp3 = dynamic_cast<ZPoint*>(zins)) != NULL)
+				{
 					primt = new Cylindrical_Wave( FLOAT_ZCONV(*(inp[0])) , zp3->getPnt() );
+					CenterExists = true;
+				}
 				else if ( (za = dynamic_cast<ZAxis*>(zins)) != NULL)
 					primt = new Cylindrical_Wave( FLOAT_ZCONV(*(inp[0])) , za->ax );
 				else ZError::Throw<ZBadConversionError>();
@@ -88,7 +92,10 @@ public:
 				case ZETInstance:
 					zins=INSTANCE_ZCONV(*(inp[2]));
 					if( (zp3 = dynamic_cast<ZPoint*>(zins)) != NULL)
+					{
 						primt = new Cylindrical_Wave( FLOAT_ZCONV(*(inp[0])) , FLOAT_ZCONV(*(inp[1])) , zp3->getPnt() );
+						CenterExists = true;
+					}
 					else if ( (za = dynamic_cast<ZAxis*>(zins)) != NULL)
 						primt = new Cylindrical_Wave( FLOAT_ZCONV(*(inp[0])) , FLOAT_ZCONV(*(inp[1])) , za->ax );
 					else ZError::Throw<ZBadConversionError>();
@@ -107,7 +114,10 @@ public:
 					{
 						zins=INSTANCE_ZCONV(*(inp[2]));
 						if ( (za = dynamic_cast<ZAxis*>(zins)) != NULL)
+						{
 							primt = new Cylindrical_Wave( FLOAT_ZCONV(*(inp[0])) , zp3->getPnt() , za->ax );
+							CenterExists = true;
+						}
 						else 
 							ZError::Throw<ZBadConversionError>();
 					}
@@ -130,7 +140,10 @@ public:
 			case ZETFloat:
 				zins=INSTANCE_ZCONV(*(inp[3]));
 				if( (zp3 = dynamic_cast<ZPoint*>(zins)) != NULL)
+				{
 					primt = new Cylindrical_Wave( FLOAT_ZCONV(*(inp[0])) , FLOAT_ZCONV(*(inp[1])) , FLOAT_ZCONV(*(inp[2])) , zp3->getPnt() );
+					CenterExists = true;
+				}
 				else if ( (za = dynamic_cast<ZAxis*>(zins)) != NULL)
 					primt = new Cylindrical_Wave( FLOAT_ZCONV(*(inp[0])) , FLOAT_ZCONV(*(inp[1])) , FLOAT_ZCONV(*(inp[2])) , za->ax );
 				else 
@@ -142,8 +155,10 @@ public:
 				if( (zp3 = dynamic_cast<ZPoint*>(zins)) != NULL)
 				{
 					if ( (za = dynamic_cast<ZAxis*>(INSTANCE_ZCONV(*(inp[3])))) != NULL)
+					{
 						primt = new Cylindrical_Wave( FLOAT_ZCONV(*(inp[0])) , FLOAT_ZCONV(*(inp[1])) , zp3->getPnt() , za->ax );
-
+						CenterExists = true;
+					}
 					else
 						ZError::Throw<ZBadConversionError>();
 				}
@@ -158,11 +173,22 @@ public:
 
 		case 5:
 			if ( (zp3 = dynamic_cast<ZPoint*>(INSTANCE_ZCONV(*(inp[3])))) != NULL && (za = dynamic_cast<ZAxis*>(INSTANCE_ZCONV(*(inp[4])))) != NULL)
+			{
 				primt = new Cylindrical_Wave( FLOAT_ZCONV(*(inp[0])) , FLOAT_ZCONV(*(inp[1])) , FLOAT_ZCONV(*(inp[2])) , zp3->getPnt() , za->ax );
+				CenterExists = true;
+			}
 			else
 				ZError::Throw<ZBadConversionError>();
 			break;
 		}
+
+		if (!CenterExists)
+		{
+			primt->X_Center.FrameValues[0]  = 0;
+			primt->Y_Center.FrameValues[0]  = 0;
+			primt->Z_Center.FrameValues[0]  = 0;
+		}
+
 		ZCylindrical_Wave();
 	}
 

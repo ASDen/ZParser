@@ -23,7 +23,7 @@ void ZModInit_CGsp()
 	ADD_CLASS(ZChamferCyl,"ChamferCyl");
 	ADD_CLASS(ZCone,"Cone");
 	ADD_CLASS(ZCylinder,"Cylinder");
-	//ADD_CLASS(ZLathe,"Lathe");
+	ADD_CLASS(ZLathe,"Lathe");
 	ADD_CLASS(ZPlane,"Plane");
 	ADD_CLASS(ZPyramid,"Pyramid");
 	ADD_CLASS(ZSphere,"Sphere");
