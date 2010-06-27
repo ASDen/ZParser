@@ -13,7 +13,7 @@ public:
 
 	static void Init()
 	{
-		PrimitiveAPI<ZBox>::Init();
+		PrimitiveAPI<ZLathe>::Init();
 
 		StProps.InitScope();
 
