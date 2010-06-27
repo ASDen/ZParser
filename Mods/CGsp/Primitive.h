@@ -149,6 +149,15 @@ public:
 
 	virtual Primitives* getPrimtive()=0;
 
+	template<class T>
+	void DoFor(T* mod)
+	{
+		mod->extrensic = false;
+		mod->commit = false;
+		mod->CalcmxF();
+		getPrimtive()->ApplyModifier( mod );
+	}
+
 	ZTvarp Color (ZTvarS inp)
 	{
 		if (inp.size() == 0)
@@ -190,7 +199,8 @@ public:
 		pZObjP zrsg = INSTANCE_ZCONV(*(inp[0]));
 		Primitives* pr=this->getPrimtive();
 		Modifier* m= (reinterpret_cast < ModifierAPI<ZTwist>* >(zrsg))->getModifier();
-		m->Do(pr->Mesh);
+		m->Do(pr->ModifiedMesh);
+		pr->setMesh(pr->ModifiedMesh);
 		return NULL;
 	}
 

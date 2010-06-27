@@ -140,6 +140,9 @@ public:
 			return res;
 		}
 
+		if ( (this->*mod)->extrensic == true )
+			DoFor( (this->*mod) );
+
 		FrameCreater::FillFrames(ZInterp::currentFrame,(S)(FLOAT_ZCONV(*(inp[0]))),&T::PolyP,*(this->*mod) );
 		(this->*mod)->CalcmxF();
 		bSLength->mxFrame = std::max( bSLength->mxFrame , (this->*mod)->mxFrame );

@@ -23,6 +23,8 @@ public:
 
 	ZTriangulate(ZTvarS inp)
 	{
+		primt = new Traingulate();
+
 		ZTriangulate();
 	}
 

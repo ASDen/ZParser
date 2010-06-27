@@ -1,25 +1,19 @@
-<<<<<<< HEAD
 vm=KeyFrameAnimation();
 p=Plane(100,[0,0,0]);
 vm.Add(p);
 
-for j=0 to 10 do
-for i=0 to 10 do
+c = Bend();
+--b = Lathe([ZPoint(6,0,3),ZPoint(8,0,4),ZPoint(3,0,5),ZPoint(5,0,6),ZPoint(5,0,6)],ZPoint(0,0,0),XAxis,20,0)
+b=Box(10);
+vm.Add(b);
+
+--b.Axis(ZAxis);
+printL(b);
+printL(c);
+/*animate on
 (
-	b=Box(10,[20*i,20*j,5])	
-	b.Color(ZPoint(10*i,10*j,10*i))
-	b.setWire(true);
-	vm.Add(b);
-	v=(20+i+j*10)
-	w=(30+i+j*10)
-	animate on
-	(
-		at time (20+i+j*10) (b.Height(100);b.Position([20*i,20*j,50]) )
-		at time (30+i+j*10) (b.Height(10) ;b.Position([20*i,20*j,5]) )
-	)
-)
+    at time 1 ( b.Angle(0) )
+    at time 100 ( b.Angle(360) )
+)*/
 
 vm.View();
-=======
-sddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd=23
->>>>>>> FETCH_HEAD

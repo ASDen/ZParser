@@ -224,7 +224,7 @@ constant
    	| expr_seq
     	;
 number	:
-	^(e=NUMBER (SS_MINUS)? DIGIT ){ZInterp::Number::EXEC($e);}
+	^(e=NUMBER (SS_MINUS)? DIGIT ){ZInterp::Number::Exec($e);}
 	;
 assignment_expression
 	: 
