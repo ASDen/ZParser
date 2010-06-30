@@ -95,7 +95,7 @@ public:
 			break;
 		}
 		primt->Draw();
-		InitNode(inp,primt);
+		InitNode(inp,primt,PositionExists);
 
 		cRadius		= new SpindlePropsD(&Spindle_3::radius,primt,primt->radius);
 		cCap		= new SpindlePropsD(&Spindle_3::cap_height,primt,primt->cap_height);

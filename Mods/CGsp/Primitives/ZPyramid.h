@@ -97,7 +97,7 @@ public:
 			break;
 		}
 		primt->Draw();
-		InitNode(inp,primt);
+		InitNode(inp,primt,PositionExists);
 
 		pWidth   = new PyramidPropsD(&Pyramid_3::width,primt,primt->width);
 		pHeight  = new PyramidPropsD(&Pyramid_3::height,primt,primt->height);

@@ -5,6 +5,7 @@ public:
 
 	Translate* pTr;
 	Rotate*    pRt;
+	RotateAA*    pRaat;
 	Scale*     pSc;
 
 	PrimitiveAPI()
@@ -16,11 +17,14 @@ public:
 		StProps.InitScope();
 
 		AddFunction(_ZC("setPhysActor") ,2,&PrimitiveAPI::setPhysActor);
+		AddFunction(_ZC("setPhysMass") ,2,&PrimitiveAPI::setPhysMass);
+		AddFunction(_ZC("setPhysThickness") ,2,&PrimitiveAPI::setPhysThickness);
 		AddFunction(_ZC("ApplyModifier") ,1,&PrimitiveAPI::ApplyModifier);
 		AddFunction(_ZC("Modify") ,1,&PrimitiveAPI::Modify);
 		AddFunction(_ZC("setWire") ,1,&PrimitiveAPI::setWire);
 		AddFunction(_ZC("Position") ,1,&PrimitiveAPI::Position);
 		AddFunction(_ZC("Rotation") ,1,&PrimitiveAPI::Rotation);
+		AddFunction(_ZC("RotationAA") ,1,&PrimitiveAPI::RotationAA);
 		AddFunction(_ZC("Scale") ,1,&PrimitiveAPI::Scaler);
 		AddFunction(_ZC("Color") ,1,&PrimitiveAPI::Color);
 		
@@ -29,7 +33,7 @@ public:
 
 	PolyhedronNode* pnode;
 
-	void InitNode(ZTvarS inp,Primitives* p,bool exists = false)
+	void InitNode(ZTvarS inp,Primitives* p,bool exists)
 	{
 		if(exists)
 		{
@@ -49,12 +53,50 @@ public:
 		}
 		pRt = new Rotate(0);
 		pSc = new Scale(1);
+		pRaat = new RotateAA(0,0);
 
 		pnode->ApplyModifier(pTr);
 		pnode->ApplyModifier(pSc);
-		pnode->ApplyModifier(pRt);
+		//pnode->ApplyModifier(pRt);
+		pnode->ApplyModifier(pRaat);
 
 
+	}
+
+	ZTvarp RotationAA (ZTvarS inp)
+	{
+		if (inp.size() == 0)
+		{
+			ZTvarS zvs;
+			ZTvarp zg = ZAlloc(ZTvar,4);
+			
+			zg[0] = ZTFloat(pTr->tx.FrameValues[ZInterp::currentFrame]);
+			zg[1] = ZTFloat(pTr->ty.FrameValues[ZInterp::currentFrame]);
+			zg[2] = ZTFloat(pTr->tz.FrameValues[ZInterp::currentFrame]);
+			zg[3] = ZTFloat(pTr->tz.FrameValues[ZInterp::currentFrame]);
+
+			zvs.push_back( &zg[0] );
+			zvs.push_back( &zg[1] );
+			zvs.push_back( &zg[2] );
+			
+			ZTOInstance zin;
+			ZTvarp hv = ZAlloc(ZTvar,1);
+			zin.val = new ZPoint (zvs); 
+			*hv=zin;
+			return hv;
+		}
+
+		pZObjP zins=INSTANCE_ZCONV(*(inp[0]));
+		Point_3* p3 = reinterpret_cast<ZPoint*>(zins)->getPnt();
+
+		float zls = FLOAT_ZCONV(*inp[ 1 ] );
+		
+		FrameCreater::FillFrames(ZInterp::currentFrame,(double)p3->x(),&RotateAA::ax,*pRaat );
+		FrameCreater::FillFrames(ZInterp::currentFrame,(double)p3->y(),&RotateAA::ay,*pRaat );
+		FrameCreater::FillFrames(ZInterp::currentFrame,(double)p3->z(),&RotateAA::az,*pRaat );
+		FrameCreater::FillFrames(ZInterp::currentFrame,(double)zls,&RotateAA::g,*pRaat );
+
+		return NULL;
 	}
 
 	ZTvarp Position (ZTvarS inp)
@@ -110,9 +152,9 @@ public:
 		}
 
 		ZTList zls = LIST_ZCONV(*inp[ 0 ] );
-		FrameCreater::FillFrames(ZInterp::currentFrame,(double)(FLOAT_ZCONV(*(zls.Get(0)))),&Rotate::ax,*pRt );
-		FrameCreater::FillFrames(ZInterp::currentFrame,(double)(FLOAT_ZCONV(*(zls.Get(1)))),&Rotate::ay,*pRt );
-		FrameCreater::FillFrames(ZInterp::currentFrame,(double)(FLOAT_ZCONV(*(zls.Get(2)))),&Rotate::az,*pRt );
+		FrameCreater::FillFrames(ZInterp::currentFrame,(double)(FLOAT_ZCONV(*(zls.Get(0)))) * M_PI / 180.0,&Rotate::ax,*pRt );
+		FrameCreater::FillFrames(ZInterp::currentFrame,(double)(FLOAT_ZCONV(*(zls.Get(1)))) * M_PI / 180.0,&Rotate::ay,*pRt );
+		FrameCreater::FillFrames(ZInterp::currentFrame,(double)(FLOAT_ZCONV(*(zls.Get(2)))) * M_PI / 180.0,&Rotate::az,*pRt );
 
 		return NULL;
 	}
@@ -153,7 +195,6 @@ public:
 	void DoFor(T* mod)
 	{
 		mod->extrensic = false;
-		mod->commit = false;
 		mod->CalcmxF();
 		getPrimtive()->ApplyModifier( mod );
 	}
@@ -187,6 +228,12 @@ public:
 
 	ZTvarp ApplyModifier (ZTvarS inp)
 	{
+		if (inp.size() == 0)
+		{
+			ZError::Throw<ZWrongNumberOfArguments>();
+			return NULL;
+		}
+
 		pZObjP zrsg = INSTANCE_ZCONV(*(inp[0]));
 		Primitives* pr=this->getPrimtive();
 		Modifier* m= (reinterpret_cast < ModifierAPI<ZTwist>* >(zrsg))->getModifier();
@@ -196,6 +243,12 @@ public:
 
 	ZTvarp Modify (ZTvarS inp)
 	{
+		if (inp.size() == 0)
+		{
+			ZError::Throw<ZWrongNumberOfArguments>();
+			return NULL;
+		}
+
 		pZObjP zrsg = INSTANCE_ZCONV(*(inp[0]));
 		Primitives* pr=this->getPrimtive();
 		Modifier* m= (reinterpret_cast < ModifierAPI<ZTwist>* >(zrsg))->getModifier();
@@ -206,38 +259,81 @@ public:
 
 	ZTvarp setWire (ZTvarS inp)
 	{
+		if (inp.size() == 0)
+		{
+			ZError::Throw<ZWrongNumberOfArguments>();
+			return NULL;
+		}
+
 		pnode->WireFrame = BOOL_ZCONV(*(inp[0]));
+		return NULL;
+	}
+	
+	ZTvarp setPhysMass (ZTvarS inp)
+	{
+		if (inp.size() == 0)
+		{
+			ZError::Throw<ZWrongNumberOfArguments>();
+			return NULL;
+		}
+
+		if(pnode->RigidActor == NULL) 
+			return NULL;
+			
+		pnode->RigidActor->setMass(FLOAT_ZCONV(*(inp[0])));
+		
+		return NULL;
+	}
+
+	ZTvarp setPhysThickness (ZTvarS inp)
+	{
+		if (inp.size() == 0)
+		{
+			ZError::Throw<ZWrongNumberOfArguments>();
+			return NULL;
+		}
+
+		if(pnode->ClothActor == NULL) 
+			return NULL;
+			
+		pnode->ClothActor->setThickness(FLOAT_ZCONV(*(inp[0])));
+		
 		return NULL;
 	}
 
 	ZTvarp setPhysActor (ZTvarS inp)
 	{
+		if (inp.size() == 0)
+		{
+			ZError::Throw<ZWrongNumberOfArguments>();
+			return NULL;
+		}
 		pZObjP zrsg = INSTANCE_ZCONV(*(inp[0]));
 		switch((int)FLOAT_ZCONV(*(inp[1])))
 		{
 		case 1:
-			pnode->RigidActor = XBox::Construct(reinterpret_cast<ZRigidBodySimulation*>(zrsg)->pm->gScene,pnode);
+			pnode->RigidActor = XBox::Construct(reinterpret_cast<ZRigidBodySimulation*>(zrsg)->pm->gScene,pnode,BOOL_ZCONV(*(inp[2])));
 			break;
 		case 2:
-			pnode->RigidActor = XCapsule::Construct(reinterpret_cast<ZRigidBodySimulation*>(zrsg)->pm->gScene,pnode);
+			pnode->RigidActor = XLathe::Construct(reinterpret_cast<ZRigidBodySimulation*>(zrsg)->pm->gScene,reinterpret_cast<ZRigidBodySimulation*>(zrsg)->pm->gPhysicsSDK,pnode,BOOL_ZCONV(*(inp[2])));
 			break;
 		case 3:
-			pnode->RigidActor = XConvex::Construct<ConvexHullReducer>(reinterpret_cast<ZRigidBodySimulation*>(zrsg)->pm->gScene,reinterpret_cast<ZRigidBodySimulation*>(zrsg)->pm->gPhysicsSDK,pnode);
+			pnode->RigidActor = XConvex::Construct<ConvexHullReducer>(reinterpret_cast<ZRigidBodySimulation*>(zrsg)->pm->gScene,reinterpret_cast<ZRigidBodySimulation*>(zrsg)->pm->gPhysicsSDK,pnode,BOOL_ZCONV(*(inp[2])));
 			break;
 		case 4:
-			pnode->RigidActor = XPlane::Construct(reinterpret_cast<ZRigidBodySimulation*>(zrsg)->pm->gScene,pnode);
+			pnode->RigidActor = XPlane::Construct(reinterpret_cast<ZRigidBodySimulation*>(zrsg)->pm->gScene,pnode,BOOL_ZCONV(*(inp[2])));
 			break;
 		case 5:
-			pnode->RigidActor = XSphere::Construct(reinterpret_cast<ZRigidBodySimulation*>(zrsg)->pm->gScene,pnode);
+			pnode->RigidActor = XSphere::Construct(reinterpret_cast<ZRigidBodySimulation*>(zrsg)->pm->gScene,pnode,BOOL_ZCONV(*(inp[2])));
 			break;
 		case 6:
 			pnode->RigidActor = XSpring::Construct(reinterpret_cast<ZRigidBodySimulation*>(zrsg)->pm->gScene,reinterpret_cast<ZRigidBodySimulation*>(zrsg)->pm->gPhysicsSDK,pnode,BOOL_ZCONV(*(inp[2])));
 			break;
 		case 7:
-			pnode->RigidActor = XTorus::Construct(reinterpret_cast<ZRigidBodySimulation*>(zrsg)->pm->gScene,reinterpret_cast<ZRigidBodySimulation*>(zrsg)->pm->gPhysicsSDK,pnode);
+			pnode->RigidActor = XTorus::Construct(reinterpret_cast<ZRigidBodySimulation*>(zrsg)->pm->gScene,reinterpret_cast<ZRigidBodySimulation*>(zrsg)->pm->gPhysicsSDK,pnode,BOOL_ZCONV(*(inp[2])));
 			break;
 		case 8:
-			pnode->RigidActor = XTube::Construct(reinterpret_cast<ZRigidBodySimulation*>(zrsg)->pm->gScene,pnode,INT_ZCONV(*(inp[2])),BOOL_ZCONV(*(inp[3])));
+			pnode->RigidActor = XTube::Construct(reinterpret_cast<ZRigidBodySimulation*>(zrsg)->pm->gScene,reinterpret_cast<ZRigidBodySimulation*>(zrsg)->pm->gPhysicsSDK,pnode,BOOL_ZCONV(*(inp[2])));
 			break;
 		case 9:
 			pnode->ClothActor = XCloth::Construct(reinterpret_cast<ZRigidBodySimulation*>(zrsg)->pm->gScene,reinterpret_cast<ZRigidBodySimulation*>(zrsg)->pm->gPhysicsSDK,pnode,false);

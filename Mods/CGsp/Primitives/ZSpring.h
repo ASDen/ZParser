@@ -95,7 +95,7 @@ public:
 			break;
 		}
 		primt->Draw();
-		InitNode(inp,primt);
+		InitNode(inp,primt,PositionExists);
 
 		sRadius1	= new SpringPropsD(&Spring_3::radius1,primt,primt->radius1);
 		sRadius2	= new SpringPropsD(&Spring_3::radius2,primt,primt->radius2);
