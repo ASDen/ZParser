@@ -5,7 +5,7 @@ public:
 	PhysicsManager* pm;
 
 	ZTvar ZPhysBOX,
-		  ZPhysCAPSULE,
+		  ZPhysLATHE,
 		  ZPhysCONVEX,
 		  ZPhysPLANE,
 		  ZPhysSPHERE,
@@ -19,7 +19,7 @@ public:
 	{
 		AddDataMember(_ZC("ZPhysBOX")    , &ZRigidBodySimulation::ZPhysBOX);
 		AddDataMember(_ZC("ZPhysCLOTH")  , &ZRigidBodySimulation::ZPhysCLOTH);
-		AddDataMember(_ZC("ZPhysCAPSULE")  , &ZRigidBodySimulation::ZPhysCAPSULE);
+		AddDataMember(_ZC("ZPhysLATHE")  , &ZRigidBodySimulation::ZPhysLATHE);
 		AddDataMember(_ZC("ZPhysCONVEX")  , &ZRigidBodySimulation::ZPhysCONVEX);
 		AddDataMember(_ZC("ZPhysPLANE")  , &ZRigidBodySimulation::ZPhysPLANE);
 		AddDataMember(_ZC("ZPhysSPHERE")  , &ZRigidBodySimulation::ZPhysSPHERE);
@@ -31,7 +31,7 @@ public:
 	ZRigidBodySimulation(ZTvarS inp)
 	{
 		ZPhysBOX    = ZTFloat(1);
-		ZPhysCAPSULE  = ZTFloat(2);
+		ZPhysLATHE  = ZTFloat(2);
 		ZPhysCONVEX  = ZTFloat(3);
 		ZPhysPLANE  = ZTFloat(4);
 		ZPhysSPHERE  = ZTFloat(5);
@@ -61,6 +61,12 @@ public:
 
 	ZTvarp AddRigidBody (ZTvarS inp)
 	{
+		if (inp.size() == 0)
+		{
+			ZError::Throw<ZWrongNumberOfArguments>();
+			return NULL;
+		}
+
 		pZObjP zins=INSTANCE_ZCONV(*(inp[0]));
 		//because we need to get all pnode from different primitives - Box,sphere,...etc 
 		opm->AddPolyhedron<RigidBodyManager>( reinterpret_cast<PrimitiveAPI<ZBox>* >(zins)->pnode );
@@ -69,7 +75,13 @@ public:
 
 	ZTvarp AddCloth (ZTvarS inp)
 	{
-		pZObjP zins=INSTANCE_ZCONV(*(inp[0]));
+		if (inp.size() == 0)
+		{
+			ZError::Throw<ZWrongNumberOfArguments>();
+			return NULL;
+		}
+
+		pZObjP zins = INSTANCE_ZCONV(*(inp[0]));
 		//because we need to get all pnode from different primitives - Box,sphere,...etc 
 		opm->AddPolyhedron<ClothManager>( reinterpret_cast<PrimitiveAPI<ZBox>* >(zins)->pnode );
 		return NULL;
