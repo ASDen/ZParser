@@ -119,14 +119,6 @@ public:
 
 		ZBox();
 	}
-
-	template<class T>
-	void DoFor(T* mod)
-	{
-		mod->extrensic = false;
-		mod->CalcmxF();
-		primt->ApplyModifier( mod );
-	}
 	
 	template<class T,class S,T* ZBox::*mod>
 	ZTvarp MFactory (ZTvarS inp)

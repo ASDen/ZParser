@@ -84,7 +84,7 @@ public:
 			break;
 		}
 		primt->Draw();
-		InitNode(inp,primt);
+		InitNode(inp,primt,PositionExists);
 
 		pWidth   = new PlanePropsD(&Plane_3::width,primt,primt->width);
 		pLength  = new PlanePropsD(&Plane_3::length,primt,primt->length);

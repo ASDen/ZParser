@@ -89,7 +89,7 @@ public:
 			break;
 		}
 		primt->Draw();
-		InitNode(inp,primt);
+		InitNode(inp,primt,PositionExists);
 
 		cRadius		= new CylinderPropsD(&Cylinder_3::radius,primt,primt->radius);
 		cHeight		= new CylinderPropsD(&Cylinder_3::height,primt,primt->height);

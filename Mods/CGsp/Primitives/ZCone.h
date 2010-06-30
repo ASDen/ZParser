@@ -95,7 +95,7 @@ public:
 			break;
 		}
 		primt->Draw();
-		InitNode(inp,primt);
+		InitNode(inp,primt,PositionExists);
 
 		cRadius1	= new ConePropsD(&Cone_3::radius1,primt,primt->radius1);
 		cRadius2	= new ConePropsD(&Cone_3::radius2,primt,primt->radius2);

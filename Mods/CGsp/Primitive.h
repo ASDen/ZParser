@@ -5,6 +5,7 @@ public:
 
 	Translate* pTr;
 	Rotate*    pRt;
+	RotateAA*    pRaat;
 	Scale*     pSc;
 
 	PrimitiveAPI()
@@ -21,6 +22,7 @@ public:
 		AddFunction(_ZC("setWire") ,1,&PrimitiveAPI::setWire);
 		AddFunction(_ZC("Position") ,1,&PrimitiveAPI::Position);
 		AddFunction(_ZC("Rotation") ,1,&PrimitiveAPI::Rotation);
+		AddFunction(_ZC("RotationAA") ,1,&PrimitiveAPI::RotationAA);
 		AddFunction(_ZC("Scale") ,1,&PrimitiveAPI::Scaler);
 		AddFunction(_ZC("Color") ,1,&PrimitiveAPI::Color);
 		
@@ -29,7 +31,7 @@ public:
 
 	PolyhedronNode* pnode;
 
-	void InitNode(ZTvarS inp,Primitives* p,bool exists = false)
+	void InitNode(ZTvarS inp,Primitives* p,bool exists)
 	{
 		if(exists)
 		{
@@ -49,12 +51,50 @@ public:
 		}
 		pRt = new Rotate(0);
 		pSc = new Scale(1);
+		pRaat = new RotateAA(0,0);
 
 		pnode->ApplyModifier(pTr);
 		pnode->ApplyModifier(pSc);
-		pnode->ApplyModifier(pRt);
+		//pnode->ApplyModifier(pRt);
+		pnode->ApplyModifier(pRaat);
 
 
+	}
+
+	ZTvarp RotationAA (ZTvarS inp)
+	{
+		if (inp.size() == 0)
+		{
+			ZTvarS zvs;
+			ZTvarp zg = ZAlloc(ZTvar,4);
+			
+			zg[0] = ZTFloat(pTr->tx.FrameValues[ZInterp::currentFrame]);
+			zg[1] = ZTFloat(pTr->ty.FrameValues[ZInterp::currentFrame]);
+			zg[2] = ZTFloat(pTr->tz.FrameValues[ZInterp::currentFrame]);
+			zg[3] = ZTFloat(pTr->tz.FrameValues[ZInterp::currentFrame]);
+
+			zvs.push_back( &zg[0] );
+			zvs.push_back( &zg[1] );
+			zvs.push_back( &zg[2] );
+			
+			ZTOInstance zin;
+			ZTvarp hv = ZAlloc(ZTvar,1);
+			zin.val = new ZPoint (zvs); 
+			*hv=zin;
+			return hv;
+		}
+
+		pZObjP zins=INSTANCE_ZCONV(*(inp[0]));
+		Point_3* p3 = reinterpret_cast<ZPoint*>(zins)->getPnt();
+
+		float zls = FLOAT_ZCONV(*inp[ 1 ] );
+		
+		FrameCreater::FillFrames(ZInterp::currentFrame,(double)p3->x(),&RotateAA::ax,*pRaat );
+		FrameCreater::FillFrames(ZInterp::currentFrame,(double)p3->y(),&RotateAA::ay,*pRaat );
+		FrameCreater::FillFrames(ZInterp::currentFrame,(double)p3->z(),&RotateAA::az,*pRaat );
+		FrameCreater::FillFrames(ZInterp::currentFrame,(double)zls,&RotateAA::g,*pRaat );
+
+		return NULL;
 	}
 
 	ZTvarp Position (ZTvarS inp)
@@ -110,9 +150,9 @@ public:
 		}
 
 		ZTList zls = LIST_ZCONV(*inp[ 0 ] );
-		FrameCreater::FillFrames(ZInterp::currentFrame,(double)(FLOAT_ZCONV(*(zls.Get(0)))),&Rotate::ax,*pRt );
-		FrameCreater::FillFrames(ZInterp::currentFrame,(double)(FLOAT_ZCONV(*(zls.Get(1)))),&Rotate::ay,*pRt );
-		FrameCreater::FillFrames(ZInterp::currentFrame,(double)(FLOAT_ZCONV(*(zls.Get(2)))),&Rotate::az,*pRt );
+		FrameCreater::FillFrames(ZInterp::currentFrame,(double)(FLOAT_ZCONV(*(zls.Get(0)))) * M_PI / 180.0,&Rotate::ax,*pRt );
+		FrameCreater::FillFrames(ZInterp::currentFrame,(double)(FLOAT_ZCONV(*(zls.Get(1)))) * M_PI / 180.0,&Rotate::ay,*pRt );
+		FrameCreater::FillFrames(ZInterp::currentFrame,(double)(FLOAT_ZCONV(*(zls.Get(2)))) * M_PI / 180.0,&Rotate::az,*pRt );
 
 		return NULL;
 	}
@@ -153,7 +193,6 @@ public:
 	void DoFor(T* mod)
 	{
 		mod->extrensic = false;
-		mod->commit = false;
 		mod->CalcmxF();
 		getPrimtive()->ApplyModifier( mod );
 	}

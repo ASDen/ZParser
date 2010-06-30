@@ -15,7 +15,6 @@
 
 namespace ZInterp
 {
-	
 	void IfExpr::Exec(pANTLR3_BASE_TREE ifnode,pANTLR3_BASE_TREE cond,yatgFW_Ctx_struct* xyz)
 	{
 		pANTLR3_BASE_TREE r;
@@ -134,10 +133,9 @@ namespace ZInterp
 		ZChar* id=getNodeText((pANTLR3_BASE_TREE)fnode->getChild(fnode,0));
 	    ZInterp::ZSym.currentScope->VarTable.Insert(v,id);
 
-        for ( ; start <=end && cond ; start += scale )
+        for ( ;  start !=end && cond ; start += scale )
 		{
-            if(list==NULL)
-            {
+            if(list==NULL)            {
                 //f.val+=scale;
                 //*v =(ZTvar)f;
 				//*v=boost::apply_visitor(Sum(),*v,ZTvar(ZTFloat(start)));
