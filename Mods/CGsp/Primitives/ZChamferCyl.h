@@ -99,7 +99,7 @@ public:
 			break;
 		}
 		primt->Draw();
-		InitNode(inp,primt);
+		InitNode(inp,primt,PositionExists);
 
 		cRadius		= new ChamferCylPropsD(&ChamferCyl_3::radius,primt,primt->radius);
 		cFillet		= new ChamferCylPropsD(&ChamferCyl_3::fillet,primt,primt->fillet);

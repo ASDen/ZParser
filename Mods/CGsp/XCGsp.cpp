@@ -2,4 +2,4 @@
 #include "XCGsp.h"
 #include "../../stdafx.h"
 
-#pragma message ("XCGsp.cpp compilinig waiiiit")
+#pragma message ("XCGsp.cpp compilinig wait !!!")

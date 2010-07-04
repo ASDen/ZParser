@@ -26,6 +26,9 @@ public:
             myList.Append(inp[1]);
             myList.Append(inp[2]);
             break;
+		default:
+			ZError::Throw<ZWrongNumberOfArguments>();
+			break;
         }
         
         ZPoint();

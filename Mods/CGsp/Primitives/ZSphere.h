@@ -76,7 +76,7 @@ public:
 			break;
 		}
 		primt->Draw();
-		InitNode(inp,primt);
+		InitNode(inp,primt,PositionExists);
 
 		sRadius   = new SpherePropsD(&Sphere_3::radius,primt,primt->radius);
 		sSideSegs = new SpherePropsI(&Sphere_3::Segs,primt,primt->Segs);

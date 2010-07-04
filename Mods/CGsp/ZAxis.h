@@ -17,7 +17,7 @@ public:
 
 	static Axis getAxis(ZTvarp inp)
 	{
-		pZObjP zins=INSTANCE_ZCONV(*(inp));
+		pZObjP zins = INSTANCE_ZCONV(*(inp));
 		return Axis(reinterpret_cast<ZAxis*>(zins)->ax);
 	}
 

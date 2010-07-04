@@ -93,7 +93,7 @@ public:
 			break;
 		}
 		primt->Draw();
-		InitNode(inp,primt);
+		InitNode(inp,primt,PositionExists);
 
 		tRadius1	= new TubePropsD(&Tube_3::radius1,primt,primt->radius1);
 		tRadius2	= new TubePropsD(&Tube_3::radius2,primt,primt->radius2);

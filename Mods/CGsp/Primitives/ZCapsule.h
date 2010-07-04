@@ -86,7 +86,7 @@ public:
 			break;
 		}
 		primt->Draw();
-		InitNode(inp,primt);
+		InitNode(inp,primt,PositionExists);
 
 		cRadius		= new CapsulePropsD(&Capsule_3::radius,primt,primt->radius);
 		cHeight		= new CapsulePropsD(&Capsule_3::height,primt,primt->height);

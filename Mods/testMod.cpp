@@ -1,6 +1,9 @@
 #include "../stdafx.h"
 #include "../ZInterp.h"
 
+#define _USE_MATH_DEFINES
+#include "math.h"
+
 class Zsqrt : public boost::static_visitor<ZTvar>
 {
 public:
@@ -15,12 +18,95 @@ public:
 
 	static ZTvarp Zsqrt_(ZTvarS var)
 	{
-		ZTvarp res=ZAlloc(ZTvar,1);
+		if (var.size() != 1)
+		{
+			ZError::Throw<ZWrongNumberOfArguments>();
+			return NULL;
+		}
+
+		ZTvarp res = ZAlloc(ZTvar,1);
 		*res=boost::apply_visitor(Zsqrt(),*(var[0]));
 		return res;
 	}
 };
 
+class Zsin : public boost::static_visitor<ZTvar>
+{
+public:
+
+	BASE_CASE_1
+
+	template<class S,template <typename,typename> class T>
+	ZTvar operator()(T<S,NumOps> &a1) const
+	{
+		return ZTFloat(sin(a1.cont->val * M_PI / 180.0));;
+	}
+
+	static ZTvarp Zsin_(ZTvarS var)
+	{
+		if (var.size() != 1)
+		{
+			ZError::Throw<ZWrongNumberOfArguments>();
+			return NULL;
+		}
+
+		ZTvarp res=ZAlloc(ZTvar,1);
+		*res=boost::apply_visitor(Zsin(),*(var[0]));
+		return res;
+	}
+};
+
+class Zcos : public boost::static_visitor<ZTvar>
+{
+public:
+
+	BASE_CASE_1
+
+	template<class S,template <typename,typename> class T>
+	ZTvar operator()(T<S,NumOps> &a1) const
+	{
+		return ZTFloat(cos(a1.cont->val * M_PI / 180.0));;
+	}
+
+	static ZTvarp Zcos_(ZTvarS var)
+	{
+		if (var.size() != 1)
+		{
+			ZError::Throw<ZWrongNumberOfArguments>();
+			return NULL;
+		}
+
+		ZTvarp res=ZAlloc(ZTvar,1);
+		*res=boost::apply_visitor(Zcos(),*(var[0]));
+		return res;
+	}
+};
+
+class Ztan : public boost::static_visitor<ZTvar>
+{
+public:
+
+	BASE_CASE_1
+
+	template<class S,template <typename,typename> class T>
+	ZTvar operator()(T<S,NumOps> &a1) const
+	{
+		return ZTFloat(tan(a1.cont->val * M_PI / 180.0));;
+	}
+
+	static ZTvarp Ztan_(ZTvarS var)
+	{
+		if (var.size() != 1)
+		{
+			ZError::Throw<ZWrongNumberOfArguments>();
+			return NULL;
+		}
+
+		ZTvarp res=ZAlloc(ZTvar,1);
+		*res=boost::apply_visitor(Ztan(),*(var[0]));
+		return res;
+	}
+};
 class Zpower : public boost::static_visitor<ZTvar>
 {
 public:
@@ -35,7 +121,13 @@ public:
 
 	static ZTvarp Zpower_(ZTvarS var)
 	{
-		ZTvarp res=ZAlloc(ZTvar,1);
+		if (var.size() != 2)
+		{
+			ZError::Throw<ZWrongNumberOfArguments>();
+			return NULL;
+		}
+
+		ZTvarp res = ZAlloc(ZTvar,1);
 		*res=boost::apply_visitor( Zpower() , *(var[0]) ,*(var[1]) );
 		return res;
 	}
@@ -44,22 +136,23 @@ public:
 
 ZTvarp Zprint(ZTvarS var)
 {
-	if(var.size()>0)
-		std::cout<< boost::apply_visitor(ToString(),*(var[0])) ;
-	ZTvarp res=ZAlloc(ZTvar,1);
+	for(int i=0;i<var.size();i++)
+		std::cout<< boost::apply_visitor(ToString(),*(var[i])) ;
+	ZTvarp res = ZAlloc(ZTvar,1);
 	*res=ZTBool(true);
 	return res;
 }
+
 ZTvarp ZprintL(ZTvarS var)
 {
-	if(var.size()>0)
-		std::cout<< boost::apply_visitor(ToString(),*(var[0])) <<endl;
-	else
-		std::cout<<std::endl;
+	for(int i=0;i<var.size();i++)
+		std::cout<< boost::apply_visitor(ToString(),*(var[i])) ;
+	std::cout<<std::endl;
 	ZTvarp res=ZAlloc(ZTvar,1);
 	*res=ZTBool(true);
 	return res;
 }
+
 ZTvarp ZRead(ZTvarS var)
 {
 	string s;
@@ -67,21 +160,30 @@ ZTvarp ZRead(ZTvarS var)
 	ZTString str=ZTString(s);
 	ZTvarp inp=ZAlloc(ZTvar,1);
 	*inp=str;
-	ZTInt i;
-	switch( boost::apply_visitor(getType(),*var[0]) )
+	return inp;
+}
+
+ZTvarp ZParseInt(ZTvarS inp)
+{
+	try
 	{
-	case ZETInt:
-		i=INT_ZCONV(*inp);
-		break;
+		ZIInteger i = boost::lexical_cast<int>(STRING_ZCONV( *inp[0]));
+
+		ZTvarp res=ZAlloc(ZTvar,1);
+		*res=ZTInt(i);
+		return res;
 	}
-	ZTvarp res=ZAlloc(ZTvar,1);
-	*res=ZTBool(true);
-	return res;
+
+	catch(boost::bad_lexical_cast& e)
+	{
+		ZError::Throw<ZBadConversionError>();
+		return NULL;
+	}
 }
 
 void ZModInit_Test()
 {
-	ZIFunction* zf=ZAlloc(ZIFunction,10);
+	ZIFunction* zf=ZAlloc(ZIFunction,50);
 	ZTvarp zv=ZAlloc(ZTvar,10);
 
 	zf->pFunInit(1,Zprint);
@@ -104,8 +206,28 @@ void ZModInit_Test()
 	ZInterp::ZSym.InsertSymbol(_ZC("pow"),zv);
 
 	zf++;zv++;
-	zf->pFunInit(2,ZRead);
+	zf->pFunInit(0,ZRead);
 	*zv=ZTFunction(zf);
 	ZInterp::ZSym.InsertSymbol(_ZC("Read"),zv);
+
+	zf++;zv++;
+	zf->pFunInit(1,ZParseInt);
+	*zv=ZTFunction(zf);
+	ZInterp::ZSym.InsertSymbol(_ZC("ParseInt"),zv);
+
+	zf++;zv++;
+	zf->pFunInit(1,Zsin::Zsin_);
+	*zv=ZTFunction(zf);
+	ZInterp::ZSym.InsertSymbol(_ZC("sin"),zv);
+
+	zf++;zv++;
+	zf->pFunInit(1,Zcos::Zcos_);
+	*zv=ZTFunction(zf);
+	ZInterp::ZSym.InsertSymbol(_ZC("cos"),zv);
+
+	zf++;zv++;
+	zf->pFunInit(1,Ztan::Ztan_);
+	*zv=ZTFunction(zf);
+	ZInterp::ZSym.InsertSymbol(_ZC("tan"),zv);
 
 }

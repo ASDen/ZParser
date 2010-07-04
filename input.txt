@@ -1,21 +1,22 @@
-vm=KeyFrameAnimation();
-p=Plane(100,[0,0,0]);
+vm = KeyFrameAnimation();
+
+p = Plane(100,[0,0,0]);
+p.setWire(false)
+p.Color(ZPoint(0.9,0.7,0.9))
 vm.Add(p);
 
-g=[]
-for i=0 to 4 by 0.1 do
-	g+=[ZPoint(sqrt(i),sqrt(i),sqrt(i))]
-
---b = Lathe([ZPoint(6,0,3),ZPoint(8,0,4),ZPoint(3,0,5),ZPoint(5,0,6),ZPoint(5,0,6)],ZPoint(0,0,0),ZAxis,10,60,[0,0,8])
-b = Lathe(g,ZPoint(0,0,0),ZAxis,30,0,[0,0,10])
-b.Color(ZPoint(0.5,0.9,0.7))
+b = Box(40,40,80,30,30,50,[0,0,40])	
+b.Color(ZPoint(0.8,0.2,0.4))
+b.setWire(false);
 vm.Add(b);
 
-printL(b);
+t = Twist(-500,ZPoint(0,0,-40),ZAxis,true,0,0)
+printL(t.Center())
+b.ApplyModifier(t)
+
 animate on
 (
-    at time 50 ( b.Angle(180) )
-    at time 100 ( b.Angle(360) )
+	at time 200 ( t.Upper_Limit(80) )
 )
 
 vm.View();

@@ -17,7 +17,7 @@ public:
 
 	static BulgeType getType(ZTvarp inp)
 	{
-		pZObjP zins=INSTANCE_ZCONV(*(inp));
+		pZObjP zins = INSTANCE_ZCONV(*(inp));
 		return BulgeType(reinterpret_cast<ZBulgeType*>(zins)->buType);
 	}
 

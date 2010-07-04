@@ -4,7 +4,8 @@ enum ZErrorTypes{
 	ZBadConversionError,
 	ZOperationNotSupported,
 	ZDivisionByZeroException,
-	ZWrongNumberOfArguments
+	ZWrongNumberOfArguments,
+	ZWrongNumberInList
 };
 
 #define OUT_STRM std::cout
@@ -21,9 +22,9 @@ public:
 	template <ZErrorTypes T>
 	static void Throw()
 	{
-		OUT_STRM<<(_ZC("Error : "));
+		OUT_STRM << (_ZC("Error : "));
 		Speak<T>();
-		OUT_STRM<<(_ZC(" , at Line : "))<<Lnum()<<" At Character : "<<Cnum()<<std::endl;
+		OUT_STRM << (_ZC(" , at Line : ")) << Lnum() << " At Character : " << Cnum() << std::endl;
 		exit(1);
 	}
 
@@ -53,6 +54,11 @@ public:
 	template <>
 	static void Speak<ZWrongNumberOfArguments>(){
 		OUT_STRM<<(_ZC("Wrong number of passed arguments")); 
+	}
+
+	template <>
+	static void Speak<ZWrongNumberInList>(){
+		OUT_STRM<<(_ZC("Wrong number of arguments passed in the List")); 
 	}
 	
 };
