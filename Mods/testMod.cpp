@@ -18,7 +18,13 @@ public:
 
 	static ZTvarp Zsqrt_(ZTvarS var)
 	{
-		ZTvarp res=ZAlloc(ZTvar,1);
+		if (var.size() != 1)
+		{
+			ZError::Throw<ZWrongNumberOfArguments>();
+			return NULL;
+		}
+
+		ZTvarp res = ZAlloc(ZTvar,1);
 		*res=boost::apply_visitor(Zsqrt(),*(var[0]));
 		return res;
 	}
@@ -38,6 +44,38 @@ public:
 
 	static ZTvarp Zsin_(ZTvarS var)
 	{
+		if (var.size() != 1)
+		{
+			ZError::Throw<ZWrongNumberOfArguments>();
+			return NULL;
+		}
+
+		ZTvarp res=ZAlloc(ZTvar,1);
+		*res=boost::apply_visitor(Zsin(),*(var[0]));
+		return res;
+	}
+};
+
+class Zsin : public boost::static_visitor<ZTvar>
+{
+public:
+
+	BASE_CASE_1
+
+	template<class S,template <typename,typename> class T>
+	ZTvar operator()(T<S,NumOps> &a1) const
+	{
+		return ZTFloat(sin(a1.cont->val * M_PI / 180.0));;
+	}
+
+	static ZTvarp Zsin_(ZTvarS var)
+	{
+		if (var.size() != 1)
+		{
+			ZError::Throw<ZWrongNumberOfArguments>();
+			return NULL;
+		}
+
 		ZTvarp res=ZAlloc(ZTvar,1);
 		*res=boost::apply_visitor(Zsin(),*(var[0]));
 		return res;
@@ -58,6 +96,12 @@ public:
 
 	static ZTvarp Zcos_(ZTvarS var)
 	{
+		if (var.size() != 1)
+		{
+			ZError::Throw<ZWrongNumberOfArguments>();
+			return NULL;
+		}
+
 		ZTvarp res=ZAlloc(ZTvar,1);
 		*res=boost::apply_visitor(Zcos(),*(var[0]));
 		return res;
@@ -78,6 +122,12 @@ public:
 
 	static ZTvarp Ztan_(ZTvarS var)
 	{
+		if (var.size() != 1)
+		{
+			ZError::Throw<ZWrongNumberOfArguments>();
+			return NULL;
+		}
+
 		ZTvarp res=ZAlloc(ZTvar,1);
 		*res=boost::apply_visitor(Ztan(),*(var[0]));
 		return res;
@@ -97,7 +147,13 @@ public:
 
 	static ZTvarp Zpower_(ZTvarS var)
 	{
-		ZTvarp res=ZAlloc(ZTvar,1);
+		if (var.size() != 2)
+		{
+			ZError::Throw<ZWrongNumberOfArguments>();
+			return NULL;
+		}
+
+		ZTvarp res = ZAlloc(ZTvar,1);
 		*res=boost::apply_visitor( Zpower() , *(var[0]) ,*(var[1]) );
 		return res;
 	}
@@ -108,10 +164,11 @@ ZTvarp Zprint(ZTvarS var)
 {
 	for(int i=0;i<var.size();i++)
 		std::cout<< boost::apply_visitor(ToString(),*(var[i])) ;
-	ZTvarp res=ZAlloc(ZTvar,1);
+	ZTvarp res = ZAlloc(ZTvar,1);
 	*res=ZTBool(true);
 	return res;
 }
+
 ZTvarp ZprintL(ZTvarS var)
 {
 	for(int i=0;i<var.size();i++)
@@ -121,6 +178,7 @@ ZTvarp ZprintL(ZTvarS var)
 	*res=ZTBool(true);
 	return res;
 }
+
 ZTvarp ZRead(ZTvarS var)
 {
 	string s;
@@ -133,10 +191,20 @@ ZTvarp ZRead(ZTvarS var)
 
 ZTvarp ZParseInt(ZTvarS inp)
 {
-	ZIInteger i= boost::lexical_cast<int>(STRING_ZCONV( *inp[0]));
-	ZTvarp res=ZAlloc(ZTvar,1);
-	*res=ZTInt(i);
-	return res;
+	try
+	{
+		ZIInteger i = boost::lexical_cast<int>(STRING_ZCONV( *inp[0]));
+
+		ZTvarp res=ZAlloc(ZTvar,1);
+		*res=ZTInt(i);
+		return res;
+	}
+
+	catch(boost::bad_lexical_cast& e)
+	{
+		ZError::Throw<ZBadConversionError>();
+		return NULL;
+	}
 }
 
 void ZModInit_Test()

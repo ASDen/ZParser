@@ -11,8 +11,8 @@ public:
 	static void Init()
 	{
 		StProps.InitScope();
-		AddFunction(_ZC("xtoString"),0,&ZArray::toString);
-		AddFunction(_ZC("Zadd"),1,&ZArray::Zadd);
+		AddFunction(_ZC("toString"),0,&ZArray::toString);
+		AddFunction(_ZC("add"),1,&ZArray::Zadd);
 		//AddFunction(_ZC("Zremove"),1,&ZArray::Zpow);
 	
 		ZTObject::Inheriet(StProps);
@@ -44,6 +44,12 @@ public:
 
 	ZTvarp Zadd(ZTvarS inp)
 	{
+		if (inp.size() == 0)
+		{
+			ZError::Throw<ZWrongNumberOfArguments>();
+			return NULL;
+		}
+
 		//ZIFloat in = boost::get<gZInt>(*inp[0]).cont->val;
 		//ZIInteger ai = boost::get<gZFloat>(a).cont->val;
 		myList.Concat(inp);

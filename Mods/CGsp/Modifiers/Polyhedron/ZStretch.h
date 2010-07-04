@@ -60,14 +60,14 @@ public:
 			break;
 		case 2:
 			if ((za = dynamic_cast<ZAxis*>(INSTANCE_ZCONV(*(inp[1])))) != NULL)
-				primt = new Stretch( FLOAT_ZCONV(*(inp[0])) , ZAxis::getAxis((inp[1])) );
+				primt = new Stretch( FLOAT_ZCONV(*(inp[0])) , za->ax );
 			else
 				ZError::Throw<ZBadConversionError>();
 			break;
 		case 3:
 			if ((zp3 = dynamic_cast<ZPoint*>(INSTANCE_ZCONV(*(inp[1])))) != NULL && (za = dynamic_cast<ZAxis*>(INSTANCE_ZCONV(*(inp[2])))) != NULL)
 			{
-				primt = new Stretch( FLOAT_ZCONV(*(inp[0])) , p3 , ZAxis::getAxis((inp[2])) );
+				primt = new Stretch( FLOAT_ZCONV(*(inp[0])) , zp3->getPnt() , za->ax );
 				CenterExists = true;
 			}
 			else
@@ -77,7 +77,7 @@ public:
 		case 5:
 			if ((zp3 = dynamic_cast<ZPoint*>(INSTANCE_ZCONV(*(inp[1])))) != NULL && (za = dynamic_cast<ZAxis*>(INSTANCE_ZCONV(*(inp[2])))) != NULL)
 			{
-				primt = new Stretch( FLOAT_ZCONV(*(inp[0])) , p3 , ZAxis::getAxis((inp[2])) , BOOL_ZCONV(*(inp[3])) );
+				primt = new Stretch( FLOAT_ZCONV(*(inp[0])) , zp3->getPnt() , za->ax , BOOL_ZCONV(*(inp[3])) );
 				CenterExists = true;
 			}
 			else
@@ -86,7 +86,7 @@ public:
 		case 6:
 			if ((zp3 = dynamic_cast<ZPoint*>(INSTANCE_ZCONV(*(inp[1])))) != NULL && (za = dynamic_cast<ZAxis*>(INSTANCE_ZCONV(*(inp[2])))) != NULL)
 			{
-				primt = new Stretch( FLOAT_ZCONV(*(inp[0])) , p3 , ZAxis::getAxis((inp[2])) , BOOL_ZCONV(*(inp[3])) , INT_ZCONV(*(inp[4])) , INT_ZCONV(*(inp[5])) );
+				primt = new Stretch( FLOAT_ZCONV(*(inp[0])) , zp3->getPnt() , za->ax , BOOL_ZCONV(*(inp[3])) , INT_ZCONV(*(inp[4])) , INT_ZCONV(*(inp[5])) );
 				CenterExists = true;
 			}
 			else

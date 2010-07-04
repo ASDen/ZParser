@@ -50,6 +50,12 @@ public:
 
 	ZTvarp Zsqrt(ZTvarS inp)
 	{
+		if (inp.size() == 1)
+		{
+			ZError::Throw<ZWrongNumberOfArguments>();
+			return NULL;
+		}
+
 		ZIFloat in = FLOAT_ZCONV(*inp[0]);
 		//ZIInteger ai = boost::get<gZFloat>(a).cont->val;
 
@@ -62,6 +68,12 @@ public:
 
 	ZTvarp Zpow(ZTvarS inp)
 	{
+		if (inp.size() != 2)
+		{
+			ZError::Throw<ZWrongNumberOfArguments>();
+			return NULL;
+		}
+
 		ZIFloat in = FLOAT_ZCONV(*inp[0]);
 		ZIFloat ai = FLOAT_ZCONV(*inp[1]);
 
@@ -74,6 +86,12 @@ public:
 
 	ZTvarp Zsin(ZTvarS inp)
 	{
+		if (inp.size() == 1)
+		{
+			ZError::Throw<ZWrongNumberOfArguments>();
+			return NULL;
+		}
+
 		ZIFloat in = FLOAT_ZCONV(*inp[0]);
 		//ZIFloat ai = boost::get<gZInt>(*inp[1]).cont->val;
 
@@ -86,6 +104,12 @@ public:
 
 	ZTvarp Zcos(ZTvarS inp)
 	{
+		if (inp.size() == 1)
+		{
+			ZError::Throw<ZWrongNumberOfArguments>();
+			return NULL;
+		}
+
 		ZIFloat in = FLOAT_ZCONV(*inp[0]);
 		//ZIFloat ai = boost::get<gZInt>(*inp[1]).cont->val;
 
@@ -98,6 +122,12 @@ public:
 
 	ZTvarp Ztan(ZTvarS inp)
 	{
+		if (inp.size() == 1)
+		{
+			ZError::Throw<ZWrongNumberOfArguments>();
+			return NULL;
+		}
+
 		ZIFloat in = FLOAT_ZCONV(*inp[0]);
 		//ZIFloat ai = boost::get<gZInt>(*inp[1]).cont->val;
 

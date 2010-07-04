@@ -15,6 +15,8 @@ public:
 
 		AddFunction(_ZC("FaceNumber") ,1,&ZOutline::FaceNumber);
 		AddFunction(_ZC("OutlineAmount") ,1,&ZOutline::OutlineAmount);
+
+		AddFunction(_ZC("toString"),0,&ZOutline::toString);
 	
 		ZTObject::Inheriet(StProps);
 	}
@@ -44,7 +46,11 @@ public:
 		case 2:
 			primt = new Outline( INT_ZCONV(*(inp[0])) , FLOAT_ZCONV(*(inp[1])) );
 			break;
+		default:
+			ZError::Throw<ZWrongNumberOfArguments>();
+			break;
 		}
+
 		ZOutline();
 	}
 

@@ -16,6 +16,8 @@ public:
 		AddFunction(_ZC("FaceNumber") ,1,&ZBevel::FaceNumber);
 		AddFunction(_ZC("ExtrudeAmount") ,1,&ZBevel::ExtrudeAmount);
 		AddFunction(_ZC("OutlineAmount") ,1,&ZBevel::OutlineAmount);
+
+		AddFunction(_ZC("toString"),0,&ZBevel::toString);
 	
 		ZTObject::Inheriet(StProps);
 	}
@@ -41,12 +43,17 @@ public:
 		switch(inp.size())
 		{
 		case 1:
+		case 2:
 			primt = new Bevel( INT_ZCONV(*(inp[0])) );
 			break;
 		case 3:
 			primt = new Bevel( INT_ZCONV(*(inp[0])) , FLOAT_ZCONV(*(inp[1])) , FLOAT_ZCONV(*(inp[2])) );
 			break;
+		default:
+			ZError::Throw<ZWrongNumberOfArguments>();
+			break;
 		}
+
 		ZBevel();
 	}
 

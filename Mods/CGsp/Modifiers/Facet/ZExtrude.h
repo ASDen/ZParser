@@ -15,6 +15,8 @@ public:
 
 		AddFunction(_ZC("FaceNumber") ,1,&ZExtrude::FaceNumber);
 		AddFunction(_ZC("ExtrudeAmount") ,1,&ZExtrude::ExtrudeAmount);
+
+		AddFunction(_ZC("toString"),0,&ZExtrude::toString);
 	
 		ZTObject::Inheriet(StProps);
 	}
@@ -44,7 +46,11 @@ public:
 		case 2:
 			primt = new Extrude( INT_ZCONV(*(inp[0])) , FLOAT_ZCONV(*(inp[1])) );
 			break;
+		default:
+			ZError::Throw<ZWrongNumberOfArguments>();
+			break;
 		}
+
 		ZExtrude();
 	}
 
