@@ -142,7 +142,7 @@ ZTvarp ZParseInt(ZTvarS inp)
 void ZModInit_Test()
 {
 	ZIFunction* zf=ZAlloc(ZIFunction,50);
-	ZTvarp zv=ZAlloc(ZTvar,10);
+	ZTvarp zv=ZAlloc(ZTvar,50);
 
 	zf->pFunInit(1,Zprint);
 	*zv=ZTFunction(zf);
