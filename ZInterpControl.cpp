@@ -54,39 +54,36 @@ namespace ZInterp
 		ANTLR3_MARKER Wcond=((pANTLR3_BASE_TREE)(wnode->getChild(wnode,0)))->savedIndex;
 		ANTLR3_MARKER Wexpr=((pANTLR3_BASE_TREE)(wnode->getChild(wnode,1)))->savedIndex;
 		ANTLR3_MARKER Wend =((pANTLR3_BASE_TREE)(wnode->getChild(wnode,2)))->savedIndex;
-
+	
         ZInterp::lend.push_back(Wend);
-        ZInterp::lCon.push_back(Wend);
-		while(boost::apply_visitor(BoolVal(),*((ZTvarp)(cond->u)))== ZBTrue )
+        ZInterp::lCon.push_back(Wcond);
+		while ( boost :: apply_visitor ( BoolVal ( ) , * ( ( ZTvarp ) ( cond -> u ) ) ) == ZBTrue )
 		{
 			SEEK(Wexpr);
 			MATCHT(EWHILE_EXP,NULL);
 			MATCHT(ANTLR3_TOKEN_DOWN,NULL);
+			if ( ZInterp :: isContinue )
+			{
+				ZInterp :: isContinue= ZBFalse;
+				continue ;
+			}
+			if(ZInterp::isExit)
+            {
+                ZInterp :: actual ++ ;
+                if(ZInterp :: actual == ZInterp :: loopNum)
+                {
+                    ZInterp :: actual = 0 ;
+                    ZInterp :: isExit = ZBFalse ;
+                } 
+                break ;
+            }
 			xyz->expr_g(xyz);
 			SEEK(Wcond);
 			MATCHT(EWHILE_CON,NULL);
 			MATCHT(ANTLR3_TOKEN_DOWN,NULL);
 			cond = (xyz->expr_g(xyz)).start;
-            if(ZInterp::isExit)
-            {
-                ZInterp::actual++;
-                if(ZInterp::actual==ZInterp::loopNum)
-                {
-                    ZInterp::actual=0;
-                    ZInterp::isExit = ZBFalse ;
-                }
-                break ;
-            }
-            if(ZInterp :: isContinue)
-            {
-                //ZInterp::actual++;
-                //if(ZInterp::actual==ZInterp::loopNum)
-                //{
-                    //  ZInterp::actual=0;
-                    //ZInterp::isExit = ZBFalse ;
-                //}
-                continue ;
-            }
+			
+		    
 		}
 		SEEK(Wend);
 		MATCHT(EWHILE_END,NULL);
@@ -132,8 +129,8 @@ namespace ZInterp
         }
 		ZChar* id=getNodeText((pANTLR3_BASE_TREE)fnode->getChild(fnode,0));
 	    ZInterp::ZSym.currentScope->VarTable.Insert(v,id);
-
-        for ( ;  start !=end && cond ; start += scale )
+		bool direct = ( start < end ) ? true : false ;
+		for ( ; direct?  start <=end : start >= end && cond ; start += scale )
 		{
             if(list==NULL)            {
                 //f.val+=scale;
@@ -148,11 +145,13 @@ namespace ZInterp
                // f.val=atof(boost::apply_visitor(ToString(),*(list->val[start])));
 				*v=*(list->val[start]);
             }
-			SEEK ( fexpr ) ;
-			MATCHT ( EFOR_EXP , NULL ) ;
-			MATCHT ( ANTLR3_TOKEN_DOWN , NULL ) ;
-			xyz -> expr_g ( xyz ) ;
-            if(ZInterp::isExit)
+			if(ZInterp :: isContinue)
+            {
+				ZInterp :: isContinue=ZBFalse;
+                continue ;
+
+            }
+		    if(ZInterp::isExit)
             {
                 ZInterp::actual++;
                 if(ZInterp::actual==ZInterp::loopNum)
@@ -162,16 +161,10 @@ namespace ZInterp
                 }
                 break ;
             }
-            if(ZInterp :: isContinue)
-            {
-                //ZInterp::actual++;
-                //if(ZInterp::actual==ZInterp::loopNum)
-                //{
-                    //  ZInterp::actual=0;
-                    //ZInterp::isExit = ZBFalse ;
-                //}
-                continue ;
-            }
+			SEEK ( fexpr ) ;
+			MATCHT ( EFOR_EXP , NULL ) ;
+			MATCHT ( ANTLR3_TOKEN_DOWN , NULL ) ;
+			xyz -> expr_g ( xyz ) ;
 		}
 		SEEK ( fend ) ;
 		MATCHT ( EFOR_END , NULL ) ;
@@ -223,7 +216,7 @@ namespace ZInterp
 		
 		int c=1;
 		//while((pANTLR3_BASE_TREE)(caseNode)->getChild(caseNode,c)!=NULL)
-		for(int j=0;j<cnt-1;j++)
+		for(int j=0;j<cnt-2;j++)
 		{
 			ANTLR3_MARKER item=(((pANTLR3_BASE_TREE)caseNode->getChild(caseNode,c))->savedIndex);
 			
@@ -269,4 +262,5 @@ namespace ZInterp
 		//MATCHT(ANTLR3_TOKEN_UP,NULL);
 		MATCHT(ECASE_END,NULL);
 	}
+
 };

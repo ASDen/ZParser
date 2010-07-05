@@ -149,6 +149,6 @@ void ZModInit_ZMath()
 	//zin.val = new ZMath();
 	*zv=ZObjP();
 	boost::get<gZObject>(*zv).cont=new ZMath();
-	ZInterp::ZSym.InsertSymbol(_ZC("ZMath"),zv);
+	ZInterp::ZSym.InsertSymbol(_ZC("Math"),zv);
 
 }

@@ -95,17 +95,25 @@ namespace ZInterp
 		ZTvarp var,elm;
 		ZTOInstance* zin=( gINSTANCE_ZCONV( *(ZTvarp)(t1->u) )).cont;
 		var = zin->val->getDyn().getSymbol(vName,true);
-		switch( boost::apply_visitor(getType(),*var) )
+		if(var!=NULL)
 		{
-		case ZETMemDataItem:
-			elm = (boost::apply_visitor(ZTDataBridge((MEMDATA_ZCONV(*var))), *(ZTvarp)(t1->u) ));
-			break;
-		case ZETFunction:
-			FUNCTION_ZCONV( *var )->obj = (ZTvarp)(t1->u);
-			elm = var;
-			break;
+			switch( boost::apply_visitor(getType(),*var) )
+			{
+			case ZETMemDataItem:
+				elm = (boost::apply_visitor(ZTDataBridge((MEMDATA_ZCONV(*var))), *(ZTvarp)(t1->u) ));
+				break;
+			case ZETFunction:
+				FUNCTION_ZCONV( *var )->obj = (ZTvarp)(t1->u);
+				elm = var;
+				break;
+			}
+			setCustomNodeField(t1,elm);
 		}
-		setCustomNodeField(t1,elm);
+		else
+		{
+			printf("it's not a member of object\n");
+			exit(5);
+		}
 	}
 
 	// TODO : use a pool of preallocaed temps , should affect
@@ -302,13 +310,25 @@ namespace ZInterp
         }
 
     }
-    void CONTINUE :: Exec ( pANTLR3_BASE_TREE conNode , yatgFW_Ctx_struct *xyz )
+	void CONTINUE :: Exec ( pANTLR3_BASE_TREE conNode , yatgFW_Ctx_struct *xyz )
     {
      //   char * n=getNodeText((pANTLR3_BASE_TREE)((pANTLR3_BASE_TREE)exitNode->getChild(exitNode,0))->getChild((pANTLR3_BASE_TREE)exitNode->getChild(exitNode,0),0));
         isContinue = ZBTrue ;
         //loopNum=atoi(n);
         SEEK(lCon[0]);
+        switch(LA(1))
+        {
+        case EFOR_END:
+            MATCHT(EFOR_END,NULL);
+            break;
+        case EDO_END:
+            MATCHT(EDO_END,NULL);
+            break;
+        case EWHILE_END:
+            MATCHT(EWHILE_END,NULL);
+            break;
+        }
+	}
 
-        MATCHT(EFOR_END,NULL);
-    }
+
 };
