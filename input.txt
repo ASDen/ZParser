@@ -1,9 +1,2 @@
-x=2
-y=2
-case x of
-(
-x+y:
-printL(x)
-3:
-printL(x)
-)
+
+print("an\\\"nasd\n123\tt\n\n\nn\n")

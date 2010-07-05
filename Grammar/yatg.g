@@ -191,7 +191,7 @@ case_expr
 	 ;
 
 case_item 
-	: constant SS_COLON expr_g ->^(CASE_Item  constant expr_g)
+	: expr_g SS_COLON expr_g ->^(CASE_Item  expr_g expr_g)
 	| KW_DEFAULT SS_COLON expr_g ->^(CASE_Item   DEFAULT expr_g)
 	;
 
@@ -324,6 +324,9 @@ constant
 number	:
 	(SS_MINUS)? DIGIT
     	  ->^(NUMBER (SS_MINUS)? DIGIT )
+    	  |
+    	  (SS_MINUS)? DIGIT1
+    	  ->^(NUMBER (SS_MINUS)? DIGIT1 )
 	;
 //
 constant_expression
@@ -764,7 +767,10 @@ LETTER
 	| '_'
 	;
 	
-DIGIT 	: ('0'..'9')+('.'('0'..'9')+)?
+DIGIT 	: ('0'..'9')+
+	;
+
+DIGIT1 	: ('0'..'9')* '.' ('0'..'9')+
 	;
 
 HEX_LITERAL 
