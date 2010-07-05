@@ -118,6 +118,7 @@ namespace ZInterp
 	{
 	public:
 		static void Exec(pANTLR3_BASE_TREE conNode);
+		static void Exec1(pANTLR3_BASE_TREE conNode);
 	};
 
 };

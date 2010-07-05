@@ -225,6 +225,8 @@ constant
     	;
 number	:
 	^(e=NUMBER (SS_MINUS)? DIGIT ){ZInterp::Number::Exec($e);}
+	|
+	^(e=NUMBER (SS_MINUS)? DIGIT1 ){ZInterp::Number::Exec1($e);}
 	;
 assignment_expression
 	: 

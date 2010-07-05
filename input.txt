@@ -1,2 +1,2 @@
-
-print("an\\\"nasd\n123\tt\n\n\nn\n")
+x=12asd="20kkl\tk"qwe=40
+print("this is value of x \n \"",asd," ",qwe,"\"\n")

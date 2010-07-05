@@ -137,6 +137,26 @@ namespace ZInterp
 			*var=ZTFloat(boost::lexical_cast<float,ZChar*>(getNodeText(num)));
 			setCustomNodeField(numNode,var);
 		}
+	}
+
+	void Number::Exec1(pANTLR3_BASE_TREE numNode)
+	{
+		ZTvarp var=ZAlloc(ZTvar,1);
+		string str=getNodeText(numNode);
+		int cc=numNode->getChildCount(numNode);
+		
+		if(numNode->getChildCount(numNode)>1)
+		{
+			pANTLR3_BASE_TREE num=(pANTLR3_BASE_TREE)numNode->getChild(numNode,1);
+			*var=ZTFloat(boost::lexical_cast<float,ZChar*>(getNodeText(num))*-1);
+			setCustomNodeField(numNode,var);
+		}
+		else
+		{
+			pANTLR3_BASE_TREE num=(pANTLR3_BASE_TREE)numNode->getChild(numNode,0);
+			*var=ZTFloat(boost::lexical_cast<float,ZChar*>(getNodeText(num)));
+			setCustomNodeField(numNode,var);
+		}
 
 	}
 
