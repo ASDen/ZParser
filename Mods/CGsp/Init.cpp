@@ -67,6 +67,7 @@ void ZModInit_CGsp()
 	ADD_CLASS(ZAxis  ,"__ZAxis");
 	ADD_CLASS(ZPoint ,"ZPoint");
 	
+	ADD_CLASS(ZMatrix ,"ZMat");
 	
 
 }

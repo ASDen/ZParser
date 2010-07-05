@@ -8,7 +8,7 @@
 namespace ZInterp
 {
 	extern ZSymbolTable<ZTvar> ZSym;
-    extern ZIBool isExit,isContinue;
+	extern ZIBool isExit,isContinue,ifScope,caseScope;
     extern vector <ANTLR3_MARKER> lend,lCon;
     extern int loopNum,actual,currentFrame;
 	extern yatgFW_Ctx_struct* cxtr;
@@ -119,6 +119,12 @@ namespace ZInterp
 	public:
 		static void Exec(pANTLR3_BASE_TREE conNode);
 		static void Exec1(pANTLR3_BASE_TREE conNode);
+	};
+
+	class Matrix
+	{
+	public:
+		static void Exec(pANTLR3_BASE_TREE matrixNode , yatgFW_Ctx_struct* xyz);
 	};
 
 };

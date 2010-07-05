@@ -1,6 +1,5 @@
 #include "../stdafx.h"
 #include "../ZInterp.h"
-
 #define _USE_MATH_DEFINES
 #include "math.h"
 
@@ -218,6 +217,25 @@ ZTvarp ZParseInt(ZTvarS inp)
 	}
 }
 
+
+ZTvarp IsDefined(ZTvarS inp)
+{
+	string var=STRING_ZCONV( *inp[0]);
+	ZTvarp res = ZInterp::ZSym . getSymbol ((char*) var.c_str() , true ) ;
+	if(res!=NULL)
+	{
+		ZTvarp res1=ZAlloc(ZTvar,1);
+		*res1=ZTBool(true);
+		return res1;
+	}
+	else
+	{
+		ZTvarp res1=ZAlloc(ZTvar,1);
+		*res1=ZTBool(false);
+		return res1;
+	}
+
+}
 void ZModInit_Test()
 {
 	ZIFunction* zf=ZAlloc(ZIFunction,50);
@@ -267,4 +285,8 @@ void ZModInit_Test()
 	*zv=ZTFunction(zf);
 	ZInterp::ZSym.InsertSymbol(_ZC("tan"),zv);
 
+	zf++;zv++;
+	zf->pFunInit(1,IsDefined);
+	*zv=ZTFunction(zf);
+	ZInterp::ZSym.InsertSymbol(_ZC("IsDefined"),zv);
 }

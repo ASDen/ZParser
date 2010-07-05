@@ -1,2 +1,2 @@
-x=12asd="20kkl\tk"qwe=40
-print("this is value of x \n \"",asd," ",qwe,"\"\n")
+x=12
+printL(IsDefined("xas"))

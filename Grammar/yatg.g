@@ -107,6 +107,9 @@ tokens {
 	PRIM_EXP;
 	// NUMBER
 	NUMBER;
+	//Matrix
+	MATRIX; 
+	ROW;
 }
 
 
@@ -304,6 +307,7 @@ constant
     	| STRING_LITERIAL
     	| SS_HASH IDENTIFIER
    	| array
+   	| matrix
     	| bitarray
     	| box2
    	| point3
@@ -422,7 +426,19 @@ array
 	| SS_OBRACKET ele+=expr_g ( SS_COMMA ele+=expr_g )* SS_CBRACKET
 	-> ^(ARR_A $ele+)
 	;
+matrix
+	: SS_OCBRACKET SS_CCBRACKET
+	-> ^(MATRIX)
+	| SS_OCBRACKET ele+= row ( SS_COMMA ele+= row )* SS_CCBRACKET
+	-> ^(MATRIX $ele+)
+	;
 
+row	
+	: SS_OCBRACKET SS_CCBRACKET
+	-> ^(ROW)
+	|  SS_OCBRACKET ele+=expr_g ( SS_COMMA ele+=expr_g )* SS_CCBRACKET
+	-> ^(ROW $ele+)
+	;
 bitarray 
 	: SS_HASH SS_OCBRACKET SS_CCBRACKET -> ^(ARR_BIT)
 	| SS_HASH SS_OCBRACKET ele+=arrrange ( SS_COMMA ele+=arrrange )* SS_CCBRACKET -> ^(ARR_BIT $ele+)

@@ -20,7 +20,7 @@ namespace ZInterp
 {
 	
 	ZSymbolTable<ZTvar> ZSym;
-    ZIBool isExit=ZBFalse,isContinue=ZBFalse;
+	ZIBool isExit=ZBFalse,isContinue=ZBFalse,ifScope=ZBFalse,caseScope=ZBFalse;
     vector <ANTLR3_MARKER> lend,lCon;
 	int loopNum=0,actual=0,currentFrame=0,currentLine=1;
 	yatgFW_Ctx_struct* cxtr;
@@ -32,12 +32,14 @@ namespace ZInterp
 
 	void global :: IncScope()
 	{
-		ZSym . InitScope ( ) ;
+		if(!ifScope || !caseScope)
+			ZSym . InitScope ( ) ;
 	}
 
 	void global :: DecScope ( )
 	{
-		ZSym . FinScope();
+		if(!ifScope || !caseScope)
+			ZSym . FinScope();
 	}
 
 	void global::InitBuiltinMods()
@@ -111,8 +113,9 @@ namespace ZInterp
 		}
 		else
 		{
-			printf("it's not a member of object\n");
-			exit(5);
+			ZError::Throw<ZNotDefined>();
+			//printf("it's not a member of object\n");
+			//exit(5);
 		}
 	}
 
@@ -348,6 +351,27 @@ namespace ZInterp
             MATCHT(EWHILE_END,NULL);
             break;
         }
+	}
+
+	void Matrix::Exec(pANTLR3_BASE_TREE matrixNode , yatgFW_Ctx_struct* xyz)
+	{
+		MATCHT(MATRIX,NULL);
+		MATCHT(ANTLR3_TOKEN_DOWN,NULL);
+		for ( int i=0;i<matrixNode->getChildCount(matrixNode);i++)
+		{
+			pANTLR3_BASE_TREE row= (pANTLR3_BASE_TREE)matrixNode->getChild(matrixNode,i);
+			MATCHT(ROW,NULL);
+			MATCHT(ANTLR3_TOKEN_DOWN,NULL);
+			for( int j=0;j<row->getChildCount(row);j++)
+			{
+				pANTLR3_BASE_TREE element=(pANTLR3_BASE_TREE)row->getChild(row,j);
+				//SEEK(element->savedIndex);
+				xyz->expr_g(xyz);
+				MATCHT(ANTLR3_TOKEN_UP,NULL);
+			}
+		}
+		cout<<"Matrix"<<endl;
+
 	}
 
 

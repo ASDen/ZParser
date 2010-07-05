@@ -18,14 +18,15 @@ namespace ZInterp
 	void IfExpr::Exec(pANTLR3_BASE_TREE ifnode,pANTLR3_BASE_TREE cond,yatgFW_Ctx_struct* xyz)
 	{
 		pANTLR3_BASE_TREE r;
-
 		if(boost::apply_visitor(BoolVal(),*((ZTvarp)(cond->u)))== ZBTrue )
 		{
 			r=(pANTLR3_BASE_TREE)(ifnode->getChild(ifnode,1));
 			SEEK(r->savedIndex);
 			MATCHT(EIF_THEN,NULL);
 			MATCHT(ANTLR3_TOKEN_DOWN,NULL);
+			ZInterp::ifScope=true;
 			r=(xyz->expr_g(xyz)).start;
+			ZInterp::ifScope=false;
 			ifnode->u=r->u;
 			r=(pANTLR3_BASE_TREE)(ifnode->getChild(ifnode,3));
 			SEEK(r->savedIndex);
@@ -40,7 +41,9 @@ namespace ZInterp
 			if(LA(1)==ANTLR3_TOKEN_DOWN)
 			{
 				MATCHT(ANTLR3_TOKEN_DOWN,NULL);
+				ZInterp::ifScope=true;
 				r=(xyz->expr_g(xyz)).start;
+				ZInterp::ifScope=false;
 				ifnode->u=r->u;
 				MATCHT(ANTLR3_TOKEN_UP,NULL);
 			}
@@ -213,7 +216,6 @@ namespace ZInterp
 		pANTLR3_BASE_TREE p=(pANTLR3_BASE_TREE)t->getChild(t,0);
 		ZChar* var = getNodeText((pANTLR3_BASE_TREE)p->getChild(p,0));
         ZTvarp x= ZInterp::ZSym.getSymbol(var,ZBTrue);
-		
 		int c=1;
 		//while((pANTLR3_BASE_TREE)(caseNode)->getChild(caseNode,c)!=NULL)
 		for(int j=0;j<cnt-2;j++)
@@ -230,16 +232,16 @@ namespace ZInterp
 				pANTLR3_BASE_TREE tt = ( pANTLR3_BASE_TREE ) caseNode -> getChild ( caseNode , c ) ;
 				pANTLR3_BASE_TREE tt1 = ( pANTLR3_BASE_TREE ) tt -> getChild ( tt , 1 ) ;
 				SEEK (  tt1-> savedIndex);
+				caseScope=true;
 				xyz -> expr_g ( xyz );
+				caseScope=false;
 				break;
 			}
 			else
 			{
 				xyz->expr_g(xyz);
 				ZTvarp y = ((ZTvarp)cur->u);
-
 				string str=boost::apply_visitor(ToString(),*y);
-
 				ZTvarp var=ZAlloc(ZTvar,1);
 				*var = boost::apply_visitor(Boolean::Equal(),*x,*y);
 				string str1=boost::apply_visitor(ToString(),*var);
@@ -249,7 +251,9 @@ namespace ZInterp
 					pANTLR3_BASE_TREE tt = ( pANTLR3_BASE_TREE ) caseNode -> getChild ( caseNode , c ) ;
 					pANTLR3_BASE_TREE tt1 = ( pANTLR3_BASE_TREE ) tt -> getChild ( tt , 1 ) ;
 					SEEK (  tt1-> savedIndex);
+					caseScope=true;
 					xyz -> expr_g ( xyz );
+					caseScope=false;
 					//MATCHT ( ANTLR3_TOKEN_UP , NULL ) ;
 					break;
 				}
