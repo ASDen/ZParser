@@ -130,7 +130,8 @@ namespace ZInterp
 			CallFunction(Fargs,inp,t1,arg,xyz);
 			break;
 		default:
-			cout<<"This is not defined Function\n";
+			cout<<"This is not defined Function  "<<getNodeText((pANTLR3_BASE_TREE)t1->getChild(t1,0))<<endl;
+			exit(5);
 		}
 	}
 	////////////////////////////////////////////////

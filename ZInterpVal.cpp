@@ -20,7 +20,7 @@ namespace ZInterp
 {
 	
 	ZSymbolTable<ZTvar> ZSym;
-    ZIBool isExit=ZBFalse,isContinue=ZBFalse;
+	ZIBool isExit=ZBFalse,isContinue=ZBFalse,ifScope=ZBFalse,caseScope=ZBFalse;
     vector <ANTLR3_MARKER> lend,lCon;
 	int loopNum=0,actual=0,currentFrame=0,currentLine=1;
 	yatgFW_Ctx_struct* cxtr;
@@ -32,12 +32,14 @@ namespace ZInterp
 
 	void global :: IncScope()
 	{
-		ZSym . InitScope ( ) ;
+		if(!ifScope || !caseScope)
+			ZSym . InitScope ( ) ;
 	}
 
 	void global :: DecScope ( )
 	{
-		ZSym . FinScope();
+		if(!ifScope || !caseScope)
+			ZSym . FinScope();
 	}
 
 	void global::InitBuiltinMods()
@@ -95,23 +97,52 @@ namespace ZInterp
 		ZTvarp var,elm;
 		ZTOInstance* zin=( gINSTANCE_ZCONV( *(ZTvarp)(t1->u) )).cont;
 		var = zin->val->getDyn().getSymbol(vName,true);
-		switch( boost::apply_visitor(getType(),*var) )
+		if(var!=NULL)
 		{
-		case ZETMemDataItem:
-			elm = (boost::apply_visitor(ZTDataBridge((MEMDATA_ZCONV(*var))), *(ZTvarp)(t1->u) ));
-			break;
-		case ZETFunction:
-			FUNCTION_ZCONV( *var )->obj = (ZTvarp)(t1->u);
-			elm = var;
-			break;
+			switch( boost::apply_visitor(getType(),*var) )
+			{
+			case ZETMemDataItem:
+				elm = (boost::apply_visitor(ZTDataBridge((MEMDATA_ZCONV(*var))), *(ZTvarp)(t1->u) ));
+				break;
+			case ZETFunction:
+				FUNCTION_ZCONV( *var )->obj = (ZTvarp)(t1->u);
+				elm = var;
+				break;
+			}
+			setCustomNodeField(t1,elm);
 		}
-		setCustomNodeField(t1,elm);
+		else
+		{
+			ZError::Throw<ZNotDefined>();
+			//printf("it's not a member of object\n");
+			//exit(5);
+		}
 	}
 
 	// TODO : use a pool of preallocaed temps , should affect
 	//		  performance greatly
 
 	void Number::Exec(pANTLR3_BASE_TREE numNode)
+	{
+		ZTvarp var=ZAlloc(ZTvar,1);
+		string str=getNodeText(numNode);
+		int cc=numNode->getChildCount(numNode);
+		
+		if(numNode->getChildCount(numNode)>1)
+		{
+			pANTLR3_BASE_TREE num=(pANTLR3_BASE_TREE)numNode->getChild(numNode,1);
+			*var=ZTFloat(boost::lexical_cast<float,ZChar*>(getNodeText(num))*-1);
+			setCustomNodeField(numNode,var);
+		}
+		else
+		{
+			pANTLR3_BASE_TREE num=(pANTLR3_BASE_TREE)numNode->getChild(numNode,0);
+			*var=ZTFloat(boost::lexical_cast<float,ZChar*>(getNodeText(num)));
+			setCustomNodeField(numNode,var);
+		}
+	}
+
+	void Number::Exec1(pANTLR3_BASE_TREE numNode)
 	{
 		ZTvarp var=ZAlloc(ZTvar,1);
 		string str=getNodeText(numNode);
@@ -302,13 +333,46 @@ namespace ZInterp
         }
 
     }
-    void CONTINUE :: Exec ( pANTLR3_BASE_TREE conNode , yatgFW_Ctx_struct *xyz )
+	void CONTINUE :: Exec ( pANTLR3_BASE_TREE conNode , yatgFW_Ctx_struct *xyz )
     {
      //   char * n=getNodeText((pANTLR3_BASE_TREE)((pANTLR3_BASE_TREE)exitNode->getChild(exitNode,0))->getChild((pANTLR3_BASE_TREE)exitNode->getChild(exitNode,0),0));
         isContinue = ZBTrue ;
         //loopNum=atoi(n);
         SEEK(lCon[0]);
+        switch(LA(1))
+        {
+        case EFOR_END:
+            MATCHT(EFOR_END,NULL);
+            break;
+        case EDO_END:
+            MATCHT(EDO_END,NULL);
+            break;
+        case EWHILE_END:
+            MATCHT(EWHILE_END,NULL);
+            break;
+        }
+	}
 
-        MATCHT(EFOR_END,NULL);
-    }
+	void Matrix::Exec(pANTLR3_BASE_TREE matrixNode , yatgFW_Ctx_struct* xyz)
+	{
+		MATCHT(MATRIX,NULL);
+		MATCHT(ANTLR3_TOKEN_DOWN,NULL);
+		for ( int i=0;i<matrixNode->getChildCount(matrixNode);i++)
+		{
+			pANTLR3_BASE_TREE row= (pANTLR3_BASE_TREE)matrixNode->getChild(matrixNode,i);
+			MATCHT(ROW,NULL);
+			MATCHT(ANTLR3_TOKEN_DOWN,NULL);
+			for( int j=0;j<row->getChildCount(row);j++)
+			{
+				pANTLR3_BASE_TREE element=(pANTLR3_BASE_TREE)row->getChild(row,j);
+				//SEEK(element->savedIndex);
+				xyz->expr_g(xyz);
+				MATCHT(ANTLR3_TOKEN_UP,NULL);
+			}
+		}
+		cout<<"Matrix"<<endl;
+
+	}
+
+
 };

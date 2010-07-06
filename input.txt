@@ -1,22 +1,2 @@
-vm = KeyFrameAnimation();
-
-p = Plane(100,[0,0,0]);
-p.setWire(false)
-p.Color(ZPoint(0.9,0.7,0.9))
-vm.Add(p);
-
-b = Box(40,40,80,30,30,50,[0,0,40])	
-b.Color(ZPoint(0.8,0.2,0.4))
-b.setWire(false);
-vm.Add(b);
-
-t = Twist(-500,ZPoint(0,0,-40),ZAxis,true,0,0)
-printL(t.Center())
-b.ApplyModifier(t)
-
-animate on
-(
-	at time 200 ( t.Upper_Limit(80) )
-)
-
-vm.View();
+x=12
+printL(IsDefined("xas"))

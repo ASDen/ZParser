@@ -3,11 +3,11 @@ grammar yatg;
 options 
 {
 	output=AST;
-	language=C;
+	//language=C;
 	backtrack=true;
     	memoize=true;
     	k=2;
-    	ASTLabelType    = pANTLR3_BASE_TREE;
+    	//ASTLabelType    = pANTLR3_BASE_TREE;
 }
 
 
@@ -107,6 +107,9 @@ tokens {
 	PRIM_EXP;
 	// NUMBER
 	NUMBER;
+	//Matrix
+	MATRIX; 
+	ROW;
 }
 
 
@@ -191,7 +194,7 @@ case_expr
 	 ;
 
 case_item 
-	: constant SS_COLON expr_g ->^(CASE_Item  constant expr_g)
+	: expr_g SS_COLON expr_g ->^(CASE_Item  expr_g expr_g)
 	| KW_DEFAULT SS_COLON expr_g ->^(CASE_Item   DEFAULT expr_g)
 	;
 
@@ -304,6 +307,7 @@ constant
     	| STRING_LITERIAL
     	| SS_HASH IDENTIFIER
    	| array
+   	| matrix
     	| bitarray
     	| box2
    	| point3
@@ -324,6 +328,9 @@ constant
 number	:
 	(SS_MINUS)? DIGIT
     	  ->^(NUMBER (SS_MINUS)? DIGIT )
+    	  |
+    	  (SS_MINUS)? DIGIT1
+    	  ->^(NUMBER (SS_MINUS)? DIGIT1 )
 	;
 //
 constant_expression
@@ -419,7 +426,19 @@ array
 	| SS_OBRACKET ele+=expr_g ( SS_COMMA ele+=expr_g )* SS_CBRACKET
 	-> ^(ARR_A $ele+)
 	;
+matrix
+	: SS_OCBRACKET SS_CCBRACKET
+	-> ^(MATRIX)
+	| SS_OCBRACKET ele+= row ( SS_COMMA ele+= row )* SS_CCBRACKET
+	-> ^(MATRIX $ele+)
+	;
 
+row	
+	: SS_OCBRACKET SS_CCBRACKET
+	-> ^(ROW)
+	|  SS_OCBRACKET ele+=expr_g ( SS_COMMA ele+=expr_g )* SS_CCBRACKET
+	-> ^(ROW $ele+)
+	;
 bitarray 
 	: SS_HASH SS_OCBRACKET SS_CCBRACKET -> ^(ARR_BIT)
 	| SS_HASH SS_OCBRACKET ele+=arrrange ( SS_COMMA ele+=arrrange )* SS_CCBRACKET -> ^(ARR_BIT $ele+)
@@ -764,7 +783,10 @@ LETTER
 	| '_'
 	;
 	
-DIGIT 	: ('0'..'9')+('.'('0'..'9')+)?
+DIGIT 	: ('0'..'9')+
+	;
+
+DIGIT1 	: ('0'..'9')* '.' ('0'..'9')+
 	;
 
 HEX_LITERAL 

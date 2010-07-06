@@ -14,7 +14,7 @@ public:
 		StProps.InitScope();
 		AddFunction(_ZC("xtoString"),0,&ZMath::toString);
 		AddFunction(_ZC("Zsqrt"),1,&ZMath::Zsqrt);
-		AddFunction(_ZC("Zpow"),2,&ZMath::Zpow);
+		AddFunction(_ZC("Power"),2,&ZMath::Zpow);
 		AddFunction(_ZC("Zsqrt"),1,&ZMath::Zsqrt);
 		AddFunction(_ZC("Zsin"),1,&ZMath::Zsin);
 		AddFunction(_ZC("Zcos"),1,&ZMath::Zcos);
@@ -149,6 +149,6 @@ void ZModInit_ZMath()
 	//zin.val = new ZMath();
 	*zv=ZObjP();
 	boost::get<gZObject>(*zv).cont=new ZMath();
-	ZInterp::ZSym.InsertSymbol(_ZC("ZMath"),zv);
+	ZInterp::ZSym.InsertSymbol(_ZC("Math"),zv);
 
 }

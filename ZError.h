@@ -5,7 +5,8 @@ enum ZErrorTypes{
 	ZOperationNotSupported,
 	ZDivisionByZeroException,
 	ZWrongNumberOfArguments,
-	ZWrongNumberInList
+	ZWrongNumberInList,
+	ZNotDefined
 };
 
 #define OUT_STRM std::cout
@@ -59,6 +60,11 @@ public:
 	template <>
 	static void Speak<ZWrongNumberInList>(){
 		OUT_STRM<<(_ZC("Wrong number of arguments passed in the List")); 
+	}
+
+	template <>
+	static void Speak<ZNotDefined>(){
+		OUT_STRM<<(_ZC("Not Defined Element")); 
 	}
 	
 };

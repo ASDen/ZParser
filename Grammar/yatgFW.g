@@ -215,6 +215,8 @@ constant
     	{ ZInterp::Constant::Exec($e); }
     	| ^(c=ARR_A  expr_g*)
    	{ ZInterp::Constant::ComplexExec($c); }
+   	| ^(c=ROW expr_g*)
+	{ZInterp::Matrix::Exec($c,ctx);}
     	| SS_HASH IDENTIFIER
     	| bitarray
     	| box2
@@ -225,6 +227,8 @@ constant
     	;
 number	:
 	^(e=NUMBER (SS_MINUS)? DIGIT ){ZInterp::Number::Exec($e);}
+	|
+	^(e=NUMBER (SS_MINUS)? DIGIT1 ){ZInterp::Number::Exec1($e);}
 	;
 assignment_expression
 	: 
@@ -318,3 +322,16 @@ arrrange
 	: 
 	  ^(ARR_BIT_RANGE  arrrange arrrange?)
 	;		
+matrix
+	:
+	
+	  e = MATRIX 
+	|^( e = MATRIX expr_g+)
+	// {ZInterp::Matrix::Exec($e,ctx);}
+	;
+
+row	
+	: 
+	 ROW
+	| ^(ROW expr_g+)
+	;
