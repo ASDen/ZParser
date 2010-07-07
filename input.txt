@@ -1,2 +1,35 @@
-x=12
-printL(IsDefined("xas"))
+fn BoxCube x,y,z =(
+    ps = PhysicsSimulation();
+    
+    p = Plane(300,[0,0,0]);
+	p.Color(ZPoint(0.6,0.3,0.6))
+    p.setPhysActor(ps,ps.ZPhysPLANE);
+    ps.AddRigid(p);
+
+	ma = Math()
+	
+    for k = 0 to x do(
+        for i = 0 to z do(
+        
+			s = Spindle(2,10,3,3,3,3,[ma.Random(-150,300),ma.Random(-150,300),250])
+			s.Color(ZPoint(ma.Random(0,10)/10,ma.Random(0,10)/10,ma.Random(0,10)/10))
+			s.setWire(false);
+			s.setPhysActor(ps,ps.ZPhysCONVEX)
+			s.setPhysMass(100)
+			ps.AddRigid(s);
+            
+            for j = 0 to y do(
+				if ( (k < 7 && (j < 7 || j > 28)) || (k > 28 && (j < 7 || j > 28)) ) then (
+					b = Box(4,[k*4-((x-1)/2.0)*4,j*4-((y-1)/2.0)*4,i*4+2]);
+					b.Color(ZPoint(k*0.9/10,j/10,i*0.8/10))
+					b.setPhysActor(ps,ps.ZPhysBOX);
+					b.setWire(false);
+					ps.AddRigid(b);
+                )
+            )
+        )
+    )
+    ps.View();
+)
+
+BoxCube(35,35,7)

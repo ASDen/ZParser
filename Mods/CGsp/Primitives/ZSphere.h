@@ -65,29 +65,34 @@ public:
 		case 1:
 			primt = new Sphere_3();
 			break;
+
 		case 2:
 			primt = new Sphere_3( FLOAT_ZCONV(*(inp[0])) );
 			break;
+
 		case 3:
 			primt = new Sphere_3( FLOAT_ZCONV(*inp[0]) , INT_ZCONV(*inp[1]) );
 			break;
+
 		default:
 			ZError::Throw<ZWrongNumberOfArguments>();
 			break;
 		}
+
 		primt->Draw();
 		InitNode(inp,primt,PositionExists);
 
 		sRadius   = new SpherePropsD(&Sphere_3::radius,primt,primt->radius);
 		sSideSegs = new SpherePropsI(&Sphere_3::Segs,primt,primt->Segs);
 
-		
-		primt->ApplyModifier(sRadius);
-		primt->ApplyModifier(sSideSegs);
+		DoFor(sRadius);
+		DoFor(sSideSegs);
+
+		sSideSegs->commit = true;
 
 		ZSphere();
 	}
-
+	
 	template<class T,class S,T* ZSphere::*mod>
 	ZTvarp MFactory (ZTvarS inp)
 	{
@@ -99,7 +104,13 @@ public:
 			return res;
 		}
 
+		if ( (this->*mod)->extrensic == true )
+			DoFor( (this->*mod) );
+
 		FrameCreater::FillFrames(ZInterp::currentFrame,(S)(FLOAT_ZCONV(*(inp[0]))),&T::PolyP,*(this->*mod) );
+		(this->*mod)->CalcmxF();
+		sSideSegs->mxFrame = std::max( sSideSegs->mxFrame , (this->*mod)->mxFrame );
+
 		return NULL;
 	}
 };

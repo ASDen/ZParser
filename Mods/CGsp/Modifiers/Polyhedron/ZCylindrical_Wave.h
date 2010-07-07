@@ -180,6 +180,9 @@ public:
 			else
 				ZError::Throw<ZBadConversionError>();
 			break;
+
+		default:
+			ZError::Throw<ZBadConversionError>();
 		}
 
 		if (!CenterExists)

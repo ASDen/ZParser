@@ -77,27 +77,34 @@ public:
 		case 1:
 			primt = new ChamferCyl_3();
 			break;
+
 		case 2:
 			primt = new ChamferCyl_3( FLOAT_ZCONV(*(inp[0])) );
 			break;
+
 		case 3:
 			primt = new ChamferCyl_3( FLOAT_ZCONV(*(inp[0])) , INT_ZCONV(*(inp[1])) );
 			break;
+
 		case 4:
 			primt = new ChamferCyl_3( FLOAT_ZCONV(*inp[0]) , FLOAT_ZCONV(*inp[1]) , FLOAT_ZCONV(*inp[2]) );
 			break;
+
 		case 5:
 		case 6:
 		case 7:
 			primt = new ChamferCyl_3( FLOAT_ZCONV(*inp[0]) , FLOAT_ZCONV(*inp[1]) , FLOAT_ZCONV(*inp[2]) , INT_ZCONV(*inp[3]) );
 			break;
+
 		case 8:
 			primt = new ChamferCyl_3( FLOAT_ZCONV(*inp[0]) , FLOAT_ZCONV(*inp[1]) , FLOAT_ZCONV(*inp[2]) , INT_ZCONV(*inp[3]) , INT_ZCONV(*inp[4]) , INT_ZCONV(*inp[5]) , INT_ZCONV(*inp[6]) );
 			break;
+
 		default:
 			ZError::Throw<ZWrongNumberOfArguments>();
 			break;
 		}
+
 		primt->Draw();
 		InitNode(inp,primt,PositionExists);
 
@@ -109,18 +116,19 @@ public:
 		cHeightSegs = new ChamferCylPropsI(&ChamferCyl_3::height_Seg,primt,primt->height_Seg);
 		cFilletSegs = new ChamferCylPropsI(&ChamferCyl_3::fillet_Seg,primt,primt->fillet_Seg);
 
-		
-		primt->ApplyModifier(cRadius);
-		primt->ApplyModifier(cFillet);
-		primt->ApplyModifier(cHeight);
-		primt->ApplyModifier(cSideSegs);
-		primt->ApplyModifier(cCapSegs);
-		primt->ApplyModifier(cHeightSegs);
-		primt->ApplyModifier(cFilletSegs);
+		DoFor(cRadius);
+		DoFor(cFillet);
+		DoFor(cHeight);
+		DoFor(cSideSegs);
+		DoFor(cCapSegs);
+		DoFor(cHeightSegs);
+		DoFor(cFilletSegs);
+
+		cFilletSegs->commit = true;
 
 		ZChamferCyl();
 	}
-
+	
 	template<class T,class S,T* ZChamferCyl::*mod>
 	ZTvarp MFactory (ZTvarS inp)
 	{
@@ -132,7 +140,13 @@ public:
 			return res;
 		}
 
+		if ( (this->*mod)->extrensic == true )
+			DoFor( (this->*mod) );
+
 		FrameCreater::FillFrames(ZInterp::currentFrame,(S)(FLOAT_ZCONV(*(inp[0]))),&T::PolyP,*(this->*mod) );
+		(this->*mod)->CalcmxF();
+		cFilletSegs->mxFrame = std::max( cFilletSegs->mxFrame , (this->*mod)->mxFrame );
+
 		return NULL;
 	}
 };

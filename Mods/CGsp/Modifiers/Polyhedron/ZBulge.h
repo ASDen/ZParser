@@ -118,6 +118,7 @@ public:
 			else
 				ZError::Throw<ZBadConversionError>();
 			break;
+
 		case 5:
 			if ( (zp3 = dynamic_cast<ZPoint*>(INSTANCE_ZCONV(*(inp[1])))) != NULL && (za = dynamic_cast<ZAxis*>(INSTANCE_ZCONV(*(inp[2])))) != NULL && (zbut = dynamic_cast<ZBulgeType*>(INSTANCE_ZCONV(*(inp[3])))) != NULL)
 			{
@@ -127,6 +128,7 @@ public:
 			else
 				ZError::Throw<ZBadConversionError>();
 			break;
+
 		case 6:
 			if ( (zp3 = dynamic_cast<ZPoint*>(INSTANCE_ZCONV(*(inp[1])))) != NULL && (za = dynamic_cast<ZAxis*>(INSTANCE_ZCONV(*(inp[2])))) != NULL)
 			{
@@ -136,6 +138,7 @@ public:
 			else
 				ZError::Throw<ZBadConversionError>();
 			break;
+
 		case 7:
 			if ( (zp3 = dynamic_cast<ZPoint*>(INSTANCE_ZCONV(*(inp[1])))) != NULL && (za = dynamic_cast<ZAxis*>(INSTANCE_ZCONV(*(inp[2])))) != NULL && (zbut = dynamic_cast<ZBulgeType*>(INSTANCE_ZCONV(*(inp[3])))) != NULL)
 			{
@@ -145,6 +148,9 @@ public:
 			else
 				ZError::Throw<ZBadConversionError>();
 			break;
+
+		default:
+			ZError::Throw<ZBadConversionError>();
 		}
 
 		if (!CenterExists)

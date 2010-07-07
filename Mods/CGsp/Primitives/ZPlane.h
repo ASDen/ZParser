@@ -69,20 +69,25 @@ public:
 		case 1:
 			primt = new Plane_3();
 			break;
+
 		case 2:
 			primt = new Plane_3( FLOAT_ZCONV(*(inp[0])) );
 			break;
+
 		case 3:
 		case 4:
 			primt = new Plane_3( FLOAT_ZCONV(*(inp[0])) , INT_ZCONV(*(inp[1])) );
 			break;
+
 		case 5:
 			primt = new Plane_3( FLOAT_ZCONV(*inp[0]) , FLOAT_ZCONV(*inp[1]) , INT_ZCONV(*inp[2]) , INT_ZCONV(*inp[3]) );
 			break;
+
 		default:
 			ZError::Throw<ZWrongNumberOfArguments>();
 			break;
 		}
+
 		primt->Draw();
 		InitNode(inp,primt,PositionExists);
 
@@ -91,15 +96,16 @@ public:
 		pSWidth  = new PlanePropsI(&Plane_3::width_Seg,primt,primt->width_Seg);
 		pSLength = new PlanePropsI(&Plane_3::length_Seg,primt,primt->length_Seg);
 
+		DoFor(pWidth);
+		DoFor(pLength);
+		DoFor(pSWidth);
+		DoFor(pSLength);
 
-		primt->ApplyModifier(pWidth);
-		primt->ApplyModifier(pLength);
-		primt->ApplyModifier(pSWidth);
-		primt->ApplyModifier(pSLength);
+		pSLength->commit = true;
 
 		ZPlane();
 	}
-
+	
 	template<class T,class S,T* ZPlane::*mod>
 	ZTvarp MFactory (ZTvarS inp)
 	{
@@ -111,7 +117,13 @@ public:
 			return res;
 		}
 
+		if ( (this->*mod)->extrensic == true )
+			DoFor( (this->*mod) );
+
 		FrameCreater::FillFrames(ZInterp::currentFrame,(S)(FLOAT_ZCONV(*(inp[0]))),&T::PolyP,*(this->*mod) );
+		(this->*mod)->CalcmxF();
+		pSLength->mxFrame = std::max( pSLength->mxFrame , (this->*mod)->mxFrame );
+
 		return NULL;
 	}
 };

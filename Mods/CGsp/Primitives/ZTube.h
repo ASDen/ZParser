@@ -73,25 +73,32 @@ public:
 		case 1:
 			primt = new Tube_3();
 			break;
+
 		case 2:
 			primt = new Tube_3( FLOAT_ZCONV(*(inp[0])) );
 			break;
+
 		case 3:
 			primt = new Tube_3( FLOAT_ZCONV(*(inp[0])) , FLOAT_ZCONV(*(inp[1])) );
 			break;
+
 		case 4:
 			primt = new Tube_3( FLOAT_ZCONV(*inp[0]) , FLOAT_ZCONV(*inp[1]) , FLOAT_ZCONV(*inp[2]) );
 			break;
+
 		case 5:
 			primt = new Tube_3( FLOAT_ZCONV(*inp[0]) , FLOAT_ZCONV(*inp[1]) , FLOAT_ZCONV(*inp[2]) , INT_ZCONV(*inp[3]) );
 			break;
+
 		case 7:
 			primt = new Tube_3( FLOAT_ZCONV(*inp[0]) , FLOAT_ZCONV(*inp[1]) , FLOAT_ZCONV(*inp[2]) , INT_ZCONV(*inp[3]) , INT_ZCONV(*inp[4]) , INT_ZCONV(*inp[5]) );
 			break;
+
 		default:
 			ZError::Throw<ZWrongNumberOfArguments>();
 			break;
 		}
+
 		primt->Draw();
 		InitNode(inp,primt,PositionExists);
 
@@ -102,17 +109,18 @@ public:
 		tCapSegs	= new TubePropsI(&Tube_3::cap_Seg,primt,primt->cap_Seg);
 		tHeightSegs = new TubePropsI(&Tube_3::height_Seg,primt,primt->height_Seg);
 
-		
-		primt->ApplyModifier(tRadius1);
-		primt->ApplyModifier(tRadius2);
-		primt->ApplyModifier(tHeight);
-		primt->ApplyModifier(tSideSegs);
-		primt->ApplyModifier(tCapSegs);
-		primt->ApplyModifier(tHeightSegs);
+		DoFor(tRadius1);
+		DoFor(tRadius2);
+		DoFor(tHeight);
+		DoFor(tSideSegs);
+		DoFor(tCapSegs);
+		DoFor(tHeightSegs);
+
+		tHeightSegs->commit = true;
 
 		ZTube();
 	}
-
+	
 	template<class T,class S,T* ZTube::*mod>
 	ZTvarp MFactory (ZTvarS inp)
 	{
@@ -124,7 +132,13 @@ public:
 			return res;
 		}
 
+		if ( (this->*mod)->extrensic == true )
+			DoFor( (this->*mod) );
+
 		FrameCreater::FillFrames(ZInterp::currentFrame,(S)(FLOAT_ZCONV(*(inp[0]))),&T::PolyP,*(this->*mod) );
+		(this->*mod)->CalcmxF();
+		tHeightSegs->mxFrame = std::max( tHeightSegs->mxFrame , (this->*mod)->mxFrame );
+
 		return NULL;
 	}
 };

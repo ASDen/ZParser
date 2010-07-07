@@ -69,22 +69,28 @@ public:
 		case 1:
 			primt = new Capsule_3();
 			break;
+
 		case 2:
 			primt = new Capsule_3( FLOAT_ZCONV(*(inp[0])) );
 			break;
+
 		case 3:
 			primt = new Capsule_3( FLOAT_ZCONV(*(inp[0])) , INT_ZCONV(*(inp[1])) );
 			break;
+
 		case 4:
 			primt = new Capsule_3( FLOAT_ZCONV(*inp[0]) , FLOAT_ZCONV(*inp[1]) , INT_ZCONV(*inp[2]) );
 			break;
+
 		case 5:
 			primt = new Capsule_3( FLOAT_ZCONV(*inp[0]) , FLOAT_ZCONV(*inp[1]) , INT_ZCONV(*inp[2]) , INT_ZCONV(*inp[3]) );
 			break;
+
 		default:
 			ZError::Throw<ZWrongNumberOfArguments>();
 			break;
 		}
+
 		primt->Draw();
 		InitNode(inp,primt,PositionExists);
 
@@ -93,15 +99,16 @@ public:
 		cSideSegs	= new CapsulePropsI(&Capsule_3::Segs,primt,primt->Segs);
 		cHeightSegs = new CapsulePropsI(&Capsule_3::h_Segs,primt,primt->h_Segs);
 
-		
-		primt->ApplyModifier(cRadius);
-		primt->ApplyModifier(cHeight);
-		primt->ApplyModifier(cSideSegs);
-		primt->ApplyModifier(cHeightSegs);
+		DoFor(cRadius);
+		DoFor(cHeight);
+		DoFor(cSideSegs);
+		DoFor(cHeightSegs);
+
+		cHeightSegs->commit = true;
 
 		ZCapsule();
 	}
-
+	
 	template<class T,class S,T* ZCapsule::*mod>
 	ZTvarp MFactory (ZTvarS inp)
 	{
@@ -113,7 +120,13 @@ public:
 			return res;
 		}
 
+		if ( (this->*mod)->extrensic == true )
+			DoFor( (this->*mod) );
+
 		FrameCreater::FillFrames(ZInterp::currentFrame,(S)(FLOAT_ZCONV(*(inp[0]))),&T::PolyP,*(this->*mod) );
+		(this->*mod)->CalcmxF();
+		cHeightSegs->mxFrame = std::max( cHeightSegs->mxFrame , (this->*mod)->mxFrame );
+
 		return NULL;
 	}
 };
