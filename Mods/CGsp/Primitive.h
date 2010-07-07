@@ -19,6 +19,7 @@ public:
 		AddFunction(_ZC("setPhysActor") ,2,&PrimitiveAPI::setPhysActor);
 		AddFunction(_ZC("setPhysMass") ,2,&PrimitiveAPI::setPhysMass);
 		AddFunction(_ZC("setPhysThickness") ,2,&PrimitiveAPI::setPhysThickness);
+		AddFunction(_ZC("setPhysPose") ,2,&PrimitiveAPI::setPhysPose);
 		AddFunction(_ZC("ApplyModifier") ,1,&PrimitiveAPI::ApplyModifier);
 		AddFunction(_ZC("Modify") ,1,&PrimitiveAPI::Modify);
 		AddFunction(_ZC("setWire") ,1,&PrimitiveAPI::setWire);
@@ -313,6 +314,21 @@ public:
 			return NULL;
 			
 		pnode->ClothActor->setThickness(FLOAT_ZCONV(*(inp[0])));
+		
+		return NULL;
+	}
+
+	ZTvarp setPhysPose (ZTvarS inp)
+	{
+		if (inp.size() == 0)
+		{
+			ZError::Throw<ZWrongNumberOfArguments>();
+			return NULL;
+		}
+		
+		//zp3 = dynamic_cast<ZPoint*>(INSTANCE_ZCONV(*(inp[1]))))
+			
+		pnode->RigidActor->setGlobalPose(ZMatrix::toNxMat(MATRIX_ZCONV(*(inp[0]))));
 		
 		return NULL;
 	}

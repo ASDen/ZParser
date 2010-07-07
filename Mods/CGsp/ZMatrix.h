@@ -1,38 +1,25 @@
-USING_PART_OF_NAMESPACE_EIGEN
 class ZMatrix : public ZTBaseObject<ZMatrix> 
 {
 public:
-    ZTList myList;
+    ZTMatrix myMatrix;
     
     static void Init()
     {
         StProps.InitScope();
 
         AddFunction(_ZC("toString"),1,&ZMatrix::toString);
+        AddFunction(_ZC("transpose"),1,&ZMatrix::ZTransport);
 		AddFunction(_ZC("add"),2,&ZMatrix::Zadd);
-
+		AddFunction(_ZC("Translate"),3,&ZMatrix::ZTranslate);
+		AddFunction(_ZC("Scale"),3,&ZMatrix::ZScale);
+		AddFunction(_ZC("Rotate"),3,&ZMatrix::ZRotateEuler);
+		
         ZTObject::Inheriet(StProps);
     }
 
     ZMatrix(ZTvarS inp)
     {
-		if (inp.size() == 0)
-			ZError::Throw<ZWrongNumberOfArguments>();
-
-		myList = LIST_ZCONV(*inp[ 0 ] );
-		ZTList subList = LIST_ZCONV(*(myList.Get(0)));
-
-		int size = subList.size();
-
-	
-		for (int i = 1; i < myList.size(); i++)
-		{
-			subList = LIST_ZCONV(*(myList.Get(i)));
-
-			if (subList.size() != size)
-				ZError::Throw<ZWrongNumberInList>();
-		}
-        
+		myMatrix.val= MATRIX_ZCONV(*(inp[0]));        
         ZMatrix();
     }
 
@@ -42,34 +29,99 @@ public:
 
     ZTvarp Zadd(ZTvarS inp)
     {
-		MatrixXi m(3,3);
-		return NULL;
+		ZTMatrix myMatrix1= MATRIX_ZCONV(*(inp[0]));
+		ZTMatrix myMatrix2= MATRIX_ZCONV(*(inp[1]));
+		ZTvarp res=ZAlloc(ZTvar,1);
+		*res = ZTMatrix(myMatrix1.val+myMatrix2.val);
+		return res;    }
+
+	ZTvarp ZTransport(ZTvarS inp)
+    {
+		ZTMatrix myMatrix1= MATRIX_ZCONV(*(inp[0]));
+		ZTvarp res=ZAlloc(ZTvar,1);
+		*res = ZTMatrix(myMatrix1.val.transpose());
+		return res;
     }
 	
+	ZTvarp ZTranslate(ZTvarS inp)
+    {
+		ZIFloat x= FLOAT_ZCONV(*(inp[0]));
+		ZIFloat y= FLOAT_ZCONV(*(inp[1]));
+		ZIFloat z= FLOAT_ZCONV(*(inp[2]));
+
+		
+		Eigen::Transform<float,3> t ;
+		t.setIdentity();
+		ZTvarp res=ZAlloc(ZTvar,1);
+		t.translate(Eigen::Vector3f(-x,z,y));
+		*res = ZTMatrix( t );
+		return res;
+    }
+
+	ZTvarp ZScale(ZTvarS inp)
+    {
+		ZIFloat x= FLOAT_ZCONV(*(inp[0]));
+		ZIFloat y= FLOAT_ZCONV(*(inp[1]));
+		ZIFloat z= FLOAT_ZCONV(*(inp[2]));
+
+		
+		Eigen::Transform<float,3> t ;
+		t.setIdentity();
+		ZTvarp res=ZAlloc(ZTvar,1);
+		t.scale(Eigen::Vector3f(x,y,z));
+		*res = ZTMatrix( t );
+		return res;
+    }
+
+	ZTvarp ZRotateEuler(ZTvarS inp)
+    {
+		ZIFloat x= FLOAT_ZCONV(*(inp[0]));
+		ZIFloat y= FLOAT_ZCONV(*(inp[1]));
+		ZIFloat z= FLOAT_ZCONV(*(inp[2]));
+
+		
+		Eigen::Transform<float,3> t ;
+		t.setIdentity();
+		ZTvarp res=ZAlloc(ZTvar,1);
+		t       = Eigen::AngleAxisf(-x*180/M_PI, Vector3f::UnitZ())
+				* Eigen::AngleAxisf(z*180/M_PI, Vector3f::UnitY())
+				* Eigen::AngleAxisf(y*180/M_PI, Vector3f::UnitZ());
+
+		*res = ZTMatrix( t );
+		return res;
+    }
+
+	static NxMat34 toNxMat( ZTMatrix zmx )
+	{
+		NxMat34 nxm;
+		NxF32 d[4][4];
+		for(int i=0;i<3;i++)
+			for(int j=0;j<4;j++)
+				d[i][j] = zmx.val(i,j);
+
+		nxm.setRowMajor44(d);
+		return nxm;
+	}
+
 	ZTvarp toString(ZTvarS inp)
 	{
-		ostringstream s1;
-		s1 << "";
-
-		for (int i = 0; i < myList.size(); i++)
-		{
-			ZTList subList = LIST_ZCONV(*(myList.Get(i)));
-			s1 << " [ " << FLOAT_ZCONV(*(subList.Get(0)));
-
-			for (int j = 1; j < subList.size(); j++)
-			{
-				s1 << " " << FLOAT_ZCONV(*(subList.Get(j)));
-			}
-
-			s1 << " ]";
-
-			if (i != myList.size() - 1)
-				s1 << endl;
-		}
-
-		s1 << "" << endl;
-		
-		INST_TO_STR( s1.str() );
+		ZTvarp res=ZAlloc(ZTvar,1);
+		*res = ZTString("MATRIX is");
+		cout<<myMatrix.val<<endl;
+		return res;
 	}
     
 };
+
+void ZModInit_ZMatrix()
+{
+	ZMatrix::Init();
+
+	ZTvarp zv = ZAlloc(ZTvar,1);
+	//ZTOInstance zin;
+	//zin.val = new ZMatrix();
+	*zv=ZObjP();
+	boost::get<gZObject>(*zv).cont=new ZMatrix();
+	ZInterp::ZSym.InsertSymbol(_ZC("ZMatrix"),zv);
+
+}

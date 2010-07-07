@@ -13,10 +13,7 @@
 #define	    LT(n)							INPUT->tnstream->_LT(INPUT->tnstream, n)
 #define		SEEK(n)							ISTREAM->seek(ISTREAM, n)
 
-<<<<<<< HEAD
-=======
 USING_PART_OF_NAMESPACE_EIGEN
->>>>>>> FETCH_HEAD
 
 extern ZBuiltinModule ZBMods[];
 
@@ -357,28 +354,7 @@ namespace ZInterp
         }
 	}
 
-<<<<<<< HEAD
-	void Matrix::Exec(pANTLR3_BASE_TREE matrixNode , yatgFW_Ctx_struct* xyz)
-	{
-		MATCHT(MATRIX,NULL);
-		MATCHT(ANTLR3_TOKEN_DOWN,NULL);
-		for ( int i=0;i<matrixNode->getChildCount(matrixNode);i++)
-		{
-			pANTLR3_BASE_TREE row= (pANTLR3_BASE_TREE)matrixNode->getChild(matrixNode,i);
-			MATCHT(ROW,NULL);
-			MATCHT(ANTLR3_TOKEN_DOWN,NULL);
-			for( int j=0;j<row->getChildCount(row);j++)
-			{
-				pANTLR3_BASE_TREE element=(pANTLR3_BASE_TREE)row->getChild(row,j);
-				//SEEK(element->savedIndex);
-				xyz->expr_g(xyz);
-				MATCHT(ANTLR3_TOKEN_UP,NULL);
-			}
-		}
-		cout<<"Matrix"<<endl;
 
-	}
-=======
 	void Matrix::Exec(pANTLR3_BASE_TREE matrixNode , yatgFW_Ctx_struct* xyz)
 	{
 		ZTvarp var=ZAlloc(ZTvar,1);
@@ -405,7 +381,4 @@ namespace ZInterp
 		}
 		setCustomNodeField(matrixNode,var);
 	}
->>>>>>> FETCH_HEAD
-
-
 };

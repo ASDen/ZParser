@@ -54,6 +54,7 @@ public:
 
 		AddFunction(_ZC("AddRigid") ,1,&ZRigidBodySimulation::AddRigidBody);
 		AddFunction(_ZC("AddCloth") ,1,&ZRigidBodySimulation::AddCloth);
+		AddFunction(_ZC("setGravity") ,1,&ZRigidBodySimulation::setGravity);
 		AddFunction(_ZC("View"),0,&ZRigidBodySimulation::ViewScene);
 
 		ZTObject::Inheriet(StProps);
@@ -86,6 +87,15 @@ public:
 		opm->AddPolyhedron<ClothManager>( reinterpret_cast<PrimitiveAPI<ZBox>* >(zins)->pnode );
 		return NULL;
 	}
+
+	ZTvarp setGravity (ZTvarS inp)
+	{
+		pZObjP zins=INSTANCE_ZCONV(*(inp[0]));
+		Point_3* p3 = reinterpret_cast<ZPoint*>(zins)->getPnt();
+		pm->gScene->setGravity(NxVec3(-p3->x(),p3->z(),p3->y()));
+		return NULL;
+	}
+	
 
 	ZTvarp ViewScene (ZTvarS inp)
 	{

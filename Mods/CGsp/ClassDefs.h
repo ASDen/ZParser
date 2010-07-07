@@ -3,6 +3,7 @@
 #include "ZPseudo.h"
 #include "ZAxis.h"
 #include "ZPoint.h"
+#include "ZMatrix.h"
 #include "ZBulgeType.h"
 
 
@@ -44,7 +45,6 @@
 #include "Physics/RigidBodySimulation.h"
 #include "KeyFrame/KeyFrame.h"
 
-#include "../../ZMatrix.h"
 
 //class ZBox    : public CGPlug{};
 //class ZSphere : public CGPlug{};

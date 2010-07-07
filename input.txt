@@ -1,4 +1,39 @@
 a={{1,2},{3,4}}
+b={{1,2},{3,4}}
+printL(a+b)
 m=ZMatrix(a)
-m1=(m.Scale(.43,3.141,3.141))--.Translate(2,3,4)
-printL(m1)
+m1= m.Translate(0,0,200) * m.Rotate(45,0,0) --* m.Scale(2,2,2) 
+
+fn BoxCube x,y,z =(
+    ps = PhysicsSimulation();
+    ps.setGravity(ZPoint(0,0,-1000))
+    
+    p = Plane(300,[0,0,0]);
+	p.Color(ZPoint(0.6,0.3,0.6))
+    p.setPhysActor(ps,ps.ZPhysPLANE);
+    ps.AddRigid(p);
+    
+    printL(m1)
+
+	s = Box(12,[0,0,200])
+	s.Color(ZPoint(0.9,0.8,0.9))
+	s.setPhysActor(ps,ps.ZPhysBOX)
+	--s.setPhysMass(100)
+	s.setPhysPose(m1);
+	ps.AddRigid(s);
+	
+    for k = 0 to z do(
+        for i = 0 to x do(
+            for j = 0 to y do(
+                b = Box(4,[k*4-((z-1)/2.0)*4,j*4-((y-1)/2.0)*4,i*4+2]);
+                b.Color(ZPoint(k*0.9/10,j/10,i*0.8/10))
+                b.setPhysActor(ps,ps.ZPhysBOX);
+                b.setWire(true);
+                ps.AddRigid(b);
+            )
+        )
+    )
+    ps.View();
+)
+
+BoxCube(2,2,2)
