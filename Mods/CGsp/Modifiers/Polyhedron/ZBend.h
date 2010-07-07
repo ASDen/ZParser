@@ -55,15 +55,18 @@ public:
 		case 0:
 			primt = new Bend();
 			break;
+
 		case 1:
 			primt = new Bend( FLOAT_ZCONV(*(inp[0])) );
 			break;
+
 		case 2:
 			if ((za = dynamic_cast<ZAxis*>(INSTANCE_ZCONV(*(inp[1])))) != NULL)
 				primt = new Bend( FLOAT_ZCONV(*(inp[0])) , za->ax );
 			else
 				ZError::Throw<ZBadConversionError>();
 			break;
+
 		case 3:
 			if ((zp3 = dynamic_cast<ZPoint*>(INSTANCE_ZCONV(*(inp[1])))) != NULL && (za = dynamic_cast<ZAxis*>(INSTANCE_ZCONV(*(inp[2])))) != NULL)
 			{
@@ -73,6 +76,7 @@ public:
 			else
 				ZError::Throw<ZBadConversionError>();
 			break;
+
 		case 4:
 		case 5:
 			if ((zp3 = dynamic_cast<ZPoint*>(INSTANCE_ZCONV(*(inp[1])))) != NULL && (za = dynamic_cast<ZAxis*>(INSTANCE_ZCONV(*(inp[2])))) != NULL)
@@ -83,6 +87,7 @@ public:
 			else
 				ZError::Throw<ZBadConversionError>();
 			break;
+
 		case 6:
 			if ((zp3 = dynamic_cast<ZPoint*>(INSTANCE_ZCONV(*(inp[1])))) != NULL && (za = dynamic_cast<ZAxis*>(INSTANCE_ZCONV(*(inp[2])))) != NULL)
 			{
@@ -92,6 +97,9 @@ public:
 			else
 				ZError::Throw<ZBadConversionError>();
 			break;
+
+		default:
+			ZError::Throw<ZBadConversionError>();
 		}
 
 		if (!CenterExists)

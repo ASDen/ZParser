@@ -133,8 +133,11 @@ namespace ZInterp
 		ZChar* id=getNodeText((pANTLR3_BASE_TREE)fnode->getChild(fnode,0));
 	    ZInterp::ZSym.currentScope->VarTable.Insert(v,id);
 		bool direct = ( start < end ) ? true : false ;
-		for ( ; direct?  start <=end : start >= end && cond ; start += scale )
+		for ( ; (direct?  start <=end : start >= end) && cond ; start += scale )
 		{
+			cond= (twhere!=NULL)  ? gBOOL_ZCONV(*(ZTvarp)((( pANTLR3_BASE_TREE ) twhere -> getChild ( twhere , 0 ))->u)).cont->val ==  ZBTrue : ZBTrue;
+			if(!cond)
+				break;
             if(list==NULL)            {
                 //f.val+=scale;
                 //*v =(ZTvar)f;

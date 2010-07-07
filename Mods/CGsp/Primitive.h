@@ -18,6 +18,7 @@ public:
 
 		AddFunction(_ZC("setPhysActor") ,2,&PrimitiveAPI::setPhysActor);
 		AddFunction(_ZC("setPhysMass") ,2,&PrimitiveAPI::setPhysMass);
+		AddFunction(_ZC("setPhysPressure") ,2,&PrimitiveAPI::setPhysPressure);
 		AddFunction(_ZC("setPhysThickness") ,2,&PrimitiveAPI::setPhysThickness);
 		AddFunction(_ZC("setPhysPose") ,2,&PrimitiveAPI::setPhysPose);
 		AddFunction(_ZC("ApplyModifier") ,1,&PrimitiveAPI::ApplyModifier);
@@ -329,13 +330,31 @@ public:
 		//zp3 = dynamic_cast<ZPoint*>(INSTANCE_ZCONV(*(inp[1]))))
 			
 		pnode->RigidActor->setGlobalPose(ZMatrix::toNxMat(MATRIX_ZCONV(*(inp[0]))));
-		
+			
 		return NULL;
 	}
+
+	ZTvarp setPhysPressure (ZTvarS inp)
+	{
+		if (inp.size() == 0)
+		{
+			ZError::Throw<ZWrongNumberOfArguments>();
+			return NULL;
+		}
+		
+		if(pnode->ClothActor == NULL) 
+			return NULL;
+			
+		pnode->ClothActor->setPressure(FLOAT_ZCONV(*(inp[0])));
+			
+		return NULL;
+	}
+
 
 	ZTvarp setPhysActor (ZTvarS inp)
 	{
 		bool static_Obj;
+		bool Pressure;
 
 		if (inp.size() <= 1)
 		{
@@ -345,12 +364,12 @@ public:
 		
 		if (inp.size() == 2)
 		{
-			static_Obj = false;
+			static_Obj = Pressure = false;
 		}
 
 		else
 		{
-			static_Obj = BOOL_ZCONV(*(inp[2]));
+			static_Obj = Pressure = BOOL_ZCONV(*(inp[2]));
 		}
 
 		pZObjP zrsg = INSTANCE_ZCONV(*(inp[0]));
@@ -382,7 +401,7 @@ public:
 			pnode->RigidActor = XTube::Construct(reinterpret_cast<ZRigidBodySimulation*>(zrsg)->pm->gScene,reinterpret_cast<ZRigidBodySimulation*>(zrsg)->pm->gPhysicsSDK,pnode,static_Obj);
 			break;
 		case 9:
-			pnode->ClothActor = XCloth::Construct(reinterpret_cast<ZRigidBodySimulation*>(zrsg)->pm->gScene,reinterpret_cast<ZRigidBodySimulation*>(zrsg)->pm->gPhysicsSDK,pnode,false);
+			pnode->ClothActor = XCloth::Construct(reinterpret_cast<ZRigidBodySimulation*>(zrsg)->pm->gScene,reinterpret_cast<ZRigidBodySimulation*>(zrsg)->pm->gPhysicsSDK,pnode,Pressure);
 			pnode->ClothActor->setThickness(0.5);
 			break;
 		}

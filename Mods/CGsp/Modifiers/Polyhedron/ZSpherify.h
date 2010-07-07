@@ -42,9 +42,13 @@ public:
 		case 0:
 			primt = new Spherify();
 			break;
+
 		case 1:
 			primt = new Spherify( FLOAT_ZCONV(*(inp[0])) );
 			break;
+
+		default:
+			ZError::Throw<ZBadConversionError>();
 		}
 
 		ZSpherify();

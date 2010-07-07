@@ -74,26 +74,33 @@ public:
 		case 1:
 			primt = new Cone_3();
 			break;
+
 		case 2:
 			primt = new Cone_3( FLOAT_ZCONV(*(inp[0])) );
 			break;
+
 		case 3:
 			primt = new Cone_3( FLOAT_ZCONV(*(inp[0])) , INT_ZCONV(*(inp[1])) );
 			break;
+
 		case 4:
 			primt = new Cone_3( FLOAT_ZCONV(*inp[0]) , FLOAT_ZCONV(*inp[1]) , FLOAT_ZCONV(*inp[2]) );
 			break;
+
 		case 5:
 		case 6:
 			primt = new Cone_3( FLOAT_ZCONV(*inp[0]) , FLOAT_ZCONV(*inp[1]) , FLOAT_ZCONV(*inp[2]) , INT_ZCONV(*inp[3]) );
 			break;
+
 		case 7:
 			primt = new Cone_3( FLOAT_ZCONV(*inp[0]) , FLOAT_ZCONV(*inp[1]) , FLOAT_ZCONV(*inp[2]) , INT_ZCONV(*inp[3]) , INT_ZCONV(*inp[4]) , INT_ZCONV(*inp[5]) );
 			break;
+
 		default:
 			ZError::Throw<ZWrongNumberOfArguments>();
 			break;
 		}
+		
 		primt->Draw();
 		InitNode(inp,primt,PositionExists);
 
@@ -104,17 +111,18 @@ public:
 		cCapSegs	= new ConePropsI(&Cone_3::cap_Seg,primt,primt->cap_Seg);
 		cHeightSegs = new ConePropsI(&Cone_3::height_Seg,primt,primt->height_Seg);
 
-		
-		primt->ApplyModifier(cRadius1);
-		primt->ApplyModifier(cRadius2);
-		primt->ApplyModifier(cHeight);
-		primt->ApplyModifier(cSideSegs);
-		primt->ApplyModifier(cCapSegs);
-		primt->ApplyModifier(cHeightSegs);
+		DoFor(cRadius1);
+		DoFor(cRadius2);
+		DoFor(cHeight);
+		DoFor(cSideSegs);
+		DoFor(cCapSegs);
+		DoFor(cHeightSegs);
+
+		cHeightSegs->commit = true;
 
 		ZCone();
 	}
-
+	
 	template<class T,class S,T* ZCone::*mod>
 	ZTvarp MFactory (ZTvarS inp)
 	{
@@ -126,7 +134,13 @@ public:
 			return res;
 		}
 
+		if ( (this->*mod)->extrensic == true )
+			DoFor( (this->*mod) );
+
 		FrameCreater::FillFrames(ZInterp::currentFrame,(S)(FLOAT_ZCONV(*(inp[0]))),&T::PolyP,*(this->*mod) );
+		(this->*mod)->CalcmxF();
+		cHeightSegs->mxFrame = std::max( cHeightSegs->mxFrame , (this->*mod)->mxFrame );
+
 		return NULL;
 	}
 };

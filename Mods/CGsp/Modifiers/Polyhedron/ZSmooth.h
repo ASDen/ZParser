@@ -42,10 +42,15 @@ public:
 		case 0:
 			primt = new Smooth();
 			break;
+
 		case 1:
 			primt = new Smooth( FLOAT_ZCONV(*(inp[0])) );
 			break;
+
+		default:
+			ZError::Throw<ZBadConversionError>();
 		}
+
 		ZSmooth();
 	}
 

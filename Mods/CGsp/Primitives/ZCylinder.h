@@ -43,6 +43,7 @@ public:
 		
 		INST_TO_STR( s1.str() );
 	}
+
 	//FIXME : int conversions
 	ZCylinder(ZTvarS inp)
 	{
@@ -71,23 +72,29 @@ public:
 		case 1:
 			primt = new Cylinder_3();
 			break;
+
 		case 2:
 			primt = new Cylinder_3( FLOAT_ZCONV(*(inp[0])) );
 			break;
+
 		case 3:
 			primt = new Cylinder_3( FLOAT_ZCONV(*(inp[0])) , INT_ZCONV(*(inp[1])) );
 			break;
+
 		case 4:
 		case 5:
 			primt = new Cylinder_3( FLOAT_ZCONV(*inp[0]) , FLOAT_ZCONV(*inp[1]) , INT_ZCONV(*inp[2]) );
 			break;
+
 		case 6:
 			primt = new Cylinder_3( FLOAT_ZCONV(*inp[0]) , FLOAT_ZCONV(*inp[1]) , INT_ZCONV(*inp[2]) , INT_ZCONV(*inp[3]) , INT_ZCONV(*inp[4]) );
 			break;
+
 		default:
 			ZError::Throw<ZWrongNumberOfArguments>();
 			break;
 		}
+
 		primt->Draw();
 		InitNode(inp,primt,PositionExists);
 
@@ -97,16 +104,17 @@ public:
 		cCapSegs	= new CylinderPropsI(&Cylinder_3::cap_Seg,primt,primt->cap_Seg);
 		cHeightSegs = new CylinderPropsI(&Cylinder_3::height_Seg,primt,primt->height_Seg);
 
-		
-		primt->ApplyModifier(cRadius);
-		primt->ApplyModifier(cHeight);
-		primt->ApplyModifier(cSideSegs);
-		primt->ApplyModifier(cCapSegs);
-		primt->ApplyModifier(cHeightSegs);
+		DoFor(cRadius);
+		DoFor(cHeight);
+		DoFor(cSideSegs);
+		DoFor(cCapSegs);
+		DoFor(cHeightSegs);
+
+		cHeightSegs->commit = true;
 
 		ZCylinder();
 	}
-
+	
 	template<class T,class S,T* ZCylinder::*mod>
 	ZTvarp MFactory (ZTvarS inp)
 	{
@@ -118,7 +126,13 @@ public:
 			return res;
 		}
 
+		if ( (this->*mod)->extrensic == true )
+			DoFor( (this->*mod) );
+
 		FrameCreater::FillFrames(ZInterp::currentFrame,(S)(FLOAT_ZCONV(*(inp[0]))),&T::PolyP,*(this->*mod) );
+		(this->*mod)->CalcmxF();
+		cHeightSegs->mxFrame = std::max( cHeightSegs->mxFrame , (this->*mod)->mxFrame );
+
 		return NULL;
 	}
 };

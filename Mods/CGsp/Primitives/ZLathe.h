@@ -81,23 +81,45 @@ public:
 			else
 				ZError::Throw<ZBadConversionError>();
 			break;
+
 		default:
 			ZError::Throw<ZWrongNumberOfArguments>();
 			break;
 		}
+
 		primt->Draw();
 		InitNode(inp,primt,PositionExists);
 
 		lAngle    = new LathePropsD(&Lathe_3::R_Angle,primt,primt->R_Angle);
 		lSideSegs = new LathePropsI(&Lathe_3::Seg,primt,primt->Seg);
 
-		
-		primt->ApplyModifier(lAngle);
-		primt->ApplyModifier(lSideSegs);
+		DoFor(lAngle);
+		DoFor(lSideSegs);
 
 		lSideSegs->commit = true;
 
 		ZLathe();
+	}
+	
+	template<class T,class S,T* ZLathe::*mod>
+	ZTvarp MFactory (ZTvarS inp)
+	{
+		if (inp.size() == 0)
+		{
+			ZIFloat fr = (this->*mod)->PolyP.FrameValues[ZInterp::currentFrame];
+			ZTvarp res=ZAlloc(ZTvar,1);
+			*res = ZTFloat(fr);
+			return res;
+		}
+
+		if ( (this->*mod)->extrensic == true )
+			DoFor( (this->*mod) );
+
+		FrameCreater::FillFrames(ZInterp::currentFrame,(S)(FLOAT_ZCONV(*(inp[0]))),&T::PolyP,*(this->*mod) );
+		(this->*mod)->CalcmxF();
+		lSideSegs->mxFrame = std::max( lSideSegs->mxFrame , (this->*mod)->mxFrame );
+
+		return NULL;
 	}
 
 	std::vector<Point_3> LISTtoVECTOR (ZTList inp)
@@ -140,21 +162,6 @@ public:
 		}
 
 		return zl;
-	}
-
-	template<class T,class S,T* ZLathe::*mod>
-	ZTvarp MFactory (ZTvarS inp)
-	{
-		if (inp.size() == 0)
-		{
-			ZIFloat fr = (this->*mod)->PolyP.FrameValues[ZInterp::currentFrame];
-			ZTvarp res=ZAlloc(ZTvar,1);
-			*res = ZTFloat(fr);
-			return res;
-		}
-
-		FrameCreater::FillFrames(ZInterp::currentFrame,(S)(FLOAT_ZCONV(*(inp[0]))),&T::PolyP,*(this->*mod) );
-		return NULL;
 	}
 
 	ZTvarp Axis (ZTvarS inp)

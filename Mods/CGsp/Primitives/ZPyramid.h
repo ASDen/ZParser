@@ -74,28 +74,36 @@ public:
 		case 1:
 			primt = new Pyramid_3();
 			break;
+
 		case 2:
 			primt = new Pyramid_3( FLOAT_ZCONV(*(inp[0])) );
 			break;
+
 		case 3:
 			primt = new Pyramid_3( FLOAT_ZCONV(*(inp[0])) , INT_ZCONV(*(inp[1])) );
 			break;
+
 		case 4:
 			primt = new Pyramid_3( FLOAT_ZCONV(*inp[0]) , FLOAT_ZCONV(*inp[1]) , FLOAT_ZCONV(*inp[2]) );
 			break;
+
 		case 5:
 			primt = new Pyramid_3( FLOAT_ZCONV(*inp[0]) , FLOAT_ZCONV(*inp[1]) , FLOAT_ZCONV(*inp[2]) , INT_ZCONV(*inp[3]) );
 			break;
+
 		case 6:
 			primt = new Pyramid_3( FLOAT_ZCONV(*inp[0]) , FLOAT_ZCONV(*inp[1]) , FLOAT_ZCONV(*inp[2]) , INT_ZCONV(*inp[3]) , INT_ZCONV(*inp[4]) );
 			break;
+
 		case 7:
 			primt = new Pyramid_3( FLOAT_ZCONV(*inp[0]) , FLOAT_ZCONV(*inp[1]) , FLOAT_ZCONV(*inp[2]) , INT_ZCONV(*inp[3]) , INT_ZCONV(*inp[4]) , INT_ZCONV(*inp[5]) );
 			break;
+
 		default:
 			ZError::Throw<ZWrongNumberOfArguments>();
 			break;
 		}
+
 		primt->Draw();
 		InitNode(inp,primt,PositionExists);
 
@@ -106,17 +114,18 @@ public:
 		pSHeight = new PyramidPropsI(&Pyramid_3::height_Seg,primt,primt->height_Seg);
 		pSDepth	 = new PyramidPropsI(&Pyramid_3::depth_Seg,primt,primt->depth_Seg);
 
-		
-		primt->ApplyModifier(pWidth);
-		primt->ApplyModifier(pHeight);
-		primt->ApplyModifier(pDepth);
-		primt->ApplyModifier(pSWidth);
-		primt->ApplyModifier(pSHeight);
-		primt->ApplyModifier(pSDepth);
+		DoFor(pWidth);
+		DoFor(pHeight);
+		DoFor(pDepth);
+		DoFor(pSWidth);
+		DoFor(pSHeight);
+		DoFor(pSDepth);
+
+		pSDepth->commit = true;
 
 		ZPyramid();
 	}
-
+	
 	template<class T,class S,T* ZPyramid::*mod>
 	ZTvarp MFactory (ZTvarS inp)
 	{
@@ -128,7 +137,13 @@ public:
 			return res;
 		}
 
+		if ( (this->*mod)->extrensic == true )
+			DoFor( (this->*mod) );
+
 		FrameCreater::FillFrames(ZInterp::currentFrame,(S)(FLOAT_ZCONV(*(inp[0]))),&T::PolyP,*(this->*mod) );
+		(this->*mod)->CalcmxF();
+		pSDepth->mxFrame = std::max( pSDepth->mxFrame , (this->*mod)->mxFrame );
+
 		return NULL;
 	}
 };
