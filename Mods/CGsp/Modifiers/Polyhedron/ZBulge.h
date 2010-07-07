@@ -119,7 +119,7 @@ public:
 				ZError::Throw<ZBadConversionError>();
 			break;
 
-		case 5:
+			case 5:
 			if ( (zp3 = dynamic_cast<ZPoint*>(INSTANCE_ZCONV(*(inp[1])))) != NULL && (za = dynamic_cast<ZAxis*>(INSTANCE_ZCONV(*(inp[2])))) != NULL && (zbut = dynamic_cast<ZBulgeType*>(INSTANCE_ZCONV(*(inp[3])))) != NULL)
 			{
 				primt = new Bulge( FLOAT_ZCONV(*(inp[0])) , zp3->getPnt() , za->ax , zbut->buType , BOOL_ZCONV(*(inp[4])) );
@@ -129,7 +129,7 @@ public:
 				ZError::Throw<ZBadConversionError>();
 			break;
 
-		case 6:
+			case 6:
 			if ( (zp3 = dynamic_cast<ZPoint*>(INSTANCE_ZCONV(*(inp[1])))) != NULL && (za = dynamic_cast<ZAxis*>(INSTANCE_ZCONV(*(inp[2])))) != NULL)
 			{
 				primt = new Bulge( FLOAT_ZCONV(*(inp[0])) , zp3->getPnt() , za->ax , BOOL_ZCONV(*(inp[3])) , FLOAT_ZCONV(*(inp[4])) , FLOAT_ZCONV(*(inp[5])) );
@@ -138,7 +138,6 @@ public:
 			else
 				ZError::Throw<ZBadConversionError>();
 			break;
-
 		case 7:
 			if ( (zp3 = dynamic_cast<ZPoint*>(INSTANCE_ZCONV(*(inp[1])))) != NULL && (za = dynamic_cast<ZAxis*>(INSTANCE_ZCONV(*(inp[2])))) != NULL && (zbut = dynamic_cast<ZBulgeType*>(INSTANCE_ZCONV(*(inp[3])))) != NULL)
 			{

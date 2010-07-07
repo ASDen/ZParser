@@ -57,6 +57,7 @@ public:
 			primt = new Linear_Wave();
 			break;
 
+			
 		case 1:
 			primt = new Linear_Wave( FLOAT_ZCONV(*(inp[0])) );
 			break;
@@ -145,6 +146,7 @@ public:
 			}
 			break;
 
+			
 		case 4:
 			switch( GET_ZTYPE(*(inp[1])) )
 			{
@@ -273,6 +275,7 @@ public:
 
 		default:
 			ZError::Throw<ZBadConversionError>();
+
 		}
 
 		if (!CenterExists)

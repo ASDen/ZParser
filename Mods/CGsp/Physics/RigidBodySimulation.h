@@ -97,6 +97,7 @@ public:
 	}
 	
 
+
 	ZTvarp ViewScene (ZTvarS inp)
 	{
 		pm->DisplayLoop();

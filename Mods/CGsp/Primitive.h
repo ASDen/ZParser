@@ -356,6 +356,7 @@ public:
 		bool static_Obj;
 		bool Pressure;
 
+
 		if (inp.size() <= 1)
 		{
 			ZError::Throw<ZWrongNumberOfArguments>();
@@ -365,11 +366,13 @@ public:
 		if (inp.size() == 2)
 		{
 			static_Obj = Pressure = false;
+
 		}
 
 		else
 		{
 			static_Obj = Pressure = BOOL_ZCONV(*(inp[2]));
+
 		}
 
 		pZObjP zrsg = INSTANCE_ZCONV(*(inp[0]));
@@ -402,6 +405,7 @@ public:
 			break;
 		case 9:
 			pnode->ClothActor = XCloth::Construct(reinterpret_cast<ZRigidBodySimulation*>(zrsg)->pm->gScene,reinterpret_cast<ZRigidBodySimulation*>(zrsg)->pm->gPhysicsSDK,pnode,Pressure);
+
 			pnode->ClothActor->setThickness(0.5);
 			break;
 		}

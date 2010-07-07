@@ -1,8 +1,8 @@
 a={{1,2},{3,4}}
 b={{1,2},{3,4}}
 printL(a+b)
-m=ZMatrix(a)
-m1= m.Translate(0,0,200) * m.Rotate(45,0,0) --* m.Scale(2,2,2) 
+--m=ZMatrix(a)
+m1= ZMatrix.CreateTranslation(0,0,200) * ZMatrix.CreateRotation(45,0,0) --* m.Scale(2,2,2) 
 
 fn BoxCube x,y,z =(
     ps = PhysicsSimulation();
@@ -37,3 +37,4 @@ fn BoxCube x,y,z =(
 )
 
 BoxCube(3,3,3)
+

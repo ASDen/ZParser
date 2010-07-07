@@ -434,7 +434,7 @@ matrix
 	-> ^(MATRIX expr_g+)
 	;
 
-	
+
 bitarray 
 	: SS_HASH SS_OCBRACKET SS_CCBRACKET -> ^(ARR_BIT)
 	| SS_HASH SS_OCBRACKET ele+=arrrange ( SS_COMMA ele+=arrrange )* SS_CCBRACKET -> ^(ARR_BIT $ele+)

@@ -381,4 +381,5 @@ namespace ZInterp
 		}
 		setCustomNodeField(matrixNode,var);
 	}
+
 };

@@ -17,6 +17,7 @@
 		}
 
 
+
 class ZMath : public ZTBaseObject<ZMath> 
 {
 public:
@@ -56,6 +57,7 @@ public:
 		AddFunction(_ZC("Min"),2,&ZMath::ZMin);
 		AddFunction(_ZC("Random"),2,&ZMath::ZRandom);
 
+
 		ZTObject::Inheriet(StProps);
 	}
 
@@ -79,6 +81,7 @@ public:
 	{
 		ZTvarp res=ZAlloc(ZTvar,1);
 		ZIString str=_ZC("Math Object");
+
 		*res=ZTString(str);
 		return res;
 	}
@@ -113,12 +116,14 @@ public:
 		HAS_ERROR(inp,1)
 		ZTvarp res=ZAlloc(ZTvar,1);
 		*res = ZTFloat(sqrtf(FLOAT_ZCONV(*inp[0])));
+
 		return res;
 	}
 
 	ZTvarp Zpow(ZTvarS inp)
 	{
 		HAS_ERROR(inp,2)
+
 		ZIFloat in = FLOAT_ZCONV(*inp[0]);
 		ZIFloat ai = FLOAT_ZCONV(*inp[1]);
 
@@ -289,6 +294,7 @@ public:
 
 
 };
+
 
 
 void ZModInit_ZMath()
