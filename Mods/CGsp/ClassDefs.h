@@ -44,7 +44,10 @@
 #include "Physics/RigidBodySimulation.h"
 #include "KeyFrame/KeyFrame.h"
 
-#include "ZMatrix.h"
+#include "../../ZMatrix.h"
+#include "../../ZMath.h"
+#include "../../ZFile.h"
+
 
 //class ZBox    : public CGPlug{};
 //class ZSphere : public CGPlug{};

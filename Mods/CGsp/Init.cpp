@@ -56,18 +56,25 @@ void ZModInit_CGsp()
 
 	ZTvarS zvs;
 	ZTOInstance zin;
+	
+	ADD_CLASS(ZAxis  ,"__ZAxis");
 	ADD_VAR( ZAxis (X_ax) , _ZC("XAxis") );
 	ADD_VAR( ZAxis (Y_ax) , _ZC("YAxis") );
 	ADD_VAR( ZAxis (Z_ax) , _ZC("ZAxis") );
+	
+	ADD_CLASS(ZMath ,"__Math");
+	ADD_CLASS(ZMatrix ,"__Matrix");
+	ADD_VAR( ZMath () , _ZC("Math") );
+	ADD_VAR( ZMatrix () , _ZC("Matrix") );
 
 	ADD_VAR( ZBulgeType (BRadial) , _ZC("BRadial") );
 	ADD_VAR( ZBulgeType (BLinear) , _ZC("BLinear") );
 
 	ADD_CLASS(ZBulgeType,"ZBulgeType");
-	ADD_CLASS(ZAxis  ,"__ZAxis");
 	ADD_CLASS(ZPoint ,"ZPoint");
 	
-	ADD_CLASS(ZMatrix ,"ZMat");
+	ADD_CLASS(ZFile ,"File");
+	
 	
 
 }

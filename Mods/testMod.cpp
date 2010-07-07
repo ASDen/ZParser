@@ -182,7 +182,43 @@ ZTvarp Zprint(ZTvarS var)
 ZTvarp ZprintL(ZTvarS var)
 {
 	for(int i=0;i<var.size();i++)
-		std::cout<< boost::apply_visitor(ToString(),*(var[i])) ;
+	{
+		string data=boost::apply_visitor(ToString(),*(var[i]));
+		while (data!="")
+		{
+			int i=data.find("\\");
+			if(i>=0)
+			{
+				switch(data[i+1])
+				{
+				case 'n':
+					std::cout<< data.substr(0,data.find("\\"))<<"\n" ;
+					break;
+				case 't':
+					std::cout<< data.substr(0,data.find("\\"))<<"\t" ;
+					break;
+				case '\\':
+					std::cout<<data.substr(0,data.find("\\"))<<"\\";
+					break;
+				case '\r':
+					std::cout<<data.substr(0,data.find("\\"))<<"\r";
+					break;
+				case '\"':
+					std::cout<<data.substr(0,data.find("\\"))<<"\"";
+					break;
+				case 'b':
+					std::cout<< data.substr(0,data.find("\\"))<<"\b" ;
+					break;
+				}
+				data=data.replace(0,data.find("\\")+2,"");
+			}
+			else
+			{
+				std::cout<<data;
+				break;
+			}
+		}
+	}
 	std::cout<<std::endl;
 	ZTvarp res=ZAlloc(ZTvar,1);
 	*res=ZTBool(true);

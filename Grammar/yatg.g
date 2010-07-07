@@ -3,11 +3,11 @@ grammar yatg;
 options 
 {
 	output=AST;
-	//language=C;
+	language=C;
 	backtrack=true;
     	memoize=true;
     	k=2;
-    	//ASTLabelType    = pANTLR3_BASE_TREE;
+    	ASTLabelType    = pANTLR3_BASE_TREE;
 }
 
 
@@ -426,19 +426,14 @@ array
 	| SS_OBRACKET ele+=expr_g ( SS_COMMA ele+=expr_g )* SS_CBRACKET
 	-> ^(ARR_A $ele+)
 	;
-matrix
+
+matrix 
 	: SS_OCBRACKET SS_CCBRACKET
 	-> ^(MATRIX)
-	| SS_OCBRACKET ele+= row ( SS_COMMA ele+= row )* SS_CCBRACKET
-	-> ^(MATRIX $ele+)
+	| SS_OCBRACKET ele+=expr_g ( SS_COMMA ele+=expr_g )* SS_CCBRACKET
+	-> ^(MATRIX expr_g+)
 	;
 
-row	
-	: SS_OCBRACKET SS_CCBRACKET
-	-> ^(ROW)
-	|  SS_OCBRACKET ele+=expr_g ( SS_COMMA ele+=expr_g )* SS_CCBRACKET
-	-> ^(ROW $ele+)
-	;
 bitarray 
 	: SS_HASH SS_OCBRACKET SS_CCBRACKET -> ^(ARR_BIT)
 	| SS_HASH SS_OCBRACKET ele+=arrrange ( SS_COMMA ele+=arrrange )* SS_CCBRACKET -> ^(ARR_BIT $ele+)

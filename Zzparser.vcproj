@@ -315,18 +315,6 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\yatgFW.cpp"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						UsePrecompiledHeader="0"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
 				RelativePath=".\yatgLexer.cpp"
 				>
 				<FileConfiguration
@@ -532,19 +520,6 @@
 						/>
 					</FileConfiguration>
 				</File>
-				<File
-					RelativePath=".\Mods\ZMath.cpp"
-					>
-					<FileConfiguration
-						Name="Debug|Win32"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-							UsePrecompiledHeader="0"
-							PrecompiledHeaderThrough="../StdAfx.h"
-						/>
-					</FileConfiguration>
-				</File>
 				<Filter
 					Name="CGsp"
 					>
@@ -620,10 +595,6 @@
 						>
 					</File>
 					<File
-						RelativePath=".\Mods\CGsp\ZMatrix.h"
-						>
-					</File>
-					<File
 						RelativePath=".\Mods\CGsp\ZPoint.h"
 						>
 					</File>
@@ -674,6 +645,10 @@
 			<Filter
 				Name="Mods"
 				>
+				<File
+					RelativePath=".\ZFile.h"
+					>
+				</File>
 				<Filter
 					Name="CGsp"
 					>
@@ -695,6 +670,14 @@
 					</File>
 					<File
 						RelativePath=".\Mods\CGsp\ZBulgeType.h"
+						>
+					</File>
+					<File
+						RelativePath=".\ZMath.h"
+						>
+					</File>
+					<File
+						RelativePath=".\ZMatrix.h"
 						>
 					</File>
 					<File
