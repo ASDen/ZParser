@@ -1,2 +1,4 @@
-x=12
-printL(IsDefined("xas"))
+a={{1,2},{3,4}}
+m=ZMatrix(a)
+m1=(m.Scale(.43,3.141,3.141))--.Translate(2,3,4)
+printL(m1)
